@@ -24,7 +24,6 @@ public class FacturaDAO {
             while(rs.next()){
                 facturas.add(new Factura(rs.getInt("idFactura"), rs.getInt("idCliente")));
             }
-            ps.close();
         }catch (Exception e){
             System.err.println("Error al consultar facturas");
         }finally {

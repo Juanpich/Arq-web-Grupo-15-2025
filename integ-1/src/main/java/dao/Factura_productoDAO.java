@@ -13,6 +13,30 @@ public class Factura_productoDAO {
     public Factura_productoDAO(Connection conn){
         this.conn = conn;
     }
+      public ArrayList<Factura_producto> getFacturas_productos(){
+        ArrayList<Factura_producto> facturas = new ArrayList<>();
+        String select = "SELECT * FROM Factura_Producto";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            ps = conn.prepareStatement(select);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                facturas.add(new Factura_producto(rs.getInt("idFactura"), rs.getInt("idProducto"), rs.getInt("cantidad")));
+            }
+        }catch (Exception e){
+            System.err.println("Error al consultar facturas");
+        }finally {
+            try {
+                if(ps!=null)
+                    ps.close();
+                conn.commit();
+            } catch (SQLException ex) {
+                System.err.println("Error al cerrar la conexion");
+            }
+        }
+        return facturas;
+    }
 
     public void insertarDesdeCsv() {
         try {
@@ -62,5 +86,4 @@ public class Factura_productoDAO {
         }
 
     }
-
 }

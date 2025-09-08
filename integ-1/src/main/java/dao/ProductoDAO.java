@@ -1,6 +1,7 @@
 package dao;
 import java.sql.Connection;
 
+import DTO.ProductoDTO;
 import entity.Producto;
 
 import org.apache.commons.csv.*;
@@ -14,6 +15,31 @@ public class ProductoDAO {
     private Connection conn;
     public ProductoDAO(Connection conn) {
         this.conn = conn;
+    }
+
+      public ArrayList<Producto> getProductos(){
+        ArrayList<Producto> productos = new ArrayList<>();
+        String select = "SELECT * FROM Producto";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try{
+            ps = conn.prepareStatement(select);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                productos.add(new Producto(rs.getInt("idProducto"), rs.getString("nombre"), rs.getFloat("valor")));
+            }
+        }catch (Exception e){
+            System.err.println("Error al consultar productos");
+        }finally {
+            try {
+                if(ps!=null)
+                    ps.close();
+                conn.commit();
+            } catch (SQLException ex) {
+                System.err.println("Error al cerrar la conexion");
+            }
+        }
+        return productos;
     }
 
     public void insertarDatosCsv(){
@@ -55,5 +81,31 @@ public class ProductoDAO {
             }
 
         }
+    }
+    public ProductoDTO getRecaudacion(){
+        String sql = " SELECT p.nombre, p.valor, SUM(p.valor * fp.cantidad) as recaudacion FROM Producto p JOIN Factura_Producto fp ON p.idProducto = fp.idProducto  GROUP BY p.idProducto ORDER BY recaudacion DESC LIMIT 1 ";
+
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        ProductoDTO productoDTO = null;
+        try{
+            ps= conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            System.out.println(rs);
+            if(rs.next()){
+                productoDTO = new ProductoDTO(rs.getString("nombre"), rs.getFloat("valor"), rs.getFloat("recaudacion"));
+            }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        } finally{
+            try{
+                ps.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        return productoDTO;
     }
 }

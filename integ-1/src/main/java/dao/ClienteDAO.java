@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.sql.*;
 import java.util.ArrayList;
 
+import DTO.ClienteDTO;
 import entity.Cliente;
 import org.apache.commons.csv.*;
 
@@ -103,5 +104,36 @@ public class ClienteDAO {
 
         }
 
+    }
+    public ArrayList<ClienteDTO> getClientesMasFacturados(){
+        String sql = "SELECT c.nombre, c.email, SUM(p.valor*fp.cantidad) AS importeFacturado " +
+                "FROM Cliente c JOIN Factura f ON c.idCliente = f.idCliente " +
+                "JOIN Factura_Producto fp ON f.idFactura = fp.idFactura " +
+                "JOIN Producto p ON fp.idProducto = p.idProducto " +
+                "GROUP BY c.idCliente " +
+                "ORDER BY importeFacturado DESC " +
+                "LIMIT 5;";
+        ResultSet rs = null;
+        PreparedStatement ps = null;
+        ArrayList<ClienteDTO> clientesDTO = null;
+        
+        try{
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            clientesDTO = new ArrayList<>();
+            while(rs.next()){
+                clientesDTO.add(new ClienteDTO (rs.getString("nombre"), rs.getString("email"), rs.getFloat("importeFacturado")));
+            }
+            
+    } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try {
+                    ps.close();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return clientesDTO;
     }
 }

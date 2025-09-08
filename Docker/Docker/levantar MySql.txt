@@ -1,0 +1,36 @@
+crear archivo: docker-compose.yml
+contenido del archivo:
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: arquitectura-web
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: ""
+    ports:
+      - "9090:80"
+
+volumes:
+  mysql_data:
+
+ejecutar el comando: docker compose up -d
+abrir en chrome: localhost:9090
+para concet: localhost:3306
+
+
+
+

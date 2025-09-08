@@ -13,15 +13,20 @@ public class Main {
         FacturaDAO factura = bd.getFacturaDAO();
         ProductoDAO producto = bd.getProductoDao();
         Factura_productoDAO fpd = bd.getFactura_ProductoDao();
-
-        cliente.leerDatos();
+        System.out.println(cliente.SelectClientes());
+        System.out.println(factura.getFacturas());
+        /*cliente.leerDatos();
         System.out.println("Clientes cargados");
         producto.insertarDatosCsv();
         System.out.println("Productos cargados");
         factura.insertarDatosCsv();
         System.out.println("Facturas cargados");
         fpd.insertarDesdeCsv();
-        System.out.println("Facturas productos cargados");
+        System.out.println("Facturas productos cargados");*/
+
+        //System.out.println(producto.getRecaudacion());
+        //System.out.println(cliente.getClientesMasFacturados());
+        System.out.println(producto.getProductos());
 
 
     }
