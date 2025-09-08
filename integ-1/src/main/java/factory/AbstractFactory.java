@@ -1,20 +1,22 @@
 package factory;
 
-import dao.ClienteDAO;
-import dao.FacturaDAO;
-import dao.Factura_productoDAO;
-import dao.ProductoDAO;
+import dao.impl.ClienteDAOImpl;
+import dao.impl.FacturaDAOImpl;
+import dao.impl.Factura_productoDAOImpl;
+import dao.impl.ProductoDAOImpl;
+
+import java.sql.Connection;
 
 public abstract class AbstractFactory {
-    public abstract ClienteDAO getClienteDao();
-    public abstract Factura_productoDAO getFactura_ProductoDao();
-    public abstract FacturaDAO getFacturaDAO();
-    public abstract ProductoDAO getProductoDao();
+    public abstract ClienteDAOImpl getClienteDao();
+    public abstract Factura_productoDAOImpl getFactura_ProductoDao();
+    public abstract FacturaDAOImpl getFacturaDAO();
+    public abstract ProductoDAOImpl getProductoDao();
 
-    public static AbstractFactory getDAOFactory(DBType typeDB) {
+    public static Connection getDAOFactory(DBType typeDB) {
         switch (typeDB) {
             case MYSQL : {
-                return MySQLDAOFactory.getInstance();
+                return ConnectionHelper.getInstance();
             }
             case ORACLE: return null;
             case DERBY: return null;
