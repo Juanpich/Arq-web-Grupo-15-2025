@@ -50,7 +50,7 @@ public class Factura_productoDAOImpl implements Factura_productoDAO {
             insertarDatos(facturas_productos);
 
         } catch (IOException e) {
-            System.err.println("Error al insertar datos" + e);
+            System.err.println("Error al insertar datos de la Factura producto" + e);
         }
     }
 

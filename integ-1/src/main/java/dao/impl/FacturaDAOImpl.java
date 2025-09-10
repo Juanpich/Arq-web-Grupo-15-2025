@@ -48,7 +48,6 @@ public class FacturaDAOImpl implements FacturaDAO {
                 facturas.add(new Factura( Integer.parseInt(columnas.get("idFactura")), Integer.parseInt(columnas.get("idCliente"))));
             }
             this.insertarDatos(facturas);
-            System.out.println("datos cargados facturas ");
         }catch(Exception e){
             System.out.println(e);
         }
@@ -65,7 +64,8 @@ public class FacturaDAOImpl implements FacturaDAO {
             }
             ps.executeBatch();//ejecuta todas las operaciones almacenadas
             conn.commit();
-            
+            System.out.println("datos cargados de facturas ");
+
         }catch(Exception e){
             System.out.println(e);
         }finally{//cuando finaliza

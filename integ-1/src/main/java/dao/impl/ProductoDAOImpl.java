@@ -51,7 +51,7 @@ public class ProductoDAOImpl implements ProductoDAO {
                 productos.add(new Producto( Integer.parseInt(row.get("idProducto")), (row.get("nombre")), Float.parseFloat(row.get("valor"))));
             }
             this.insertarDatos(productos);
-            System.out.println("Datos Cargados con Exito! Producto");
+
         }
         catch(Exception e){
             System.out.println(e);
@@ -71,6 +71,7 @@ public class ProductoDAOImpl implements ProductoDAO {
             }
             ps.executeBatch();
             conn.commit();
+            System.out.println("Datos Cargados con Exito! Producto");
         }catch(Exception e){
             System.out.println(e);
         }finally{
@@ -92,7 +93,6 @@ public class ProductoDAOImpl implements ProductoDAO {
         try{
             ps= conn.prepareStatement(sql);
             rs = ps.executeQuery();
-            System.out.println(rs);
             if(rs.next()){
                 productoDTO = new ProductoDTO(rs.getString("nombre"), rs.getFloat("valor"), rs.getFloat("recaudacion"));
             }

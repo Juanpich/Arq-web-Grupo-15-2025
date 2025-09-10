@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public interface ClienteDAO {
     public ArrayList<Cliente> SelectClientes();
 
-    public void leerDatos();
+    public void insertarDatosCsv();
 
     public void insertarDatos( ArrayList<Cliente> clientes);
 

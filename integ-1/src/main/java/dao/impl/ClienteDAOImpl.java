@@ -57,7 +57,7 @@ public class ClienteDAOImpl implements ClienteDAO {
         return clientes;
     }
     //Leer datos desde el CSV
-    public void leerDatos(){
+    public void insertarDatosCsv(){
         try{
             ArrayList<Cliente> clientes = new ArrayList<Cliente>();
             CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(new
@@ -69,7 +69,7 @@ public class ClienteDAOImpl implements ClienteDAO {
             
             }
             insertarDatos(clientes);
-            System.out.println("Clientes cargados");
+
         }catch(Exception e){//idCliente,nombre,email
             e.printStackTrace();
         }
@@ -90,6 +90,7 @@ public class ClienteDAOImpl implements ClienteDAO {
 
             ps.executeBatch();
             conn.commit();
+            System.out.println("Clientes cargados");
         } catch (SQLException e) {
             System.out.println(e);;
 
