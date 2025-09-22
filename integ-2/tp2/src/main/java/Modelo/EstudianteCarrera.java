@@ -1,6 +1,6 @@
 package Modelo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 public class EstudianteCarrera {

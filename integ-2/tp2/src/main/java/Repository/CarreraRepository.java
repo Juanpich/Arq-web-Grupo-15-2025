@@ -1,4 +1,5 @@
 package Repository;
 
-public class CarreraRepository {
+public interface CarreraRepository {
+
 }

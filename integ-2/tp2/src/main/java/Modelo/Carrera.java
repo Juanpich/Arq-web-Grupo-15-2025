@@ -1,6 +1,7 @@
 package Modelo;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,7 +18,13 @@ public class Carrera {
 
     @OneToMany(mappedBy = "id_carrera")
     private List<EstudianteCarrera> Inscriptos;
-
+    public Carrera() {}
+    public Carrera(int id_carrera,String carrera, int duracion) {
+        this.id_carrera = id_carrera;
+        this.carrera = carrera;
+        this.duracion = duracion;
+        this.Inscriptos = new ArrayList<EstudianteCarrera>();
+    }
     public int getDuracion() {
         return duracion;
     }
