@@ -6,12 +6,12 @@ import jakarta.persistence.*;
 public class EstudianteCarrera {
     @Id
     private int id;
-    @Column
     @ManyToOne(fetch = FetchType.LAZY)
-    private int id_estudiante;
-    @Column
+    @JoinColumn(name= "id_estudiante")
+    private Estudiante id_estudiante;
     @ManyToOne(fetch = FetchType.LAZY)
-    private int id_carrera;
+    @JoinColumn(name= "id_carrera")
+    private Carrera id_carrera;
     @Column
     private int inscripcion;
     @Column
@@ -28,16 +28,16 @@ public class EstudianteCarrera {
     public void setId(int id) {
         this.id = id;
     }
-    public int getId_estudiante() {
+    public Estudiante getId_estudiante() {
         return id_estudiante;
     }
-    public void setId_estudiante(int id_estudiante) {
+    public void setId_estudiante(Estudiante id_estudiante) {
         this.id_estudiante = id_estudiante;
     }
-    public int getId_carrera() {
+    public Carrera getId_carrera() {
         return id_carrera;
     }
-    public void setId_carrera(int id_carrera) {
+    public void setId_carrera(Carrera id_carrera) {
         this.id_carrera = id_carrera;
     }
     public int getInscripcion() {

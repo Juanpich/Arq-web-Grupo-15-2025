@@ -8,9 +8,9 @@ import jakarta.persistence.EntityManager;
 import java.io.FileReader;
 
 public class CarreraRepositoryImpl {
-    public void insertarDesdeCSV(String rutaArchivo) {
+    public void insertarDesdeCSV() {
         EntityManager em = JPAUtil.getEntityManager();
-        try (CSVReader reader = new CSVReader(new FileReader("src/main/resources/carrera.csv"))) {
+        try (CSVReader reader = new CSVReader(new FileReader("src/main/resources/carreras.csv"))) {
             String[] linea;
             reader.readNext(); // salta cabecera
 
@@ -27,5 +27,12 @@ public class CarreraRepositoryImpl {
         } finally {
             em.close();
         }
+    }
+
+    public void insertarCarrera (Carrera carr){
+      EntityManager em = JPAUtil.getEntityManager();
+      em.persist(carr);
+      em.getTransaction().commit();
+      em.close();
     }
 }
