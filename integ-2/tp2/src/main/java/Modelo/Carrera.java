@@ -1,4 +1,7 @@
+package Modelo;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Carrera {
