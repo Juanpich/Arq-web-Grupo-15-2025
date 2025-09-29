@@ -10,5 +10,9 @@ public class Main {
         estudianteRepository.insertarDesdeCSV();
         EstudianteCarreraRepositoryImpl eCarreraRepository = new EstudianteCarreraRepositoryImpl();
         eCarreraRepository.insertarDesdeCSV();
+
+        System.out.println(estudianteRepository.obtenerEstudiantes());
+
+        System.out.println(estudianteRepository.estudiantesByGenero("Female"));
     }
 }
