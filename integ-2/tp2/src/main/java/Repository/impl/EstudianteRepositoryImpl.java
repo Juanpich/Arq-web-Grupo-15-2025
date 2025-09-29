@@ -21,7 +21,7 @@ public class EstudianteRepositoryImpl implements EstudianteRepository {
             em.getTransaction().begin();
 
             while ((linea = reader.readNext()) != null) {
-                Estudiante estudiante = new Estudiante(Integer.parseInt(linea[0]), linea[1], linea[2], linea[3], Integer.parseInt(linea[4]), linea[5], Integer.parseInt(linea[6]), new ArrayList<>());
+                Estudiante estudiante = new Estudiante(Integer.parseInt(linea[0]), linea[1], linea[2], linea[4], Integer.parseInt(linea[3]), linea[5], Integer.parseInt(linea[6]), new ArrayList<>());
                 em.persist(estudiante);
             }
             em.getTransaction().commit();
@@ -32,7 +32,7 @@ public class EstudianteRepositoryImpl implements EstudianteRepository {
             em.close();
         }
     }
-    public void insertarEstudiante(EstudianteCarrera es){
+    public void insertarEstudiante(Estudiante es){
         EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         em.persist(es);
