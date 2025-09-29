@@ -1,14 +1,15 @@
-package Repository;
+package Repository.impl;
 
 import Factory.JPAUtil;
 import Modelo.Carrera;
+import Repository.CarreraRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
 
 import java.io.FileReader;
 import java.util.ArrayList;
 
-public class CarreraRepositoryImpl {
+public class CarreraRepositoryImpl implements CarreraRepository {
     public void insertarDesdeCSV() {
         EntityManager em = JPAUtil.getEntityManager();
         try (CSVReader reader = new CSVReader(new FileReader("src/main/resources/carreras.csv"))) {

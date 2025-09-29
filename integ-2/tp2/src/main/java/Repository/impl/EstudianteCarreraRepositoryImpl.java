@@ -1,15 +1,16 @@
-package Repository;
+package Repository.impl;
 
 import Factory.JPAUtil;
 import Modelo.Carrera;
 import Modelo.Estudiante;
 import Modelo.EstudianteCarrera;
+import Repository.EstudianteCarreraRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
 
 import java.io.FileReader;
 
-public class EstudianteCarreraRepositoryImpl {
+public class EstudianteCarreraRepositoryImpl implements EstudianteCarreraRepository {
     public void insertarDesdeCSV() {
         EntityManager em = JPAUtil.getEntityManager();
         try (CSVReader reader = new CSVReader(new FileReader("src/main/resources/estudianteCarrera.csv"))) {
@@ -26,10 +27,17 @@ public class EstudianteCarreraRepositoryImpl {
             }
             em.getTransaction().commit();
         } catch (Exception e) {
-            System.err.println("Error al insertar las carreras");
+            System.err.println("Error al insertar las inscripciones");
             e.printStackTrace();
         } finally {
             em.close();
         }
     }
+    public void insertarInscripcion(EstudianteCarrera inscripcion){
+        EntityManager em = JPAUtil.getEntityManager();
+        em.persist(inscripcion);
+        em.getTransaction().commit();
+        em.close();
+    }
+
 }

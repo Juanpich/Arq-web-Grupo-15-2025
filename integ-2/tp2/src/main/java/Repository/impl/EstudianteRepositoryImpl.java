@@ -1,15 +1,16 @@
-package Repository;
+package Repository.impl;
 
 import Factory.JPAUtil;
-import Modelo.Carrera;
 import Modelo.Estudiante;
+import Modelo.EstudianteCarrera;
+import Repository.EstudianteRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
 
 import java.io.FileReader;
 import java.util.ArrayList;
 
-public class EstudianteRepositoryImpl {
+public class EstudianteRepositoryImpl implements EstudianteRepository {
 
     public void insertarDesdeCSV() {
         EntityManager em = JPAUtil.getEntityManager();
@@ -30,6 +31,13 @@ public class EstudianteRepositoryImpl {
         } finally {
             em.close();
         }
+    }
+    public void insertarEstudiante(EstudianteCarrera es){
+        EntityManager em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        em.persist(es);
+        em.getTransaction().commit();
+        em.close();
     }
 }
 

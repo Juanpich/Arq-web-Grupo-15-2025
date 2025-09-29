@@ -1,5 +1,4 @@
-import Modelo.Carrera;
-import Repository.CarreraRepositoryImpl;
+import Repository.impl.CarreraRepositoryImpl;
 
 public class Main {
     public static void main(String[] args) {
