@@ -5,6 +5,7 @@ import Modelo.Carrera;
 import Repository.CarreraRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -37,5 +38,11 @@ public class CarreraRepositoryImpl implements CarreraRepository {
       em.getTransaction().commit();
       em.close();
     }
-
+    public Carrera carreraByID(int id){
+        EntityManager em = JPAUtil.getEntityManager();
+        String jpl = "SELECT c FROM Carrera c WHERE id_carrera = : id";
+        Query query = em.createQuery(jpl).setParameter("id", id);
+        Carrera carr = (Carrera) query.getSingleResult();
+        return carr;
+    }
 }

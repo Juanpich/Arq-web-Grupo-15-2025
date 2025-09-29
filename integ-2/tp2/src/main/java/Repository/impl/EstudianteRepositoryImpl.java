@@ -1,8 +1,9 @@
 package Repository.impl;
 
+import DTO.EstudianteFiltradioDTO;
 import Factory.JPAUtil;
+import Modelo.Carrera;
 import Modelo.Estudiante;
-import Modelo.EstudianteCarrera;
 import Repository.EstudianteRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
@@ -53,6 +54,14 @@ public class EstudianteRepositoryImpl implements EstudianteRepository {
         String jplq =  "SELECT e FROM Estudiante e WHERE e.genero = :genero";
         Query query = em.createQuery(jplq).setParameter("genero", genero);
         List<Estudiante> estudiantes = query.getResultList();
+        return estudiantes;
+    }
+    public List<EstudianteFiltradioDTO> estudiantesByCarrera(Carrera carreraObj, String ciudad){
+        int id_carrera = carreraObj.getId_carrera();
+        EntityManager em = JPAUtil.getEntityManager();
+        Query query = em.createQuery("SELECT new DTO.EstudianteFiltradioDTO( e.dni, e.nombre, e.apellido, e.genero, e.edad, e.ciudad, e.LU) FROM Estudiante e JOIN e.carreras c  WHERE c.id_carrera = :carrera AND e.ciudad LIKE :ciudad");
+        query.setParameter("carrera", carreraObj).setParameter("ciudad", ciudad);
+        List<EstudianteFiltradioDTO> estudiantes = query.getResultList();
         return estudiantes;
     }
 }
