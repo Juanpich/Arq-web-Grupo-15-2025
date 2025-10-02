@@ -1,13 +1,17 @@
 package Repository.impl;
 
+import DTO.CarreraConInscriptosDTO;
+import DTO.CarreraReporteDTO;
 import Factory.JPAUtil;
 import Modelo.Carrera;
 import Repository.CarreraRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class CarreraRepositoryImpl implements CarreraRepository {
     public void insertarDesdeCSV() {
@@ -38,4 +42,23 @@ public class CarreraRepositoryImpl implements CarreraRepository {
       em.close();
     }
 
+    //recuperar las carreras con estudiantes inscriptos, y ordenar por cantidad de inscriptos.
+    public List<CarreraConInscriptosDTO> consultarCarrerasConInscriptos() {
+        EntityManager em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery("SELECT new DTO.CarreraConInscriptosDTO(CAST(count(i.id_estudiante) AS integer), c.carrera, c.duracion) FROM Carrera c JOIN c.Inscriptos i GROUP BY c.id_carrera ORDER BY COUNT(i.id_estudiante) DESC");
+        List<CarreraConInscriptosDTO> carreras = query.getResultList();
+        return carreras;
+    }
+
+    /*Generar un reporte de las carreras, que para cada carrera incluya información de los
+      inscriptos y egresados por año. Se deben ordenar las carreras alfabéticamente, y presentar
+      los años de manera cronológica.*/
+    public List<CarreraReporteDTO> consultarReporteCarrera(){
+        EntityManager em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery("SELECT new DTO.CarreraReporteDTO(c.carrera, CAST(count(i.inscripcion) AS INTEGER ), CAST(SUM(CASE WHEN i.graduacion <> 0THEN 1 ELSE 0 END) AS INTEGER), i.inscripcion) FROM Carrera c JOIN c.Inscriptos i GROUP BY c.id_carrera, i.inscripcion  ORDER BY c.carrera ASC, i.inscripcion DESC");
+        List<CarreraReporteDTO> reporte = query.getResultList();
+        return reporte;
+    }
 }

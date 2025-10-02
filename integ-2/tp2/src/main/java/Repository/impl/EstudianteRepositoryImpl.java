@@ -6,9 +6,11 @@ import Modelo.EstudianteCarrera;
 import Repository.EstudianteRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EstudianteRepositoryImpl implements EstudianteRepository {
 
@@ -38,6 +40,15 @@ public class EstudianteRepositoryImpl implements EstudianteRepository {
         em.persist(es);
         em.getTransaction().commit();
         em.close();
+    }
+    //recuperar un estudiante, en base a su número de libreta universitaria
+    public Estudiante obtenerEstudianteSegunLU(int lu){
+        EntityManager em = JPAUtil.getEntityManager();
+        em.getTransaction().begin();
+        Query query = em.createQuery("SELECT e FROM Estudiante e WHERE e.LU = :lu");
+        query.setParameter("lu", lu);
+        List<Estudiante> es = query.getResultList();
+        return es.get(0);
     }
 }
 

@@ -16,9 +16,7 @@ public class EstudianteCarreraRepositoryImpl implements EstudianteCarreraReposit
         try (CSVReader reader = new CSVReader(new FileReader("src/main/resources/estudianteCarrera.csv"))) {
             String[] linea;
             reader.readNext(); // salta cabecera
-
             em.getTransaction().begin();
-
             while ((linea = reader.readNext()) != null) {
                 Estudiante e = em.find(Estudiante.class, Integer.parseInt(linea[1]));
                 Carrera c = em.find(Carrera.class, Integer.parseInt(linea[2]));
@@ -39,5 +37,4 @@ public class EstudianteCarreraRepositoryImpl implements EstudianteCarreraReposit
         em.getTransaction().commit();
         em.close();
     }
-
 }
