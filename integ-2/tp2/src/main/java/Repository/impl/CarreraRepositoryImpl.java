@@ -54,11 +54,18 @@ public class CarreraRepositoryImpl implements CarreraRepository {
     /*Generar un reporte de las carreras, que para cada carrera incluya información de los
       inscriptos y egresados por año. Se deben ordenar las carreras alfabéticamente, y presentar
       los años de manera cronológica.*/
-    public List<CarreraReporteDTO> consultarReporteCarrera(){
+    public List<CarreraReporteDTO> consultarReporteCarrera() {
         EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
         Query query = em.createQuery("SELECT new DTO.CarreraReporteDTO(c.carrera, CAST(count(i.inscripcion) AS INTEGER ), CAST(SUM(CASE WHEN i.graduacion <> 0THEN 1 ELSE 0 END) AS INTEGER), i.inscripcion) FROM Carrera c JOIN c.Inscriptos i GROUP BY c.id_carrera, i.inscripcion  ORDER BY c.carrera ASC, i.inscripcion DESC");
         List<CarreraReporteDTO> reporte = query.getResultList();
         return reporte;
+    }
+    public Carrera carreraByID(int id){
+        EntityManager em = JPAUtil.getEntityManager();
+        String jpl = "SELECT c FROM Carrera c WHERE id_carrera = : id";
+        Query query = em.createQuery(jpl).setParameter("id", id);
+        Carrera carr = (Carrera) query.getSingleResult();
+        return carr;
     }
 }

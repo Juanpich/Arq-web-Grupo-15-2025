@@ -1,13 +1,14 @@
 package Repository.impl;
 
+
 import Factory.JPAUtil;
+import Modelo.Carrera;
 import Modelo.Estudiante;
-import Modelo.EstudianteCarrera;
 import Repository.EstudianteRepository;
 import com.opencsv.CSVReader;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-
+import DTO.EstudianteFiltradoDTO;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +43,34 @@ public class EstudianteRepositoryImpl implements EstudianteRepository {
         em.close();
     }
     //recuperar un estudiante, en base a su número de libreta universitaria
-    public Estudiante obtenerEstudianteSegunLU(int lu){
+    public EstudianteFiltradoDTO obtenerEstudianteSegunLU(int lu) {
         EntityManager em = JPAUtil.getEntityManager();
         em.getTransaction().begin();
-        Query query = em.createQuery("SELECT e FROM Estudiante e WHERE e.LU = :lu");
+        Query query = em.createQuery("SELECT new DTO.EstudianteFiltradoDTO( e.dni, e.nombre, e.apellido, e.genero, e.edad, e.ciudad, e.LU) FROM Estudiante e WHERE e.LU = :lu");
         query.setParameter("lu", lu);
-        List<Estudiante> es = query.getResultList();
+        List<EstudianteFiltradoDTO> es = query.getResultList();
         return es.get(0);
+    }
+    public List<EstudianteFiltradoDTO> obtenerEstudiantes(){
+        EntityManager em = JPAUtil.getEntityManager();
+        String jpql = "SELECT new DTO.EstudianteFiltradoDTO( e.dni, e.nombre, e.apellido, e.genero, e.edad, e.ciudad, e.LU) FROM Estudiante e ORDER BY nombre ASC";
+        Query query = em.createQuery(jpql);
+        List<EstudianteFiltradoDTO> estudiantes = query.getResultList();
+        return estudiantes;
+    }
+    public List<EstudianteFiltradoDTO> estudiantesByGenero(String genero){
+        EntityManager em = JPAUtil.getEntityManager();
+        Query query = em.createQuery("SELECT new DTO.EstudianteFiltradoDTO( e.dni, e.nombre, e.apellido, e.genero, e.edad, e.ciudad, e.LU) FROM Estudiante e WHERE e.genero = :genero").setParameter("genero", genero);
+        List<EstudianteFiltradoDTO> estudiantes = query.getResultList();
+        return estudiantes;
+    }
+    public List<EstudianteFiltradoDTO> estudiantesByCarrera(Carrera carreraObj, String ciudad){
+        int id_carrera = carreraObj.getId_carrera();
+        EntityManager em = JPAUtil.getEntityManager();
+        Query query = em.createQuery("SELECT new DTO.EstudianteFiltradoDTO( e.dni, e.nombre, e.apellido, e.genero, e.edad, e.ciudad, e.LU) FROM Estudiante e JOIN e.carreras c  WHERE c.id_carrera = :carrera AND e.ciudad LIKE :ciudad");
+        query.setParameter("carrera", carreraObj).setParameter("ciudad", ciudad);
+        List<EstudianteFiltradoDTO> estudiantes = query.getResultList();
+        return estudiantes;
     }
 }
 

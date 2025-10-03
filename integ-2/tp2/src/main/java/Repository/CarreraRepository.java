@@ -11,4 +11,5 @@ public interface CarreraRepository {
     public void insertarCarrera (Carrera carr);
     public List<CarreraReporteDTO> consultarReporteCarrera();
     public List<CarreraConInscriptosDTO> consultarCarrerasConInscriptos();
+    public Carrera carreraByID(int id);
 }
