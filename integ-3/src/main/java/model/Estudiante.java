@@ -3,7 +3,9 @@ package model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import service.dto.estudiante.request.EstudianteDtoRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,4 +31,15 @@ public class Estudiante {
     private int LU;
     @OneToMany(mappedBy = "id_estudiante")
     private List<EstudianteCarrera> carreras;
+
+    public Estudiante(EstudianteDtoRequest estudianteDtoRequest) {
+        this.dni = estudianteDtoRequest.getDni();
+        this.nombre = estudianteDtoRequest.getNombre();
+        this.apellido = estudianteDtoRequest.getApellido();
+        this.genero = estudianteDtoRequest.getGenero();
+        this.edad = estudianteDtoRequest.getEdad();
+        this.ciudad = estudianteDtoRequest.getCiudad();
+        this.LU = estudianteDtoRequest.getLU();
+        this.carreras = new ArrayList<>();
+    }
 }
