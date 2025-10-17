@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.example.integ3.service.dto.estudiante.response.EstudianteResponseDTO;
 
@@ -16,6 +17,7 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
             " FROM Estudiante e ORDER BY e.apellido ASC")
     List<EstudianteResponseDTO> findAllEstudiantes();
 
-
-
+    @Query("Select new org.example.integ3.service.dto.estudiante.response.EstudianteResponseDTO(e) " +
+            "From Estudiante e WHERE e.genero LIKE :genero ")
+    List<EstudianteResponseDTO> findByGenro(String genero);
 }

@@ -29,6 +29,10 @@ public class EstudianteController {
     public List<EstudianteResponseDTO> findByOrderName() {
         return this.estudianteService.findAllOrderByName();
     }
+    @GetMapping("/genero/{genero}")
+    public List<EstudianteResponseDTO> findByGenero(@PathVariable("genero") String genero) {
+        return this.estudianteService.findByGenero(genero);
+    }
 
     @PostMapping("")
     public ResponseEntity<EstudianteResponseDTO> save(@RequestBody @Valid EstudianteDtoRequest request ){
