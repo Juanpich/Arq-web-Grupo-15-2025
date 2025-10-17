@@ -15,6 +15,5 @@ public class SpringbootExampleApplication {
 
     @PostConstruct
     public void init() throws IOException {
-
     }
 }
