@@ -1,4 +1,4 @@
-package service.dto.estudiante.request;
+package org.example.integ3.service.dto.estudiante.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

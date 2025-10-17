@@ -1,9 +1,9 @@
-package model;
+package org.example.integ3.model;
 
 
 import jakarta.persistence.*;
 import lombok.*;
-import service.dto.estudiante.request.EstudianteDtoRequest;
+import org.example.integ3.service.dto.estudiante.request.EstudianteDtoRequest;
 
 import java.util.ArrayList;
 import java.util.List;

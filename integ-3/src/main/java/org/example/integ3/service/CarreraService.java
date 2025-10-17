@@ -1,10 +1,10 @@
-package service;
+package org.example.integ3.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import repository.CarreraRepository;
-import service.dto.carrera.response.CarreraConInscriptosDTO;
+import org.example.integ3.repository.CarreraRepository;
+import org.example.integ3.service.dto.carrera.response.CarreraConInscriptosDTO;
 
 import java.util.List;
 

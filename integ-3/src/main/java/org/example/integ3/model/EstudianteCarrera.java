@@ -1,4 +1,4 @@
-package model;
+package org.example.integ3.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

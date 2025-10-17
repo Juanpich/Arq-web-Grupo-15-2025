@@ -1,10 +1,10 @@
-package controller;
+package org.example.integ3.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import service.dto.estudiante.EstudianteService;
-import service.dto.estudiante.request.EstudianteDtoRequest;
-import service.dto.estudiante.response.EstudianteResponseDTO;
+import org.example.integ3.service.dto.estudiante.EstudianteService;
+import org.example.integ3.service.dto.estudiante.request.EstudianteDtoRequest;
+import org.example.integ3.service.dto.estudiante.response.EstudianteResponseDTO;
 
 import java.util.List;
 
