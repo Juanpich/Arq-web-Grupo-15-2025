@@ -1,10 +1,10 @@
-package service.dto.carrera.response;
+package org.example.integ3.service.dto.carrera.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import model.Carrera;
+import org.example.integ3.model.Carrera;
 
 @AllArgsConstructor
 @NoArgsConstructor

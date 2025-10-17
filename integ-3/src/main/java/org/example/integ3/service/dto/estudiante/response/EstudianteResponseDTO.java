@@ -1,9 +1,9 @@
-package service.dto.estudiante.response;
+package org.example.integ3.service.dto.estudiante.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import model.Estudiante;
+import org.example.integ3.model.Estudiante;
 
 @Data
 @AllArgsConstructor

@@ -1,13 +1,13 @@
-package service.dto.estudiante;
+package org.example.integ3.service.dto.estudiante;
 
 
 import lombok.RequiredArgsConstructor;
-import model.Estudiante;
+import org.example.integ3.model.Estudiante;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import repository.EstudianteRepository;
-import service.dto.estudiante.request.EstudianteDtoRequest;
-import service.dto.estudiante.response.EstudianteResponseDTO;
+import org.example.integ3.repository.EstudianteRepository;
+import org.example.integ3.service.dto.estudiante.request.EstudianteDtoRequest;
+import org.example.integ3.service.dto.estudiante.response.EstudianteResponseDTO;
 
 import java.util.List;
 

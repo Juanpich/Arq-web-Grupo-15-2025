@@ -1,6 +1,6 @@
-package repository;
+package org.example.integ3.repository;
 
-import model.Carrera;
+import org.example.integ3.model.Carrera;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

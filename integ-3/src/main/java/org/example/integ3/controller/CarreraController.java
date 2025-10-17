@@ -1,11 +1,11 @@
-package controller;
+package org.example.integ3.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import service.CarreraService;
-import service.dto.carrera.response.CarreraConInscriptosDTO;
+import org.example.integ3.service.CarreraService;
+import org.example.integ3.service.dto.carrera.response.CarreraConInscriptosDTO;
 
 import java.util.List;
 
