@@ -21,6 +21,11 @@ public class EstudianteService {
         return this.estudianteRepository.findAll().stream()
                 .map( EstudianteResponseDTO::new  ).toList();
     }
+    @Transactional(readOnly = true)
+    public List<EstudianteResponseDTO> findAllOrderByName(){
+        return this.estudianteRepository.findAllEstudiantes().stream()
+                .map( EstudianteResponseDTO::new  ).toList();
+    }
 
     public EstudianteResponseDTO insert(EstudianteDtoRequest estudianteDtoRequest) {
         Estudiante estudiante = new Estudiante(estudianteDtoRequest);

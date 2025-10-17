@@ -33,5 +33,15 @@ public class EstudianteResponseDTO {
         this.ciudad=estudiante.getCiudad();
         this.LU=estudiante.getLU();
     }
+
+    public EstudianteResponseDTO(EstudianteResponseDTO estudiante) {
+        this.dni=estudiante.getDni();
+        this.nombre=estudiante.getNombre();
+        this.apellido=estudiante.getApellido();
+        this.genero=estudiante.getGenero();
+        this.edad=estudiante.getEdad();
+        this.ciudad=estudiante.getCiudad();
+        this.LU=estudiante.getLU();
+    }
 }
 
