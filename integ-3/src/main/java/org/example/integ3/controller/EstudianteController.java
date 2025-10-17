@@ -30,4 +30,11 @@ public class EstudianteController {
         final var result = this.estudianteService.insert( request );
         return ResponseEntity.accepted().body( result );
     }
+
+    @GetMapping("/lu/{lu}")
+    public List<EstudianteResponseDTO> estudianteByLu(@PathVariable("lu") int lu){
+        return  this.estudianteService.estudianteByLu(lu);
+    }
+
+
 }

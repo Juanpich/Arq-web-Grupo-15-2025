@@ -33,5 +33,10 @@ public class EstudianteService {
         return new EstudianteResponseDTO(estudianteDtoRequest.getDni(), estudianteDtoRequest.getNombre(), estudianteDtoRequest.getApellido(), estudianteDtoRequest.getGenero(), estudianteDtoRequest.getEdad(), estudianteDtoRequest.getCiudad(), estudianteDtoRequest.getLU());
     }
 
+//    Cuando hay que devolver un solo obj, hacemos lista?
+    public List<EstudianteResponseDTO> estudianteByLu(int lu){
+        return this.estudianteRepository.estudianteByLu(lu);
+    }
+
 
 }
