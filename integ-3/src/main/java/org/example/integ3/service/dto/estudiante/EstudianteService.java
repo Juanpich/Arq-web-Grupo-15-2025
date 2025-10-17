@@ -39,4 +39,7 @@ public class EstudianteService {
     }
 
 
+    public List<EstudianteResponseDTO> findByGenero(String genero) {
+        return this.estudianteRepository.findByGenro(genero).stream().map(EstudianteResponseDTO:: new ).toList();
+    }
 }
