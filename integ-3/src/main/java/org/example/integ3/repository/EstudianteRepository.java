@@ -16,6 +16,4 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
             " FROM Estudiante e ORDER BY e.apellido ASC")
     List<EstudianteResponseDTO> findAllEstudiantes();
 
-
-
 }
