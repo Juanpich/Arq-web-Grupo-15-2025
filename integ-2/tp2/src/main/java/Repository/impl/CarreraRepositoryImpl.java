@@ -43,8 +43,8 @@ public class CarreraRepositoryImpl implements CarreraRepository {
     }
 
     //recuperar las carreras con estudiantes inscriptos, y ordenar por cantidad de inscriptos.
-    public List<CarreraConInscriptosDTO> consultarCarrerasConInscriptos() {
-        EntityManager em = JPAUtil.getEntityManager();
+    public List<CarreraConInscriptosDTO> consultarCarrerasConInscripos() {
+        EntityManager em = JPAUtil.getEntityManager();t
         em.getTransaction().begin();
         Query query = em.createQuery("SELECT new DTO.CarreraConInscriptosDTO(CAST(count(i.id_estudiante) AS integer), c.carrera, c.duracion) FROM Carrera c JOIN c.Inscriptos i GROUP BY c.id_carrera ORDER BY COUNT(i.id_estudiante) DESC");
         List<CarreraConInscriptosDTO> carreras = query.getResultList();
