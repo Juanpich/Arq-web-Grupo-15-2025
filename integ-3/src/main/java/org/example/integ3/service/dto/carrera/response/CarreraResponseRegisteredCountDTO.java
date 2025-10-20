@@ -12,8 +12,6 @@ import org.example.integ3.model.Carrera;
 @ToString
 public class CarreraResponseRegisteredCountDTO {
 
-    private int id_carrera;
-
     private int cant;
 
     private String nombreCarrera;
@@ -21,14 +19,14 @@ public class CarreraResponseRegisteredCountDTO {
     private int duracion;
 
     public CarreraResponseRegisteredCountDTO(Carrera carrera) {
-        this.id_carrera = carrera.getId_carrera();
+
         this.cant = carrera.getCant();
         this.nombreCarrera =  carrera.getCarrera();
         this.duracion = carrera.getDuracion();
     }
 
     public CarreraResponseRegisteredCountDTO(CarreraResponseRegisteredCountDTO carreraDTO) {
-        this.id_carrera = carrera.getId_carrera();
+
         this.cant = carreraDTO.getCant();
         this.nombreCarrera =  carreraDTO.getNombreCarrera();
         this.duracion = carreraDTO.getDuracion();

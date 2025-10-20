@@ -12,7 +12,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/carreras")
-@RequiredArgsConstructor
 public class CarreraController {
 
     private final CarreraService carreraService;
@@ -22,7 +21,7 @@ public class CarreraController {
     }
 
     @GetMapping("")
-    public Lisy<CarreraResponseDTO> findAll(){
+    public List<CarreraResponseDTO> findAll(){
         return this.carreraService.findAll();
     }
 
