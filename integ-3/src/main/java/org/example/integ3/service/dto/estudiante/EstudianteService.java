@@ -2,7 +2,9 @@ package org.example.integ3.service.dto.estudiante;
 
 
 import lombok.RequiredArgsConstructor;
+import org.example.integ3.model.Carrera;
 import org.example.integ3.model.Estudiante;
+import org.example.integ3.repository.CarreraRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.integ3.repository.EstudianteRepository;
@@ -15,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EstudianteService {
     private final EstudianteRepository estudianteRepository;
+    private final CarreraRepository carreraRepository;
 
     @Transactional(readOnly = true)
     public List<EstudianteResponseDTO> findAll(){
@@ -42,7 +45,11 @@ public class EstudianteService {
         return this.estudianteRepository.findByGenro(genero).stream().map(EstudianteResponseDTO:: new ).toList();
     }
 
-    public List<EstudianteResponseDTO> estudianteByCarreraCiudad(String carrera, String ciudad) {
-        return this.estudianteRepository.estudianteByCarreraCiudad(carrera, ciudad).stream().map(EstudianteResponseDTO:: new ).toList();
+    public List<EstudianteResponseDTO> estudianteByCarreraCiudad(String carrera, String ciudad) throws IllegalArgumentException{
+        Carrera carreraObj = this.carreraRepository.findById(Long.valueOf(carrera)).orElse(null);
+
+        if(carreraObj == null)
+            throw new IllegalArgumentException();
+        return this.estudianteRepository.estudianteByCarreraCiudad(carreraObj, ciudad).stream().map(EstudianteResponseDTO:: new ).toList();
     }
 }
