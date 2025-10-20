@@ -1,5 +1,8 @@
 package org.example.integ3.controller;
 import jakarta.validation.Valid;
+import org.example.integ3.service.dto.estudianteCarreraRepository.EstudianteCarreraService;
+import org.example.integ3.service.dto.estudianteCarreraRepository.request.EstudianteCarreraRequestDTO;
+import org.example.integ3.service.dto.estudianteCarreraRepository.response.EstudianteCarreraResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +26,8 @@ public class EstudianteCarreraController {
 
     @PostMapping("")
     public List<EstudianteCarreraResponseDTO> matricularEstudiante(@RequestBody @Valid EstudianteCarreraRequestDTO estudianteDtoRequest){
-        final var result = this.estudianteCarreraService.save( request );
-        return ResponseEntity.accepted().body( result );
+        final var result = this.estudianteCarreraService.insert( estudianteDtoRequest );
+        return (List<EstudianteCarreraResponseDTO>) ResponseEntity.accepted().body( result );
 
     }
 }
