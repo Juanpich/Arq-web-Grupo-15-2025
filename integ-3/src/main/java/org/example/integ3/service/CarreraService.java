@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.integ3.repository.CarreraRepository;
-import org.example.integ3.service.dto.carrera.response.CarreraResponseRegisteredCountDTO;
+import org.example.integ3.service.dto.carrera.response.CarreraRegisteredCountDTO;
 import org.example.integ3.service.dto.carrera.response.CarreraResponseReportDTO;
 import org.example.integ3.service.dto.carrera.response.CarreraResponseDTO;
 
@@ -17,9 +17,9 @@ public class CarreraService {
     private final CarreraRepository carreraRepository;
 
     @Transactional(readOnly = true)
-    public List<CarreraResponseRegisteredCountDTO> findAllOrderByRegisteredCount() {
+    public List<CarreraRegisteredCountDTO> findAllOrderByRegisteredCount() {
         return this.carreraRepository.findAllOrderByRegisteredCount()
-                .stream().map(CarreraResponseRegisteredCountDTO::new).toList();
+                .stream().map(CarreraRegisteredCountDTO::new).toList();
     }
 
     @Transactional(readOnly = true)

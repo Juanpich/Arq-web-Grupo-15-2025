@@ -1,11 +1,10 @@
 package org.example.integ3.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.example.integ3.service.CarreraService;
-import org.example.integ3.service.dto.carrera.response.CarreraResponseRegisteredCountDTO;
+import org.example.integ3.service.dto.carrera.response.CarreraRegisteredCountDTO;
 import org.example.integ3.service.dto.carrera.response.CarreraResponseReportDTO;
 import org.example.integ3.service.dto.carrera.response.CarreraResponseDTO;
 import java.util.List;
@@ -26,7 +25,7 @@ public class CarreraController {
     }
 
     @GetMapping("/orderInscriptos")
-    public List<CarreraResponseRegisteredCountDTO> consultarCarrerasPorInscriptos() {
+    public List<CarreraRegisteredCountDTO> consultarCarrerasPorInscriptos() {
         return this.carreraService.findAllOrderByRegisteredCount();
     }
 
