@@ -16,12 +16,18 @@ public interface EstudianteRepository extends JpaRepository<Estudiante, Long> {
             " FROM Estudiante e ORDER BY e.apellido ASC")
     List<EstudianteResponseDTO> findAllEstudiantes();
 
-
     @Query("Select new org.example.integ3.service.dto.estudiante.response.EstudianteResponseDTO(e) " +
             "From Estudiante e WHERE e.genero LIKE :genero ")
     List<EstudianteResponseDTO> findByGenro(String genero);
 
     @Query("SELECT new org.example.integ3.service.dto.estudiante.response.EstudianteResponseDTO(e)" +
             " FROM Estudiante e WHERE e.LU = :lu") List<EstudianteResponseDTO> estudianteByLu(int lu);
+
+    @Query("SELECT new org.example.integ3.service.dto.estudiante.response.EstudianteResponseDTO(e) " +
+            "FROM Estudiante e " +
+            "JOIN e.carreras c  " +
+            "WHERE c.id_carrera = :carrera " +
+            "AND e.ciudad LIKE :ciudad")
+    List<EstudianteResponseDTO> estudianteByCarreraCiudad(String carrera, String ciudad);
 
 }

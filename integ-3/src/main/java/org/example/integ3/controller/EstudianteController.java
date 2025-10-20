@@ -45,6 +45,9 @@ public class EstudianteController {
         return  this.estudianteService.estudianteByLu(lu);
     }
 
-
+    @GetMapping("/carrera/{carrera}/ciudad/{ciudad}")
+    public List<EstudianteResponseDTO> estudianteByCarreraCiudad(@PathVariable("carrera") String carrera, @PathVariable("ciudad") String ciudad) {
+        return this.estudianteService.estudianteByCarreraCiudad(carrera, ciudad);
+    }
 
 }

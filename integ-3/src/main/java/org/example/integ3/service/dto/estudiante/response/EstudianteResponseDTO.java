@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.example.integ3.model.Estudiante;
 
+import java.util.ArrayList;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,6 +44,14 @@ public class EstudianteResponseDTO {
         this.edad=estudiante.getEdad();
         this.ciudad=estudiante.getCiudad();
         this.LU=estudiante.getLU();
+    }
+
+    public Estudiante DTOToEntity() {
+        Estudiante estudiante = new Estudiante(this.getDni(),
+                            this.getNombre(), this.getApellido(),
+                            this.getGenero(), this.getEdad(),
+                            this.getCiudad(), this.getLU(), new ArrayList<>());
+        return estudiante;
     }
 }
 
