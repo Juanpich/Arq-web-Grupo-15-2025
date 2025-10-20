@@ -12,7 +12,7 @@ import java.util.List;
 public interface CarreraRepository extends JpaRepository<Carrera, Long> {
 
 
-    @Query( "SELECT new org.example.integ3.service.dto.carrera.response.CarreraResponseRegisteredCountDTO( CAST(count(i.id_estudiante) AS integer),c.carrera, c.duracion) " +
+    @Query( "SELECT new org.example.integ3.service.dto.carrera.response.CarreraRegisteredCountDTO( CAST(count(i.id_estudiante) AS integer),c.carrera, c.duracion) " +
             "FROM Carrera c " +
             "JOIN c.Inscriptos i " +
             "GROUP BY c.id_carrera " +
