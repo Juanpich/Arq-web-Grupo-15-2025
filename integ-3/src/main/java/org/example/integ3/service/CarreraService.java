@@ -30,7 +30,6 @@ public class CarreraService {
 
     @Transactional(readOnly = true)
     public List<CarreraResponseReportDTO> carreraReport() {
-        return this.carreraRepository.carreraReport()
-                .stream().map(CarreraResponseReportDTO::new).toList();
+        return this.carreraRepository.carreraReport();
     }
 }

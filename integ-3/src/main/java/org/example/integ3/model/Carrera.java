@@ -31,10 +31,4 @@ public class Carrera {
         return getInscriptos().size();
     }
 
-    public Carrera(CarreraResponseDTO carrera) {
-        this.id_carrera = carrera.getId_carrera();
-        this.carrera = getCarrera();
-        this.duracion = carrera.getDuracion();
-        this.Inscriptos = new ArrayList<>();
-    }
 }
