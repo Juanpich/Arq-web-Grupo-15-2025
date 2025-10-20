@@ -10,7 +10,7 @@ import org.example.integ3.model.Carrera;
 @NoArgsConstructor
 @Data
 @ToString
-public class CarreraResponseRegisteredCountDTO {
+public class CarreraRegisteredCountDTO {
 
     private int cant;
 
@@ -18,14 +18,14 @@ public class CarreraResponseRegisteredCountDTO {
 
     private int duracion;
 
-    public CarreraResponseRegisteredCountDTO(Carrera carrera) {
+    public CarreraRegisteredCountDTO(Carrera carrera) {
 
         this.cant = carrera.getCant();
         this.nombreCarrera =  carrera.getCarrera();
         this.duracion = carrera.getDuracion();
     }
 
-    public CarreraResponseRegisteredCountDTO(CarreraResponseRegisteredCountDTO carreraDTO) {
+    public CarreraRegisteredCountDTO(CarreraRegisteredCountDTO carreraDTO) {
 
         this.cant = carreraDTO.getCant();
         this.nombreCarrera =  carreraDTO.getNombreCarrera();

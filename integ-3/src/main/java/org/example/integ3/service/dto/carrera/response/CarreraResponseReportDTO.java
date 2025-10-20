@@ -15,4 +15,10 @@ public class CarreraResponseReportDTO {
     private int cantEgresados;
     private int anio;
 
+    public CarreraResponseReportDTO(CarreraResponseReportDTO carreraResponseReportDTO) {
+        this.carrera = carreraResponseReportDTO.getCarrera();
+        this.cantInscriptos = carreraResponseReportDTO.getCantInscriptos();
+        this.cantEgresados = carreraResponseReportDTO.getCantEgresados();
+        this.anio = carreraResponseReportDTO.getAnio();
+    }
 }
