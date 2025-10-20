@@ -1,0 +1,198 @@
+{
+	"info": {
+		"_postman_id": "75af47f8-aa83-4d3c-8f48-401caf827fa1",
+		"name": "Integ-3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39005981"
+	},
+	"item": [
+		{
+			"name": "Ej_A",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "   {\r\n        \"dni\": 123456,\r\n        \"nombre\": \"Pedro\",\r\n        \"apellido\": \"Picapiedra\",\r\n        \"genero\": \"Male\",\r\n        \"edad\": 40,\r\n        \"ciudad\": \"Tandil\",\r\n        \"lu\": 987654\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/estudiantes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"estudiantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ej_B",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "   {\r\n        \"id_estudiante\": 123456,\r\n        \"id_carrera\": 2\r\n        \r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/estudiantesmatricular",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"estudiantesmatricular"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ej_C",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/estudiantes/order",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"estudiantes",
+						"order"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ej_D",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/estudiantes/lu/987654",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"estudiantes",
+						"lu",
+						"987654"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ej_E",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/estudiantes/genero/male",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"estudiantes",
+						"genero",
+						"male"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ej_F",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/carreras",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carreras"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ej_G",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/estudiantes/carrera/2/ciudad/tandil",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"estudiantes",
+						"carrera",
+						"2",
+						"ciudad",
+						"tandil"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ej_H",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/carreras/reporte",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"carreras",
+						"reporte"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
