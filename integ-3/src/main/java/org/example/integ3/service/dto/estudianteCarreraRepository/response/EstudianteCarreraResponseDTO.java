@@ -11,15 +11,15 @@ public class EstudianteCarreraResponseDTO {
     private int inscripcion;
     private int graduacion;
     private int antiguedad;
-    private Estudiante id_estudiante;
-    private Carrera id_carrera;
+    private Long id_estudiante;
+    private Long id_carrera;
 
     public EstudianteCarreraResponseDTO(EstudianteCarrera result) {
         this.id_inscripcion = (long) result.getInscripcion();
         this.inscripcion = result.getInscripcion();
         this.graduacion = result.getGraduacion();
         this.antiguedad = result.getAntiguedad();
-        this.id_estudiante = result.getId_estudiante();
-        this.id_carrera = result.getId_carrera();
+        this.id_estudiante = (long) result.getId_estudiante().getDni();
+        this.id_carrera = (long) result.getId_carrera().getId_carrera();
     }
 }

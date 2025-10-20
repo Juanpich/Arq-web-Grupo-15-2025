@@ -1,5 +1,6 @@
 package org.example.integ3.controller;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.example.integ3.service.dto.estudiante.EstudianteService;
@@ -37,7 +38,7 @@ public class EstudianteController {
     @PostMapping("")
     public ResponseEntity<EstudianteResponseDTO> save(@RequestBody @Valid EstudianteDtoRequest request ){
         final var result = this.estudianteService.insert( request );
-        return ResponseEntity.accepted().body( result );
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @GetMapping("/lu/{lu}")

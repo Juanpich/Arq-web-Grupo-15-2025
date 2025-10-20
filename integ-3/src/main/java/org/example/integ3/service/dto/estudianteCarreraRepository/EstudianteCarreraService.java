@@ -21,7 +21,8 @@ public class EstudianteCarreraService  {
     private final EstudianteCarreraRepository estudianteCarreraRepository;
     private final EstudianteRepository estudianteRepository;
     private final CarreraRepository carreraRepository;
-    public EstudianteCarreraRequestDTO insert(EstudianteCarreraRequestDTO inscripcionDto) throws IllegalArgumentException {
+    
+    public EstudianteCarreraResponseDTO insert(EstudianteCarreraRequestDTO inscripcionDto) throws IllegalArgumentException {
     //se debe buscar la carrera y el estudiantes antes de guardar
         Estudiante est = estudianteRepository.findById(inscripcionDto.getId_estudiante()).orElse(null);
         Carrera carr = carreraRepository.findById(inscripcionDto.getId_carrera()).orElse(null);
@@ -30,7 +31,6 @@ public class EstudianteCarreraService  {
         }
         EstudianteCarrera estCarr = new EstudianteCarrera(LocalDate.now().getYear(), 0, 0, est, carr );
         EstudianteCarrera result = this.estudianteCarreraRepository.save(estCarr);
-
         return new EstudianteCarreraResponseDTO(result);
     }
 }
