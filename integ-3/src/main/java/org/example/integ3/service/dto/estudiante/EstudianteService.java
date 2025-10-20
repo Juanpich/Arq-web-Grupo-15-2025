@@ -38,8 +38,11 @@ public class EstudianteService {
         return this.estudianteRepository.estudianteByLu(lu);
     }
 
-
     public List<EstudianteResponseDTO> findByGenero(String genero) {
         return this.estudianteRepository.findByGenro(genero).stream().map(EstudianteResponseDTO:: new ).toList();
+    }
+
+    public List<EstudianteResponseDTO> estudianteByCarreraCiudad(String carrera, String ciudad) {
+        return this.estudianteRepository.estudianteByCarreraCiudad(carrera, ciudad).stream().map(EstudianteResponseDTO:: new ).toList();
     }
 }

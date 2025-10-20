@@ -2,8 +2,10 @@ package org.example.integ3.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.integ3.service.dto.carrera.response.CarreraResponseDTO;
 
 
+import java.util.ArrayList;
 import java.util.List;
 @Getter
 @Setter
@@ -27,5 +29,12 @@ public class Carrera {
 
     public int getCant() {
         return getInscriptos().size();
+    }
+
+    public Carrera(CarreraResponseDTO carrera) {
+        this.id_carrera = carrera.getId_carrera();
+        this.carrera = getCarrera();
+        this.duracion = carrera.getDuracion();
+        this.Inscriptos = new ArrayList<>();
     }
 }
