@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Optional;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,6 +15,7 @@ import lombok.Setter;
 @Entity
 public class EstudianteCarrera {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private int inscripcion;
@@ -27,5 +30,11 @@ public class EstudianteCarrera {
     @JoinColumn(name= "id_carrera")
     private Carrera id_carrera;
 
-
+    public EstudianteCarrera(int inscripcion, int graduacion, int antiguedad, Estudiante id_estudiante, Carrera id_carrera) {
+        this.inscripcion = inscripcion;
+        this.graduacion = graduacion;
+        this.antiguedad = antiguedad;
+        this.id_estudiante = id_estudiante;
+        this.id_carrera = id_carrera;
+    }
 }
