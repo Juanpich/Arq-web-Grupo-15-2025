@@ -25,4 +25,7 @@ public class Carrera {
     @OneToMany(mappedBy = "id_carrera")
     private List<EstudianteCarrera> Inscriptos;
 
+    public int getCant() {
+        return getInscriptos().size();
+    }
 }

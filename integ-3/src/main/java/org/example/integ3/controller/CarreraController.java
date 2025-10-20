@@ -1,23 +1,36 @@
 package org.example.integ3.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.example.integ3.service.CarreraService;
-import org.example.integ3.service.dto.carrera.response.CarreraConInscriptosDTO;
-
+import org.example.integ3.service.dto.carrera.response.CarreraRegisteredCountDTO;
+import org.example.integ3.service.dto.carrera.response.CarreraResponseReportDTO;
+import org.example.integ3.service.dto.carrera.response.CarreraResponseDTO;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/carreras")
-@RequiredArgsConstructor
 public class CarreraController {
 
     private final CarreraService carreraService;
 
+    public CarreraController(CarreraService carreraService) {
+        this.carreraService = carreraService;
+    }
+
+    @GetMapping("")
+    public List<CarreraResponseDTO> findAll(){
+        return this.carreraService.findAll();
+    }
+
     @GetMapping("/orderInscriptos")
-    public List<CarreraConInscriptosDTO> consultarCarrerasConInscriptos() {
-        return this.carreraService.consultarCarrerasConInscriptos();
+    public List<CarreraRegisteredCountDTO> consultarCarrerasPorInscriptos() {
+        return this.carreraService.findAllOrderByRegisteredCount();
+    }
+
+    @GetMapping("/reporte")
+    public List<CarreraResponseReportDTO> carreraReport() {
+        return this.carreraService.carreraReport();
     }
 }
