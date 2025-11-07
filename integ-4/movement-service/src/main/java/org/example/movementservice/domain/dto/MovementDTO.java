@@ -20,10 +20,13 @@ public class MovementDTO {
     private LocalDate date;
 
     public MovementDTO(Movement movement){
-        this.movement_id = movement.getMovement_id();
-        this.account_id =  movement.getAccount_id();
-        this.user_id = movement.getUser_id();
-        this.amount =  movement.getAmount();
+        if (movement != null) {
+            this.movement_id = movement.getMovement_id();
+            this.account_id = movement.getAccount_id();
+            this.user_id = movement.getUser_id();
+            this.amount = movement.getAmount();
+            this.date = movement.getDate();
+        }
     }
 
     public Movement DTOToEntity() {

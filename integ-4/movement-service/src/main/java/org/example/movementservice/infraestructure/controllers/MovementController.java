@@ -3,8 +3,8 @@ package org.example.movementservice.infraestructure.controllers;
 
 import org.example.movementservice.application.services.MovementService;
 import org.example.movementservice.domain.dto.MovementDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 //import jakarta.validation.Valid;
+import org.example.movementservice.domain.entities.Movement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +15,6 @@ import java.util.List;
 @RequestMapping("/movement")
 public class MovementController {
 
-    @Autowired
     MovementService movementService;
 
     @GetMapping("")
@@ -35,9 +34,20 @@ public class MovementController {
 
 //    @Valid
     @PostMapping("")
-    public ResponseEntity<MovementDTO> matricularEstudiante(@RequestBody MovementDTO movementDTObody){
-        final var result = this.movementService.insert( movementDTObody );
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+    public ResponseEntity<?> createMovement(@RequestBody Movement movementBody){
+        final var movementCreated = this.movementService.insert( movementBody );
+        if (movementCreated == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se creo el movimiento");
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(movementCreated);
+    }
 
+    @PutMapping("/{movementId}")
+    public ResponseEntity<?> updateMovement(@RequestBody Movement movementToUpdate, @PathVariable Long movementId){
+        MovementDTO updatedMovementDTO = this.movementService.updateMovement(movementId, movementToUpdate);
+        if(updatedMovementDTO == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el movimiento de id " + movementId);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(updatedMovementDTO);
     }
 }

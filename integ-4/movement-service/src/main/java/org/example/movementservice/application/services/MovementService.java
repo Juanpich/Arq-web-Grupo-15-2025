@@ -36,13 +36,25 @@ public class MovementService {
                 .stream().map(MovementDTO::new).toList();
     }
 
-    public MovementDTO insert(MovementDTO movementDTObody) throws IllegalArgumentException {
+    @Transactional
+    public MovementDTO insert(Movement movementBody) throws IllegalArgumentException {
         //se debe buscar el usuario y la cuenta antes de guardar, como buscar?
 //        if(no existe el usuario o no existe la cuenta {
 //            throw new IllegalArgumentException();
 //        }
-        Movement newMovement = new Movement(movementDTObody.getAccount_id(), movementDTObody.getUser_id(), movementDTObody.getAmount(), LocalDate.now());
-        Movement result = this.movementRepo.save(newMovement);
+        Movement result = this.movementRepo.save(movementBody);
         return new MovementDTO(result);
+    }
+
+    @Transactional
+    public MovementDTO updateMovement(Long oldMovementId, Movement newMovement) {
+        Movement oldMovement = this.movementRepo.findById(oldMovementId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + oldMovementId));
+        oldMovement.setAccount_id(newMovement.getAccount_id());
+        oldMovement.setUser_id(newMovement.getUser_id());
+        oldMovement.setAmount(newMovement.getAmount());
+        oldMovement.setDate(newMovement.getDate());
+
+        Movement updatedMovement = this.movementRepo.save(oldMovement);
+        return new MovementDTO(updatedMovement);
     }
 }
