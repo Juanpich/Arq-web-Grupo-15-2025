@@ -7,6 +7,7 @@ import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
+import org.example.userservice.domain.exceptions.InvalidAmountException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -63,7 +64,11 @@ public class AccountService {
         Long id = accountData.getAccount_id();
         Account account = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException(id));
-        account.setAmount(accountData.getAmount());
+
+        if(accountData.getAmount() <= 0){
+            throw new InvalidAmountException(accountData.getAmount());
+        }
+        account.setAmount(accountData.getAmount() + account.getAmount());
         Account updated = accountRepository.save(account);
         return new AccountDto(updated);
     }
