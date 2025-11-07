@@ -5,6 +5,7 @@ import org.example.userservice.domain.dto.AccountDto;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
+import org.example.userservice.domain.exceptions.InvalidAmountException;
 import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -78,6 +79,11 @@ public class AccountController {
                     .body(e.getMessage());
         }catch (UserAlreadyAssociatedException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }catch (InvalidAmountException e){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+
         }
     }
     @PutMapping("/{id}/changeType")
