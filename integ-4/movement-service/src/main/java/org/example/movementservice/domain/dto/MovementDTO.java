@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.example.movementservice.domain.entities.Movement;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class MovementDTO {
     private int account_id;
     private int user_id;
     private int amount;
-    private Date date;
+    private LocalDate date;
 
     public MovementDTO(Movement movement){
         this.movement_id = movement.getMovement_id();

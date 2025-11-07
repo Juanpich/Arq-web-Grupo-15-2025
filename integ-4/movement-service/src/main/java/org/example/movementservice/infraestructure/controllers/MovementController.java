@@ -4,10 +4,10 @@ package org.example.movementservice.infraestructure.controllers;
 import org.example.movementservice.application.services.MovementService;
 import org.example.movementservice.domain.dto.MovementDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+//import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,4 +33,11 @@ public class MovementController {
         return this.movementService.findMovementsByAccount(accountId);
     }
 
+//    @Valid
+    @PostMapping("")
+    public ResponseEntity<MovementDTO> matricularEstudiante(@RequestBody MovementDTO movementDTObody){
+        final var result = this.movementService.insert( movementDTObody );
+        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+
+    }
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -24,9 +24,9 @@ public class Movement {
     private int account_id;
     private int user_id;
     private int amount;
-    private Date date;
+    private LocalDate date;
 
-    public Movement(int accountId, int userId, int amount, Date date) {
+    public Movement(int accountId, int userId, int amount, LocalDate date) {
         this.account_id = accountId;
         this.user_id = userId;
         this.amount = amount;
