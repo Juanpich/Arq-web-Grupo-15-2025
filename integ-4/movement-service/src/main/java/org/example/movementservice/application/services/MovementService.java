@@ -21,4 +21,16 @@ public class MovementService {
         return this.movementRepo.findAll()
                 .stream().map(MovementDTO::new).toList();
     }
+
+    @Transactional(readOnly = true)
+    public List<MovementDTO> findMovementsByUser(int userId) {
+        return this.movementRepo.findMovementsByUser(userId)
+        .stream().map(MovementDTO::new).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MovementDTO> findMovementsByAccount(int accountId) {
+        return this.movementRepo.findMovementsByAccount(accountId)
+                .stream().map(MovementDTO::new).toList();
+    }
 }

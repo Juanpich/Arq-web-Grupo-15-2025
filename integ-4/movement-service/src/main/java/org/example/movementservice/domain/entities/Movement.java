@@ -32,4 +32,11 @@ public class Movement {
         this.amount = amount;
         this.date = date;
     }
+
+    public Movement(Movement newMovement) {
+        this.account_id = newMovement.getAccount_id();
+        this.user_id = newMovement.getUser_id();
+        this.amount = newMovement.getAmount();
+        this.date = newMovement.getDate();
+    }
 }
