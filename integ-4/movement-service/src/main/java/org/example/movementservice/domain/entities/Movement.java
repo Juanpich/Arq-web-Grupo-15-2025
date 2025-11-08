@@ -42,6 +42,7 @@ public class Movement {
     }
 
     public Movement(Movement newMovement) {
+        this.movementId = newMovement.getMovementId();
         this.accountId = newMovement.getAccountId();
         this.userId = newMovement.getUserId();
         this.amount = newMovement.getAmount();
