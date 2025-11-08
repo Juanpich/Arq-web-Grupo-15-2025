@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -17,6 +16,10 @@ public class MovementService {
 
     @Autowired
     private MovementRepository movementRepo;
+
+    public MovementService(MovementRepository movementRepo) {
+        this.movementRepo = movementRepo;
+    }
 
     @Transactional(readOnly = true)
     public List<MovementDTO> findAllMovements() {

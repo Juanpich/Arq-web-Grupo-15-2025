@@ -15,7 +15,10 @@ import java.util.List;
 @RequestMapping("/movement")
 public class MovementController {
 
-    MovementService movementService;
+    private final MovementService movementService;
+    public MovementController(MovementService movementService) {
+        this.movementService = movementService;
+    }
 
     @GetMapping("")
     public List<MovementDTO> findAllMovements(){
