@@ -49,8 +49,8 @@ public class MovementService {
     @Transactional
     public MovementDTO updateMovement(Long oldMovementId, Movement newMovement) {
         Movement oldMovement = this.movementRepo.findById(oldMovementId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + oldMovementId));
-        oldMovement.setAccount_id(newMovement.getAccount_id());
-        oldMovement.setUser_id(newMovement.getUser_id());
+        oldMovement.setAccountId(newMovement.getAccountId());
+        oldMovement.setUserId(newMovement.getUserId());
         oldMovement.setAmount(newMovement.getAmount());
         oldMovement.setDate(newMovement.getDate());
 
