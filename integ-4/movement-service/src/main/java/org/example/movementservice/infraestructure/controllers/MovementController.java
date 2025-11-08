@@ -22,6 +22,11 @@ public class MovementController {
         return this.movementService.findAllMovements();
     }
 
+    @GetMapping("/{movementId}")
+    public List<MovementDTO> findMovementById(@PathVariable("movementId") Long movementId){
+        return this.movementService.findMovementById(movementId);
+    }
+
     @GetMapping("/userId/{userId}")
     public List<MovementDTO> findAllMovementsByUser(@PathVariable int userId){
         return this.movementService.findMovementsByUser(userId);
@@ -49,5 +54,11 @@ public class MovementController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el movimiento de id " + movementId);
         }
         return ResponseEntity.status(HttpStatus.OK).body(updatedMovementDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMovement(@PathVariable Long movementId) {
+        this.movementService.delete(movementId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

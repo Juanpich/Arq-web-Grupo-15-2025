@@ -23,6 +23,10 @@ public class MovementService {
         return this.movementRepo.findAll()
                 .stream().map(MovementDTO::new).toList();
     }
+    public List<MovementDTO> findMovementById(Long movementId) {
+        return this.movementRepo.findById(movementId)
+                .stream().map(MovementDTO::new).toList();
+    }
 
     @Transactional(readOnly = true)
     public List<MovementDTO> findMovementsByUser(int userId) {
@@ -57,4 +61,9 @@ public class MovementService {
         Movement updatedMovement = this.movementRepo.save(oldMovement);
         return new MovementDTO(updatedMovement);
     }
+
+    public void delete(Long movementId) {
+        this.movementRepo.deleteById(movementId);
+    }
+
 }
