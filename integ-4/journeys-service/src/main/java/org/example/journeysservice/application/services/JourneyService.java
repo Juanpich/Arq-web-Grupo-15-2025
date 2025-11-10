@@ -3,8 +3,6 @@ package org.example.journeysservice.application.services;
 import org.example.journeysservice.application.repositories.JourneyRepository;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.entities.Journey;
-import org.example.movementservice.domain.dto.MovementDTO;
-import org.example.movementservice.domain.entities.Movement;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,6 +56,7 @@ public class JourneyService {
     @Transactional
     public List<JourneyDTO> FindAllJourneysByScooterANDYear(Long scooter_id, Integer anio) {
         return this.journeyRepo.findAllJourneysByScooterByYear(scooter_id, anio);
+    }
 
     @Transactional
     public JourneyDTO updateJourney(Long journeyId, Journey journeyBody) throws IllegalArgumentException {

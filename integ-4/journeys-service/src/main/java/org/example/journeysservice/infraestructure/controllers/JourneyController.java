@@ -63,6 +63,7 @@ public class JourneyController {
     public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable Long scooter_id, @PathVariable Integer anio) {
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooterANDYear(scooter_id, anio);
         return ResponseEntity.ok(result);
+    }
 
     @PutMapping("/{journeyId}")
     public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @RequestParam Long journeyId) {
