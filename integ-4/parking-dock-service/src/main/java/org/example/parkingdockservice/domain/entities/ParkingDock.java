@@ -1,10 +1,7 @@
 package org.example.parkingdockservice.domain.entities;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,5 +17,7 @@ public class ParkingDock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long parkingDock_id;
     private String parkingDock_ubication;
+
+    @ElementCollection
     private List<Long> scooters;
 }

@@ -46,16 +46,21 @@ public class ParkingDockService {
         parkingDockRepository.deleteById(id);
     }
 
-    //Edita una parada
-    public ParkingDockDTO updateParkingDock(ParkingDock parking) {
-        //Traigo la parada que se quiere editar
-        Long parking_id = parking.getParkingDock_id();
-        ParkingDock parking_obj = parkingDockRepository.findById(parking_id).orElse(null) ;
-        //Le seteo los nuevos valores
+    // Edita una parada
+    @Transactional
+    public ParkingDockDTO updateParkingDock(Long id, ParkingDock parking) {
+        // Busco la parada que se quiere editar
+        ParkingDock parking_obj = parkingDockRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("ParkingDock not found"));
+
+        // Seteo los nuevos valores
         parking_obj.setParkingDock_ubication(parking.getParkingDock_ubication());
         parking_obj.setScooters(parking.getScooters());
-        //Retorno la parada recien creada en dto.
-        ParkingDock saved =  parkingDockRepository.save(parking_obj);
+
+        // Guardo los cambios
+        ParkingDock saved = parkingDockRepository.save(parking_obj);
+
         return new ParkingDockDTO(saved);
     }
+
 }

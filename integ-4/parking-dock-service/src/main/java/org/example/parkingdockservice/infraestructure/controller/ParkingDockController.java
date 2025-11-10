@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/parkingdock")
+@RequestMapping("/parkingdock")
 public class ParkingDockController {
 
     private final ParkingDockService parkingDockService;
@@ -31,14 +31,14 @@ public class ParkingDockController {
         return parkingDockService.findParkingDockById(id);
     }
     //Crear una parada
-    @PostMapping("/{id}")
-    public ParkingDockDTO persistParkingDock(@PathVariable Long id, @Valid @RequestBody ParkingDock parkingDock) {
+    @PostMapping("")
+    public ParkingDockDTO persistParkingDock(@RequestBody ParkingDock parkingDock) {
         return parkingDockService.persistParkingDock(parkingDock);
     }
     //Editar una parada
     @PutMapping("/{id}")
     public ParkingDockDTO updateParkingDock(@PathVariable Long id, @Valid @RequestBody ParkingDock parkingDock) {
-        return parkingDockService.updateParkingDock(parkingDock);
+        return parkingDockService.updateParkingDock(id, parkingDock);
     }
     //Eliminar una parada
     @DeleteMapping("/{id}")
