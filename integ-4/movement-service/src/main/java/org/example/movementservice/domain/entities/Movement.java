@@ -13,7 +13,6 @@ import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
-@RequiredArgsConstructor
 @Data
 public class Movement {
 

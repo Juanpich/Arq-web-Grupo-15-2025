@@ -19,9 +19,11 @@ import java.util.Map;
 @RequestMapping("/scooter")
 public class ScooterController {
     private ScooterService scooterService;
+
     public ScooterController(ScooterService scooterService){
         this.scooterService = scooterService;
     }
+
     @GetMapping("")
     public ResponseEntity<?> getAllScooter(@RequestParam(required = false) String state){
         List<ScooterDto> scooters;
@@ -40,6 +42,7 @@ public class ScooterController {
         }
         return ResponseEntity.ok(scooters);
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getSccoterById(@PathVariable("id") Long id) {
         try{
@@ -49,6 +52,7 @@ public class ScooterController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
     @PostMapping("")
     public ResponseEntity<?> createScooter(@RequestBody Scooter scooter){
         try{

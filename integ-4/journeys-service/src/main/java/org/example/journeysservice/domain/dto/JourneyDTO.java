@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.example.journeysservice.domain.entities.Journey;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -17,9 +18,9 @@ public class JourneyDTO {
     private Long journeyId;
 
     private Long scooterId;
-    private LocalDateTime date;
-    private int initHour;
-    private int finishHour;
+    private LocalDate date;
+    private LocalDateTime initHour;
+    private LocalDateTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
 
@@ -31,10 +32,5 @@ public class JourneyDTO {
         this.finishHour = newjourney.getFinishHour();
         this.kmTraveled = newjourney.getKmTraveled();
         this.pauseMinutes = newjourney.getPauseMinutes();
-    }
-
-    public Journey DTOToEntity() {
-        return new Journey(this.getJourneyId(), this.getScooterId(), this.getDate(),
-                this.getInitHour(), this.getFinishHour(), this.getKmTraveled(), this.getPauseMinutes());
     }
 }

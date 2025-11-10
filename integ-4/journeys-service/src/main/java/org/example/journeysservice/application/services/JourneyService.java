@@ -2,12 +2,14 @@ package org.example.journeysservice.application.services;
 
 import org.example.journeysservice.application.repositories.JourneyRepository;
 import org.example.journeysservice.domain.dto.JourneyDTO;
+import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class JourneyService {
@@ -18,28 +20,53 @@ public class JourneyService {
         this.journeyRepo = journeyRepo;
     }
 
+    //Trae todos los viajes.
     @Transactional(readOnly = true)
     public List<JourneyDTO> findAllJourneys() {
         return this.journeyRepo.findAll()
                 .stream().map(JourneyDTO::new).toList();
     }
 
+    //Trae un viaje por id.
     @Transactional(readOnly = true)
     public List<JourneyDTO> findJourneyById(Long id) {
         return this.journeyRepo.findById(id)
                 .stream().map(JourneyDTO::new).toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<ScooterKmReportDTO> findAllScooterKm(int kmSearch, String includePausedMinutes) {
+        if (includePausedMinutes.equals("include")) {
+            return this.journeyRepo.scooterKmPauseMinutesReport(kmSearch);
+        } else {
+            return this.journeyRepo.scooterKmReport(kmSearch);
+        }
+    }
+
+    //Elimina un viaje.
     @Transactional
-    public void  deleteJourneyById(Long id) {
+    public void deleteJourneyById(Long id) {
         this.journeyRepo.deleteById(id);
     }
 
+    //Insertar un viaje.
     @Transactional
     public JourneyDTO insertJourney(Journey journeyBody) throws IllegalArgumentException {
 //        chequear si el id del scooter existe?
         Journey result = this.journeyRepo.save(journeyBody);
         return new JourneyDTO(result);
+    }
+
+    //Los viajes de un scooter
+    @Transactional
+    public List<JourneyDTO> FindAllJourneysByScooter(Long scooter_id) {
+        return this.journeyRepo.findAllJourneysByScooter(scooter_id);
+    }
+
+    //Los viajes de un scooter en un anio.
+    @Transactional
+    public List<JourneyDTO> FindAllJourneysByScooterANDYear(Long scooter_id, Integer anio) {
+        return this.journeyRepo.findAllJourneysByScooterByYear(scooter_id, anio);
     }
 
     @Transactional
@@ -57,7 +84,15 @@ public class JourneyService {
     }
     @Transactional(readOnly = true)
     public List<JourneyDTO> getgetJourneyByUser(Long userId, LocalDate startDate, LocalDate endDate) {
+        return this.journeyRepo.getJourneyByUser(userId, startDate, endDate);
+    }
+    public Object endJourney(Long journeyId, Journey journey) {
+        Journey oldJourney = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + journeyId));
+        oldJourney.setFinishHour(journey.getFinishHour());
+        oldJourney.calcTotalHoures();
 
-        return this.journeyRepo.getgetJourneyByUser(userId, startDate, endDate);
+        Journey upadtedJourney = this.journeyRepo.save(oldJourney);
+        return new JourneyDTO(upadtedJourney);
+
     }
 }
