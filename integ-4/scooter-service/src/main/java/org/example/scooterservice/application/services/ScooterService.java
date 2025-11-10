@@ -73,4 +73,14 @@ public class ScooterService {
     public List<ScooterDto> getAllByState(State stateEnum) {
         return this.scooterRepository.findAllByState(stateEnum).stream().map(ScooterDto:: new).toList();
     }
+    @Transactional
+    public ScooterDto changeState(State stateEnum, Long id) {
+        Optional<Scooter> scooter = this.scooterRepository.findByScooterId(id);
+        if(scooter.isEmpty()){
+            throw new ScooterNotFoundException(id);
+        }
+        scooter.get().setState(stateEnum);
+        Scooter updatedScooter = this.scooterRepository.save(scooter.get()); //scooter editado
+        return new ScooterDto(updatedScooter);
+    }
 }
