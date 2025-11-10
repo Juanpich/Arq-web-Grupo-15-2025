@@ -4,12 +4,14 @@ import org.example.userservice.aplication.services.UserService;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.enums.AccountType;
+import org.example.userservice.domain.enums.State;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -83,7 +85,20 @@ public class UserController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
-
+    }
+    @PutMapping("/{id}/changeState")
+    public ResponseEntity<?>  changeState(@RequestBody Map<String, String> body, @PathVariable Long id){
+        UserDto user;
+        try{
+            String state = body.get("state");
+            State stateEnum = State.valueOf(state.toUpperCase());
+            user = this.userService.changeState(stateEnum, id);
+            return ResponseEntity.status(HttpStatus.CREATED).body(user);
+        }catch (UserNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body("State invalid" );
+        }
     }
 
 }

@@ -3,6 +3,8 @@ package org.example.journeysservice.application.services;
 import org.example.journeysservice.application.repositories.JourneyRepository;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.entities.Journey;
+import org.example.movementservice.domain.dto.MovementDTO;
+import org.example.movementservice.domain.entities.Movement;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,5 +58,18 @@ public class JourneyService {
     @Transactional
     public List<JourneyDTO> FindAllJourneysByScooterANDYear(Long scooter_id, Integer anio) {
         return this.journeyRepo.findAllJourneysByScooterByYear(scooter_id, anio);
+
+    @Transactional
+    public JourneyDTO updateJourney(Long journeyId, Journey journeyBody) throws IllegalArgumentException {
+        Journey oldJourney = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + journeyId));
+        oldJourney.setScooterId(journeyBody.getScooterId());
+        oldJourney.setDate(journeyBody.getDate());
+        oldJourney.setInitHour(journeyBody.getInitHour());
+        oldJourney.setFinishHour(journeyBody.getFinishHour());
+        oldJourney.setKmTraveled(journeyBody.getKmTraveled());
+        oldJourney.setPauseMinutes(journeyBody.getPauseMinutes());
+
+        Journey upadtedJourney = this.journeyRepo.save(oldJourney);
+        return new JourneyDTO(upadtedJourney);
     }
 }

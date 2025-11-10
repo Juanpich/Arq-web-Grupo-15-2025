@@ -65,6 +65,7 @@ public class MovementService {
         return new MovementDTO(updatedMovement);
     }
 
+    @Transactional
     public void delete(Long movementId) {
         this.movementRepo.deleteById(movementId);
     }

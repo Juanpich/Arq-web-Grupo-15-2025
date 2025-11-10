@@ -7,6 +7,7 @@ import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.enums.AccountType;
+import org.example.userservice.domain.enums.State;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -73,5 +75,15 @@ public class UserService {
         }
         user.addAccount(account);
         userRepository.save(user);
+    }
+    @Transactional
+    public UserDto changeState(State stateEnum, Long id) {
+        Optional<User> user = this.userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new UserNotFoundException(id);
+        }
+        user.get().setState(stateEnum);
+        User userUpdated = this.userRepository.save(user.get()); //scooter editado
+        return new UserDto(userUpdated);
     }
 }

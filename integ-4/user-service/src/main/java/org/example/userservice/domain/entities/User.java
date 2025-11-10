@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.userservice.domain.enums.State;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +21,8 @@ public class User {
     private String last_name;
     private String mail;
     private String phone_number;
-
+    @Enumerated(EnumType.STRING)
+    private State state;
     // LADO INVERSO (no propietario)
     @ManyToMany(mappedBy = "users")
     private Set<Account> accounts =new HashSet<>();
