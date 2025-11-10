@@ -2,6 +2,7 @@ package org.example.userservice.domain.dto;
 
 import lombok.*;
 import org.example.userservice.domain.entities.User;
+import org.example.userservice.domain.enums.State;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +15,7 @@ public class UserDto {
     private String last_name;
     private String mail;
     private String phone_number;
+    private State state;
 
 
     public  UserDto(User user) {
@@ -22,6 +24,7 @@ public class UserDto {
         this.last_name = user.getLast_name();
         this.mail = user.getMail();
         this.phone_number = user.getPhone_number();
+        this.state = user.getState();
     }
 }
 
