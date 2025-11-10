@@ -39,4 +39,9 @@ public class ParkingDock {
     public void addScooter(Long id){
         this.scooters.add(id);
     }
+
+    //Eliminar una scooter de una parada
+    public void removeScooter(Long id){
+        this.scooters.remove(id);
+    }
 }

@@ -16,33 +16,52 @@ public class JourneyController {
 
     private final JourneyService journeyService;
 
-    public JourneyController(JourneyService journeyService ) {
+    public JourneyController(JourneyService journeyService) {
         this.journeyService = journeyService;
     }
 
+    //Consultar viajes
     @GetMapping("")
     public List<JourneyDTO> findAllJourneys() {
         return this.journeyService.findAllJourneys();
     }
 
+    //Consultar viaje por Id.
     @GetMapping("/{journeyId}")
     public List<JourneyDTO> findJourneyById(@PathVariable Long journeyId) {
         return this.journeyService.findJourneyById(journeyId);
     }
 
+    //Eliminar viaje.
     @DeleteMapping("/{journeyId}")
     public ResponseEntity<?> deleteJourneyById(@PathVariable Long journeyId) {
         this.journeyService.deleteJourneyById(journeyId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+    //Crear viaje.
     @PostMapping("")
     public ResponseEntity<?> insertJourney(@RequestBody Journey journey) {
         var result = this.journeyService.insertJourney(journey);
         if (result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
-        } else  {
+        } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se creo el viaje (jurney)");
         }
+    }
+
+    //Consultar viaje por monopatin.
+    @GetMapping("/scooter/{id}")
+    public ResponseEntity<?> FindAllJourneysByScooter(@PathVariable Long scooter_id){
+        List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooter(scooter_id);
+        return ResponseEntity.ok(result);
+    }
+
+    //Consultar viaje por monopatin en determinado año.
+    // journey/scooter/2/year/2025
+    @GetMapping("scooter/{id}/year/{anio}")
+    public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable Long scooter_id, @PathVariable Integer anio) {
+        List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooterANDYear(scooter_id, anio);
+        return ResponseEntity.ok(result);
     }
 }

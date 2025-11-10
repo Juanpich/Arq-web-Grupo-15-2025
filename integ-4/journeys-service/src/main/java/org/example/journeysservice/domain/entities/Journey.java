@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+
 public class Journey {
 
     @Id
