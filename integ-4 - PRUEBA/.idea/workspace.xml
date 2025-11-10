@@ -4,14 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
+    <list default="true" id="e82bfb8d-47b9-4a82-97ef-e18dc4af45ba" name="Changes" comment="" />
+=======
     <list default="true" id="0a561ab4-c54b-4e7d-9af7-a5b636508d22" name="Changes" comment="Creo archivo de prueba">
       <change afterPath="$PROJECT_DIR$/journeys-service/src/main/java/org/example/journeysservice/journey.java" afterDir="false" />
     </list>
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "jazbarragan"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Juanpich/Arq-web-Grupo-15-2025.git",
+    "accountId": "2f0f3cc8-b90a-4de5-8eef-77351d5ea5ce"
+  }
+}]]></component>
+=======
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
@@ -40,6 +61,7 @@
   }
 }</component>
   <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
   <component name="KubernetesApiProvider"><![CDATA[{
   "isMigrated": true
 }]]></component>
@@ -50,10 +72,17 @@
       </MavenGeneralSettings>
     </option>
   </component>
+<<<<<<< HEAD
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 6
+}]]></component>
+  <component name="ProjectId" id="34z00NLXlxxLhO1JAWk3crjYfvw" />
+=======
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
   <component name="ProjectId" id="34ypx2OU4TgLqW1bFeTmMwhKXkG" />
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -62,6 +91,19 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+<<<<<<< HEAD
+    "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Usuario/OneDrive/Escritorio/r/Arq-web-Grupo-15-2025/integ-4 - PRUEBA",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.configurations.included.in.services": "true",
+    "vue.rearranger.settings.migration": "true"
+=======
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
@@ -69,18 +111,27 @@
     "last_opened_file_path": "C:/Users/Martiniano/Desktop/TUDAI/ARQUI/Grupo15/Arq-web-Grupo-15-2025/integ-4",
     "run.configurations.included.in.services": "true",
     "settings.editor.selected.configurable": "preferences.pluginManager"
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
   }
 }]]></component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
+<<<<<<< HEAD
+        <option value="KtorApplicationConfigurationType" />
+=======
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
         <option value="MicronautRunConfigurationType" />
         <option value="QuarkusRunConfigurationType" />
         <option value="SpringBootApplicationConfigurationType" />
       </set>
     </option>
   </component>
+<<<<<<< HEAD
+  <component name="RunManager" selected="Spring Boot.JourneysServiceApplication">
+=======
   <component name="RunManager" selected="Spring Boot.MicroserviceMovementApplication">
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
     <configuration name="JourneysServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="journeys-service" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.journeysservice.JourneysServiceApplication" />
@@ -95,17 +146,29 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+<<<<<<< HEAD
+    <configuration name="MovementServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="movement-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.movementservice.MovementServiceApplication" />
+=======
     <configuration name="MicroserviceMovementApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <module name="microservice-movement" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.microservicemovement.MicroserviceMovementApplication" />
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+<<<<<<< HEAD
+    <configuration name="ParkingDockServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="parking-dock-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.parkingdockservice.ParkingDockServiceApplication" />
+=======
     <configuration name="MovementServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="movement-service (1)" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="org.example.movementservice.MovementServiceApplication" />
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -129,6 +192,26 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+<<<<<<< HEAD
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
+        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e82bfb8d-47b9-4a82-97ef-e18dc4af45ba" name="Changes" comment="" />
+      <created>1762200868654</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1762200868654</updated>
+      <workItem from="1762200870262" duration="587000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+=======
         <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
       </set>
     </attachedChunks>
@@ -180,5 +263,6 @@
     <MESSAGE value="Creo modulo de movement" />
     <MESSAGE value="Creo archivo de prueba" />
     <option name="LAST_COMMIT_MESSAGE" value="Creo archivo de prueba" />
+>>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
   </component>
 </project>
