@@ -15,11 +15,19 @@ import java.util.List;
 @RequestMapping("/movement")
 public class MovementController {
 
-    MovementService movementService;
+    private final MovementService movementService;
+    public MovementController(MovementService movementService) {
+        this.movementService = movementService;
+    }
 
     @GetMapping("")
     public List<MovementDTO> findAllMovements(){
         return this.movementService.findAllMovements();
+    }
+
+    @GetMapping("/{movementId}")
+    public List<MovementDTO> findMovementById(@PathVariable("movementId") Long movementId){
+        return this.movementService.findMovementById(movementId);
     }
 
     @GetMapping("/userId/{userId}")
@@ -49,5 +57,11 @@ public class MovementController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el movimiento de id " + movementId);
         }
         return ResponseEntity.status(HttpStatus.OK).body(updatedMovementDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMovement(@PathVariable Long movementId) {
+        this.movementService.delete(movementId);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

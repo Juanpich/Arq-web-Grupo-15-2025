@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 
 
@@ -18,9 +17,17 @@ public class MovementService {
     @Autowired
     private MovementRepository movementRepo;
 
+    public MovementService(MovementRepository movementRepo) {
+        this.movementRepo = movementRepo;
+    }
+
     @Transactional(readOnly = true)
     public List<MovementDTO> findAllMovements() {
         return this.movementRepo.findAll()
+                .stream().map(MovementDTO::new).toList();
+    }
+    public List<MovementDTO> findMovementById(Long movementId) {
+        return this.movementRepo.findById(movementId)
                 .stream().map(MovementDTO::new).toList();
     }
 
@@ -49,12 +56,17 @@ public class MovementService {
     @Transactional
     public MovementDTO updateMovement(Long oldMovementId, Movement newMovement) {
         Movement oldMovement = this.movementRepo.findById(oldMovementId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + oldMovementId));
-        oldMovement.setAccount_id(newMovement.getAccount_id());
-        oldMovement.setUser_id(newMovement.getUser_id());
+        oldMovement.setAccountId(newMovement.getAccountId());
+        oldMovement.setUserId(newMovement.getUserId());
         oldMovement.setAmount(newMovement.getAmount());
         oldMovement.setDate(newMovement.getDate());
 
         Movement updatedMovement = this.movementRepo.save(oldMovement);
         return new MovementDTO(updatedMovement);
     }
+
+    public void delete(Long movementId) {
+        this.movementRepo.deleteById(movementId);
+    }
+
 }

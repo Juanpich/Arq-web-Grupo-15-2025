@@ -19,23 +19,32 @@ public class Movement {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int movement_id;
+    private Long movementId;
 
-    private int account_id;
-    private int user_id;
+    private int accountId;
+    private int userId;
     private int amount;
     private LocalDate date;
 
     public Movement(int accountId, int userId, int amount, LocalDate date) {
-        this.account_id = accountId;
-        this.user_id = userId;
+        this.accountId = accountId;
+        this.userId = userId;
+        this.amount = amount;
+        this.date = date;
+    }
+
+    public Movement(Long movement_id ,int accountId, int userId, int amount, LocalDate date) {
+        this.movementId = movement_id;
+        this.accountId = accountId;
+        this.userId = userId;
         this.amount = amount;
         this.date = date;
     }
 
     public Movement(Movement newMovement) {
-        this.account_id = newMovement.getAccount_id();
-        this.user_id = newMovement.getUser_id();
+        this.movementId = newMovement.getMovementId();
+        this.accountId = newMovement.getAccountId();
+        this.userId = newMovement.getUserId();
         this.amount = newMovement.getAmount();
         this.date = newMovement.getDate();
     }
