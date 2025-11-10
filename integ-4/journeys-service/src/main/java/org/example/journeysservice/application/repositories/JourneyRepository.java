@@ -1,18 +1,14 @@
 package org.example.journeysservice.application.repositories;
 
-
-<<<<<<< HEAD
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-=======
 import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
->>>>>>> 9f5288c04e6f4c708535e36bdc9ec8c2d91f6985
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
