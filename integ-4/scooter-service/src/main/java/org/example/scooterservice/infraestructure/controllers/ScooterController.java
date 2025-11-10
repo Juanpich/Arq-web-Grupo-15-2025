@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -64,6 +65,20 @@ public class ScooterController {
             return ResponseEntity.status(HttpStatus.CREATED).body(scooterDto);
         }catch (ScooterNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    @PutMapping("{id}/changeState")
+    public ResponseEntity<?>  changeState(@RequestBody Map<String, String> body, @PathVariable Long id){
+        ScooterDto scooter;
+        try{
+            String state = body.get("state");
+            State stateEnum = State.valueOf(state.toUpperCase());
+            scooter = this.scooterService.changeState(stateEnum, id);
+            return ResponseEntity.status(HttpStatus.CREATED).body(scooter);
+        }catch (ScooterNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body("State invalid" );
         }
     }
     @DeleteMapping("/{id}")

@@ -5,17 +5,47 @@
   </component>
   <component name="ChangeListManager">
 <<<<<<< HEAD
+    <list default="true" id="a2adbd93-fd54-4c3a-b118-76f3f92bec08" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/java/org/example/parkingdockservice/application/service/ParkingDockService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/java/org/example/parkingdockservice/application/service/ParkingDockService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/java/org/example/parkingdockservice/domain/entities/ParkingDock.java" beforeDir="false" afterPath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/java/org/example/parkingdockservice/domain/entities/ParkingDock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/java/org/example/parkingdockservice/infraestructure/controller/ParkingDockController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/java/org/example/parkingdockservice/infraestructure/controller/ParkingDockController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../integ-4/parking-dock-service/src/main/resources/application.properties" afterDir="false" />
+    </list>
+=======
+<<<<<<< HEAD
     <list default="true" id="e82bfb8d-47b9-4a82-97ef-e18dc4af45ba" name="Changes" comment="" />
 =======
     <list default="true" id="0a561ab4-c54b-4e7d-9af7-a5b636508d22" name="Changes" comment="Creo archivo de prueba">
       <change afterPath="$PROJECT_DIR$/journeys-service/src/main/java/org/example/journeysservice/journey.java" afterDir="false" />
     </list>
 >>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
+>>>>>>> 84e13350e708ba408d5f0e81166ee898aa2508af
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+<<<<<<< HEAD
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;jazbarragan&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Juanpich/Arq-web-Grupo-15-2025.git&quot;,
+    &quot;accountId&quot;: &quot;2f0f3cc8-b90a-4de5-8eef-77351d5ea5ce&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="35AAcxO9uy4PXmkJdvOWy7jQuXV" />
+=======
 <<<<<<< HEAD
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -83,10 +113,28 @@
 }</component>
   <component name="ProjectId" id="34ypx2OU4TgLqW1bFeTmMwhKXkG" />
 >>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
+>>>>>>> 84e13350e708ba408d5f0e81166ee898aa2508af
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< HEAD
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Usuario/OneDrive/Escritorio/repo - arqui/Arq-web-Grupo-15-2025/integ-4 - PRUEBA&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+=======
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
@@ -193,6 +241,7 @@
     <attachedChunks>
       <set>
 <<<<<<< HEAD
+>>>>>>> 84e13350e708ba408d5f0e81166ee898aa2508af
         <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.23892.409" />
         <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-IU-252.23892.409" />
       </set>
@@ -200,17 +249,29 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< HEAD
+      <changelist id="a2adbd93-fd54-4c3a-b118-76f3f92bec08" name="Changes" comment="" />
+      <created>1762542585948</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1762542585948</updated>
+      <workItem from="1762542587715" duration="69000" />
+      <workItem from="1762790188311" duration="18000" />
+=======
       <changelist id="e82bfb8d-47b9-4a82-97ef-e18dc4af45ba" name="Changes" comment="" />
       <created>1762200868654</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1762200868654</updated>
       <workItem from="1762200870262" duration="587000" />
+>>>>>>> 84e13350e708ba408d5f0e81166ee898aa2508af
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+<<<<<<< HEAD
+=======
 =======
         <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
       </set>
@@ -264,5 +325,6 @@
     <MESSAGE value="Creo archivo de prueba" />
     <option name="LAST_COMMIT_MESSAGE" value="Creo archivo de prueba" />
 >>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
+>>>>>>> 84e13350e708ba408d5f0e81166ee898aa2508af
   </component>
 </project>

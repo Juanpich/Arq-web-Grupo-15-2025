@@ -20,7 +20,7 @@ public class ParkingDockDTO {
     private List<Long> scooters;
 
     public ParkingDockDTO(ParkingDock parkingDock){
-        this.parkingDock_id= parkingDock.getParkingDOck_id();
+        this.parkingDock_id= parkingDock.getParkingDock_id();
         this.parkingDock_ubication= parkingDock.getParkingDock_ubication();
         this.scooters = parkingDock.getScooters();
     }
