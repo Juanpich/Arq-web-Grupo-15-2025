@@ -33,7 +33,6 @@ public class JourneyController {
         return this.journeyService.findJourneyById(journeyId);
     }
 
-
     @GetMapping("/kmByScooter/{kmSearch}")
     public List<ScooterKmReportDTO> scooterKmReport(@PathVariable int kmSearch,@RequestParam(required = true) String includePausedMinutes) {
         return this.journeyService.findAllScooterKm(kmSearch,includePausedMinutes);
@@ -75,6 +74,16 @@ public class JourneyController {
     @PutMapping("/{journeyId}")
     public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @RequestParam Long journeyId) {
         var result = this.journeyService.updateJourney(journeyId, journey);
+        if (result != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el viaje de id " + journeyId);
+        }
+    }
+
+    @PutMapping("/endJourney/{journeyId}")
+    public ResponseEntity<?> endJourney(@RequestBody Journey journey ,@PathVariable Long journeyId) {
+        var result = this.journeyService.endJourney(journeyId, journey);
         if (result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } else {

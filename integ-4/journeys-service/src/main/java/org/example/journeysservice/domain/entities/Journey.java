@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 @Data
@@ -50,5 +51,9 @@ public class Journey {
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
         this.totalHoures = 0;
+    }
+
+    public void calcTotalHoures() {
+        this.totalHoures = Math.toIntExact(ChronoUnit.HOURS.between(this.initHour, this.finishHour));
     }
 }

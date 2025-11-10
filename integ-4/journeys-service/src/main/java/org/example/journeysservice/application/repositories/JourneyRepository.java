@@ -25,18 +25,18 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
     public List<JourneyDTO> findAllJourneysByScooterByYear(@Param("id") Long id, Integer anio);
 
 
-    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId," +
-                    " CAST(SUM(j.kmTraveled) AS INTEGER) AS totalKm, " +
-            "CAST(SUM(TIMESTAMPDIFF(j.initHour, j.finishHour)) AS LONG) ), " +
-            "CAST(SUM(j.pauseMinutes) AS LONG) AS totalPausedMinutes " +
+    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
+                    "CAST(SUM(j.kmTraveled) AS INTEGER) AS totalKm, " +
+            "j.totalHoures , " +
+            "CAST(SUM(j.pauseMinutes) AS LONG) AS totalPausedMinutes)" +
             "FROM Journey j " +
             "GROUP BY j.scooterId " +
             "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
     List<ScooterKmReportDTO> scooterKmPauseMinutesReport(int kmSearched);
 
-    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId," +
-            " CAST(SUM(j.kmTraveled) AS INTEGER) AS totalKm, " +
-            "CAST(SUM(TIMESTAMPDIFF(j.initHour, j.finishHour)) AS LONG) ) " +
+    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
+            "CAST(SUM(j.kmTraveled) AS INTEGER) AS totalKm, " +
+            "j.totalHoures ) " +
             "FROM Journey j " +
             "GROUP BY j.scooterId " +
             "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")

@@ -81,4 +81,13 @@ public class JourneyService {
         Journey upadtedJourney = this.journeyRepo.save(oldJourney);
         return new JourneyDTO(upadtedJourney);
     }
+
+    public Object endJourney(Long journeyId, Journey journey) {
+        Journey oldJourney = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + journeyId));
+        oldJourney.setFinishHour(journey.getFinishHour());
+        oldJourney.calcTotalHoures();
+
+        Journey upadtedJourney = this.journeyRepo.save(oldJourney);
+        return new JourneyDTO(upadtedJourney);
+    }
 }
