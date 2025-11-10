@@ -18,11 +18,7 @@ import java.util.List;
 public class ParkingDock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-<<<<<<< HEAD
     private Long parkingDOck_id;
-=======
-    private Long parkingDock_id;
->>>>>>> a1a2112804e417048cc4de7f5d1e07aef6b65b71
     private String parkingDock_ubication;
     private List<Long> scooters;
 }

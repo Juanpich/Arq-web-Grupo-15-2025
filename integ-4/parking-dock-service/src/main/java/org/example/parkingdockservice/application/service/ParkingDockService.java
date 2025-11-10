@@ -49,7 +49,7 @@ public class ParkingDockService {
     //Edita una parada
     public ParkingDockDTO updateParkingDock(ParkingDock parking) {
         //Traigo la parada que se quiere editar
-        Long parking_id = parking.getParkingDock_id();
+        Long parking_id = parking.getParkingDOck_id();
         ParkingDock parking_obj = parkingDockRepository.findById(parking_id).orElse(null) ;
         //Le seteo los nuevos valores
         parking_obj.setParkingDock_ubication(parking.getParkingDock_ubication());
