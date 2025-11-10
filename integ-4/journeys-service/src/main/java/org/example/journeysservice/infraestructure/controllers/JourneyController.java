@@ -3,6 +3,7 @@ package org.example.journeysservice.infraestructure.controllers;
 import org.apache.coyote.Response;
 import org.example.journeysservice.application.services.JourneyService;
 import org.example.journeysservice.domain.dto.JourneyDTO;
+import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,11 @@ public class JourneyController {
         return this.journeyService.findJourneyById(journeyId);
     }
 
+    @GetMapping("/kmByScooter/{kmSearch}")
+    public List<ScooterKmReportDTO> scooterKmReport(@PathVariable int kmSearch,@RequestParam(required = true) String includePausedMinutes) {
+        return this.journeyService.findAllScooterKm(kmSearch,includePausedMinutes);
+    }
+
     @DeleteMapping("/{journeyId}")
     public ResponseEntity<?> deleteJourneyById(@PathVariable Long journeyId) {
         this.journeyService.deleteJourneyById(journeyId);
@@ -55,4 +61,6 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el viaje de id " + journeyId);
         }
     }
+
+
 }
