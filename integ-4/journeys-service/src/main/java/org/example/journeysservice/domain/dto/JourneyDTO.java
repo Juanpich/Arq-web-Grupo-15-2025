@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.example.journeysservice.domain.entities.Journey;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,7 +17,7 @@ public class JourneyDTO {
     private Long journeyId;
 
     private Long scooterId;
-    private Date date;
+    private LocalDateTime date;
     private int initHour;
     private int finishHour;
     private int kmTraveled;

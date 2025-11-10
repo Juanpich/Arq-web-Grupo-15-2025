@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -21,14 +21,14 @@ public class Journey {
     private Long journeyId;
 
     private Long scooterId;
-    private Date date;
+    private LocalDateTime date;
     private int initHour;
     private int finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
 
 
-    public Journey(Long scooterId, Date date, int initHour, int finishHour, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long scooterId, LocalDateTime date, int initHour, int finishHour, int kmTraveled, Long pauseMinutes) {
         this.scooterId = scooterId;
         this.date = date;
         this.initHour = initHour;
@@ -37,7 +37,7 @@ public class Journey {
         this.pauseMinutes = pauseMinutes;
     }
 
-    public Journey(Long journeyId, Long scooterId, Date date, int initHour, int finishHour, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long journeyId, Long scooterId, LocalDateTime date, int initHour, int finishHour, int kmTraveled, Long pauseMinutes) {
         this.journeyId = journeyId;
         this.scooterId = scooterId;
         this.date = date;
