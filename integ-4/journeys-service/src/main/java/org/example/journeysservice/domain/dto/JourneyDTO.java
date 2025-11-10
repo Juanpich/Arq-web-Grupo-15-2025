@@ -34,8 +34,7 @@ public class JourneyDTO {
     }
 
     public Journey DTOToEntity() {
-        Journey journey = new Journey(this.getJourneyId(), this.getScooterId(), this.getDate(),
+        return new Journey(this.getJourneyId(), this.getScooterId(), this.getDate(),
                 this.getInitHour(), this.getFinishHour(), this.getKmTraveled(), this.getPauseMinutes());
-        return journey;
     }
 }
