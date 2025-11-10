@@ -45,4 +45,14 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se creo el viaje (jurney)");
         }
     }
+
+    @PutMapping("/{journeyId}")
+    public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @RequestParam Long journeyId) {
+        var result = this.journeyService.updateJourney(journeyId, journey);
+        if (result != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(result);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el viaje de id " + journeyId);
+        }
+    }
 }
