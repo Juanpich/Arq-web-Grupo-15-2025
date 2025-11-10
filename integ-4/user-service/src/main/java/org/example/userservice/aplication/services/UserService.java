@@ -6,6 +6,7 @@ import org.example.userservice.aplication.repositories.UserRepository;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.entities.User;
+import org.example.userservice.domain.enums.AccountType;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
@@ -24,16 +25,20 @@ public class UserService {
         this.accountRepository = accountRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UserDto> getAll(){
         return userRepository.findAll().stream().map(UserDto::new).toList();
+    }
+    @Transactional(readOnly = true)
+    public List<UserDto> getAllByAccountType(AccountType type) {
+        return userRepository.findAllByAccountType(type);
     }
     @Transactional
     public UserDto save(User user){
         User userNew =  userRepository.save(user);
         return new UserDto(userNew);
     }
-    @Transactional
+    @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
         return userRepository.findById(id)
                 .map(UserDto::new)

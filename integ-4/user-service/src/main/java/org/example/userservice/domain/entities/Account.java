@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.userservice.domain.enums.AccountType;
-
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +21,7 @@ public class Account {
     private Float amount;
     @Enumerated(EnumType.STRING)
     private AccountType type;
+    private LocalDateTime created_at;
 
     // LADO PROPIETARIO (define la tabla intermedia)
     @ManyToMany
@@ -28,6 +29,10 @@ public class Account {
     public void addUser(User user) {
         this.users.add(user);
         user.getAccounts().add(this);
+    }
+    @PrePersist
+    protected void onCreate() {
+        this.created_at = LocalDateTime.now();
     }
 }
 

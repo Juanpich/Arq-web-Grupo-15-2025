@@ -13,21 +13,24 @@ import java.time.LocalDate;
 @Data
 @ToString
 public class MovementDTO {
-    private int movement_id;
-    private int account_id;
-    private int user_id;
+    private Long movementId;
+    private int accountId;
+    private int userId;
     private int amount;
     private LocalDate date;
 
     public MovementDTO(Movement movement){
-        this.movement_id = movement.getMovement_id();
-        this.account_id =  movement.getAccount_id();
-        this.user_id = movement.getUser_id();
-        this.amount =  movement.getAmount();
+        if (movement != null) {
+            this.movementId = movement.getMovementId();
+            this.accountId = movement.getAccountId();
+            this.userId = movement.getUserId();
+            this.amount = movement.getAmount();
+            this.date = movement.getDate();
+        }
     }
 
     public Movement DTOToEntity() {
-        Movement movement = new Movement(this.getAccount_id(), this.getUser_id(), this.getAmount(), this.getDate());
+        Movement movement = new Movement(this.getAccountId(), this.getUserId(), this.getAmount(), this.getDate());
         return movement;
     }
 }

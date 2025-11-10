@@ -1,6 +1,5 @@
 package org.example.scooterservice.domain.entities;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

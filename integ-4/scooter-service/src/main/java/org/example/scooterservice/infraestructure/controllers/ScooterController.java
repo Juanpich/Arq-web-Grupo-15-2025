@@ -4,6 +4,9 @@ package org.example.scooterservice.infraestructure.controllers;
 import org.example.scooterservice.application.services.ScooterService;
 import org.example.scooterservice.domain.dtos.ScooterDto;
 import org.example.scooterservice.domain.entities.Scooter;
+import org.example.scooterservice.domain.entities.State;
+import org.example.scooterservice.domain.exceptions.ScooterNotFoundException;
+import org.example.scooterservice.domain.exceptions.ScooterWithIDAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,34 +22,49 @@ public class ScooterController {
         this.scooterService = scooterService;
     }
     @GetMapping("")
-    public ResponseEntity<List<ScooterDto>> getAllScooter(){
-        List<ScooterDto> scooters = this.scooterService.findAllScooter();
+    public ResponseEntity<?> getAllScooter(@RequestParam(required = false) String state){
+        List<ScooterDto> scooters;
+        try {
+            if (state != null) {
+                State stateEnum = State.valueOf(state.toUpperCase());
+                scooters = this.scooterService.getAllByState(stateEnum);
+            } else {
+                scooters = this.scooterService.findAllScooter();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("State invalid");
+        }
+        if(scooters == null){
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(scooters);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<?> getSccoterById(@PathVariable("id") Long id){
-        ScooterDto scooterDto = this.scooterService.findScooterById(id);
-        if (scooterDto == null) {
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Scooter with ID " +  id  + " was not found");
+    public ResponseEntity<?> getSccoterById(@PathVariable("id") Long id) {
+        try{
+            ScooterDto scooterDto = this.scooterService.findScooterById(id);
+            return ResponseEntity.ok(scooterDto);
+        }catch(ScooterNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        return ResponseEntity.ok(scooterDto);
     }
     @PostMapping("")
     public ResponseEntity<?> createScooter(@RequestBody Scooter scooter){
-        ScooterDto scooterDto =  this.scooterService.persistScooter(scooter);
-        if(scooterDto == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Scooter not created");
+        try{
+            ScooterDto scooterDto =  this.scooterService.persistScooter(scooter);
+            return ResponseEntity.status(HttpStatus.CREATED).body(scooterDto);
+        }catch (ScooterWithIDAlreadyExistsException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(scooterDto);
     }
     @PutMapping("/{id}")
     public ResponseEntity<?> updateScooter(@RequestBody Scooter scooter, @PathVariable Long id){
-        ScooterDto scooterDto = this.scooterService.updateScooter(id, scooter);
-        if(scooterDto == null){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Scooter not updated");
+        try{
+            ScooterDto scooterDto = this.scooterService.updateScooter(id, scooter);
+            return ResponseEntity.status(HttpStatus.CREATED).body(scooterDto);
+        }catch (ScooterNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(scooterDto);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteScooter(@PathVariable Long id){
