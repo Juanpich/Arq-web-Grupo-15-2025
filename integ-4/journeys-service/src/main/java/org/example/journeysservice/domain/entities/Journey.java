@@ -7,7 +7,9 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,11 +30,11 @@ public class Journey {
     private Long pauseMinutes;
 
 
-    public Journey(Long scooterId, LocalDateTime date, LocalDateTime initHour, LocalDateTime finishHour, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long scooterId, int kmTraveled, Long pauseMinutes) {
         this.scooterId = scooterId;
-        this.date = date;
-        this.initHour = initHour;
-        this.finishHour = finishHour;
+        this.date = LocalDateTime.now();
+        this.initHour = LocalDateTime.now();
+        this.finishHour = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
     }
