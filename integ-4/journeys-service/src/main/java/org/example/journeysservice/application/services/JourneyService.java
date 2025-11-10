@@ -2,6 +2,7 @@ package org.example.journeysservice.application.services;
 
 import org.example.journeysservice.application.repositories.JourneyRepository;
 import org.example.journeysservice.domain.dto.JourneyDTO;
+import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,15 @@ public class JourneyService {
     public List<JourneyDTO> findJourneyById(Long id) {
         return this.journeyRepo.findById(id)
                 .stream().map(JourneyDTO::new).toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScooterKmReportDTO> findAllScooterKm(int kmSearch, String includePausedMinutes) {
+        if (includePausedMinutes == "include") {
+            return this.journeyRepo.scooterKmPauseMinutesReport(kmSearch);
+        } else {
+            return this.journeyRepo.scooterKmReport(kmSearch);
+        }
     }
 
     //Elimina un viaje.

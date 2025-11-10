@@ -18,8 +18,8 @@ public class JourneyDTO {
 
     private Long scooterId;
     private LocalDateTime date;
-    private int initHour;
-    private int finishHour;
+    private LocalDateTime initHour;
+    private LocalDateTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
 

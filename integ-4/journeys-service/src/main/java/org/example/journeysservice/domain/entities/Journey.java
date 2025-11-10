@@ -22,13 +22,13 @@ public class Journey {
 
     private Long scooterId;
     private LocalDateTime date;
-    private int initHour;
-    private int finishHour;
+    private LocalDateTime initHour;
+    private LocalDateTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
 
 
-    public Journey(Long scooterId, LocalDateTime date, int initHour, int finishHour, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long scooterId, LocalDateTime date, LocalDateTime initHour, LocalDateTime finishHour, int kmTraveled, Long pauseMinutes) {
         this.scooterId = scooterId;
         this.date = date;
         this.initHour = initHour;
@@ -37,7 +37,7 @@ public class Journey {
         this.pauseMinutes = pauseMinutes;
     }
 
-    public Journey(Long journeyId, Long scooterId, LocalDateTime date, int initHour, int finishHour, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long journeyId, Long scooterId, LocalDateTime date, LocalDateTime initHour, LocalDateTime finishHour, int kmTraveled, Long pauseMinutes) {
         this.journeyId = journeyId;
         this.scooterId = scooterId;
         this.date = date;
