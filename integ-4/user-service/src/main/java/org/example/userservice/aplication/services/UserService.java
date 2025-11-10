@@ -4,6 +4,7 @@ package org.example.userservice.aplication.services;
 import org.example.userservice.aplication.repositories.AccountRepository;
 import org.example.userservice.aplication.repositories.UserRepository;
 import org.example.userservice.domain.dto.UserDto;
+import org.example.userservice.domain.dto.UserTopUsageDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.enums.AccountType;
@@ -11,9 +12,14 @@ import org.example.userservice.domain.enums.State;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
+import org.example.userservice.infraestructure.feign.JourneysFeignClient;
+import org.example.userservice.models.Journey;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,9 +28,11 @@ public class UserService {
 
     private UserRepository userRepository;
     private AccountRepository accountRepository;
-    public UserService(UserRepository ur, AccountRepository accountRepository){
+    private JourneysFeignClient journeysFeignClient;
+    public UserService(UserRepository ur, AccountRepository accountRepository,  JourneysFeignClient journeysFeignClient) {
         this.userRepository=ur;
         this.accountRepository = accountRepository;
+        this.journeysFeignClient=journeysFeignClient;
     }
 
     @Transactional(readOnly = true)
@@ -85,5 +93,20 @@ public class UserService {
         user.get().setState(stateEnum);
         User userUpdated = this.userRepository.save(user.get()); //scooter editado
         return new UserDto(userUpdated);
+    }
+    @Transactional(readOnly = true)
+    public List<UserTopUsageDto> getTopUsers(AccountType typeN, LocalDate startDateN, LocalDate endDateN) {
+        List<UserTopUsageDto> userTopUsageDtos = new ArrayList<>();
+        List<UserDto> users = this.userRepository.findAllByAccountType(typeN);
+        if(users.isEmpty()){
+            return null;
+        }
+        for(UserDto user : users){
+            List<Journey> journeys = this.journeysFeignClient.getJourneyByUser(user.getId(), startDateN, endDateN);
+            userTopUsageDtos.add(new UserTopUsageDto(user, journeys.size()));
+        }
+        return userTopUsageDtos.stream()
+                .sorted(Comparator.comparingInt(UserTopUsageDto::getCantJourneys).reversed())
+                .toList();
     }
 }

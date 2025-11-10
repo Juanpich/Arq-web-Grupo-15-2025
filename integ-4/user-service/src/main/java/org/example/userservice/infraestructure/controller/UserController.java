@@ -2,14 +2,18 @@ package org.example.userservice.infraestructure.controller;
 
 import org.example.userservice.aplication.services.UserService;
 import org.example.userservice.domain.dto.UserDto;
+import org.example.userservice.domain.dto.UserTopUsageDto;
 import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.enums.AccountType;
 import org.example.userservice.domain.enums.State;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
+import org.example.userservice.domain.exceptions.StateInvalidException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -99,6 +103,25 @@ public class UserController {
         }catch(IllegalArgumentException e){
             return ResponseEntity.badRequest().body("State invalid" );
         }
+    }
+    //Como administrador quiero ver los usuarios que más utilizan los monopatines, filtrado por
+    //período y por tipo de usuario
+    ///api/scooters/usage/top-users?startDate=2025-01-01&endDate=2025-01-31&type=PREMIUM
+    @GetMapping("/usage/top-users")
+    public ResponseEntity<?> getTopUsers(@RequestParam(required = true) String startDate
+            , @RequestParam(required = true) String endDate,
+                                         @RequestParam(required = true) String type) {
+        List<UserTopUsageDto> users;
+        try{
+            AccountType typeN = AccountType.valueOf(type.toUpperCase());
+            LocalDate startDateN = LocalDate.parse(startDate);
+            LocalDate endDateN = LocalDate.parse(endDate);
+            users =  this.userService.getTopUsers(typeN, startDateN, endDateN);
+        } catch (StateInvalidException e) {
+           return  ResponseEntity.badRequest().body(e.getMessage());
+        }
+        return ResponseEntity.ok(users);
+
     }
 
 }

@@ -3,11 +3,10 @@ package org.example.journeysservice.application.services;
 import org.example.journeysservice.application.repositories.JourneyRepository;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.entities.Journey;
-import org.example.movementservice.domain.dto.MovementDTO;
-import org.example.movementservice.domain.entities.Movement;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -55,5 +54,10 @@ public class JourneyService {
 
         Journey upadtedJourney = this.journeyRepo.save(oldJourney);
         return new JourneyDTO(upadtedJourney);
+    }
+    @Transactional(readOnly = true)
+    public List<JourneyDTO> getgetJourneyByUser(Long userId, LocalDate startDate, LocalDate endDate) {
+
+        return this.journeyRepo.getgetJourneyByUser(userId, startDate, endDate);
     }
 }
