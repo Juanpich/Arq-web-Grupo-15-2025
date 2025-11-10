@@ -1,5 +1,6 @@
 package org.example.scooterservice.application.services;
 
+import org.example.scooterservice.domain.entities.State;
 import org.example.scooterservice.domain.exceptions.ScooterNotFoundException;
 import org.example.scooterservice.domain.exceptions.ScooterWithIDAlreadyExistsException;
 import org.springframework.stereotype.Service;
@@ -67,5 +68,9 @@ public class ScooterService {
         }
         Scooter newScooter = this.scooterRepository.save(scooter);
         return new ScooterDto(newScooter);
+    }
+    @Transactional(readOnly = true)
+    public List<ScooterDto> getAllByState(State stateEnum) {
+        return this.scooterRepository.findAllByState(stateEnum).stream().map(ScooterDto:: new).toList();
     }
 }

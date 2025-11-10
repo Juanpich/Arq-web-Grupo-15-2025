@@ -3,12 +3,12 @@ package org.example.userservice.infraestructure.controller;
 import org.example.userservice.aplication.services.UserService;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.User;
+import org.example.userservice.domain.enums.AccountType;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -21,10 +21,20 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        List<UserDto> users = userService.getAll();
+    public ResponseEntity<?> getAllUsers(@RequestParam(required = false) String type) {
+        List<UserDto> users;
+        try {
+            if (type != null) {
+                AccountType accountType = AccountType.valueOf(type.toUpperCase());
+                users = userService.getAllByAccountType(accountType);
+            } else {
+                users = userService.getAll();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Type invalid");
+        }
         if (users.isEmpty()) {
-            return  ResponseEntity.noContent().build();
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(users);
     }

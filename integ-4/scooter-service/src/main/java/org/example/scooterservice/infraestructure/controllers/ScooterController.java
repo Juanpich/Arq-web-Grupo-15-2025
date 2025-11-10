@@ -4,6 +4,7 @@ package org.example.scooterservice.infraestructure.controllers;
 import org.example.scooterservice.application.services.ScooterService;
 import org.example.scooterservice.domain.dtos.ScooterDto;
 import org.example.scooterservice.domain.entities.Scooter;
+import org.example.scooterservice.domain.entities.State;
 import org.example.scooterservice.domain.exceptions.ScooterNotFoundException;
 import org.example.scooterservice.domain.exceptions.ScooterWithIDAlreadyExistsException;
 import org.springframework.http.HttpStatus;
@@ -21,8 +22,21 @@ public class ScooterController {
         this.scooterService = scooterService;
     }
     @GetMapping("")
-    public ResponseEntity<List<ScooterDto>> getAllScooter(){
-        List<ScooterDto> scooters = this.scooterService.findAllScooter();
+    public ResponseEntity<?> getAllScooter(@RequestParam(required = false) String state){
+        List<ScooterDto> scooters;
+        try {
+            if (state != null) {
+                State stateEnum = State.valueOf(state.toUpperCase());
+                scooters = this.scooterService.getAllByState(stateEnum);
+            } else {
+                scooters = this.scooterService.findAllScooter();
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("State invalid");
+        }
+        if(scooters == null){
+            return ResponseEntity.noContent().build();
+        }
         return ResponseEntity.ok(scooters);
     }
     @GetMapping("/{id}")
