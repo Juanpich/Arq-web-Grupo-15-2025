@@ -42,6 +42,4 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
     List<ScooterKmReportDTO> scooterKmReport(int kmSearched);
 
-
-
 }

@@ -32,9 +32,4 @@ public class JourneyDTO {
         this.kmTraveled = newjourney.getKmTraveled();
         this.pauseMinutes = newjourney.getPauseMinutes();
     }
-
-    public Journey DTOToEntity() {
-        return new Journey(this.getJourneyId(), this.getScooterId(), this.getDate(),
-                this.getInitHour(), this.getFinishHour(), this.getKmTraveled(), this.getPauseMinutes());
-    }
 }

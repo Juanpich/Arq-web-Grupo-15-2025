@@ -6,8 +6,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,39 +21,34 @@ public class Journey {
     private Long journeyId;
 
     private Long scooterId;
-    private LocalDateTime date;
+    private Long userId;
+    private LocalDate date;
     private LocalDateTime initHour;
     private LocalDateTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
+    private int totalHoures;
 
-
-    public Journey(Long scooterId, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
         this.scooterId = scooterId;
-        this.date = LocalDateTime.now();
+        this.userId = userId;
+        this.date = LocalDate.now();
         this.initHour = LocalDateTime.now();
         this.finishHour = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
+        this.totalHoures = 0;
     }
 
-    public Journey(Long journeyId, Long scooterId, LocalDateTime date, LocalDateTime initHour, LocalDateTime finishHour, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long journeyId, Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
         this.journeyId = journeyId;
+        this.userId = userId;
         this.scooterId = scooterId;
-        this.date = date;
-        this.initHour = initHour;
-        this.finishHour = finishHour;
+        this.date = LocalDate.now();
+        this.initHour = LocalDateTime.now();
+        this.finishHour = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
-    }
-
-    public Journey(Journey newjourney) {
-        this.journeyId = newjourney.getJourneyId();
-        this.scooterId = newjourney.getScooterId();
-        this.date = newjourney.getDate();
-        this.initHour = newjourney.getInitHour();
-        this.finishHour = newjourney.getFinishHour();
-        this.kmTraveled = newjourney.getKmTraveled();
-        this.pauseMinutes = newjourney.getPauseMinutes();
+        this.totalHoures = 0;
     }
 }
