@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -94,8 +95,8 @@ public class JourneyController {
     @GetMapping("/byUser/{userId}")
     public ResponseEntity<?> getJourneyByUser(@PathVariable Long userId, @RequestParam(required = true, name="start-date") String startDate
             , @RequestParam(required = true, name="end-date") String endDate) {
-        LocalDate startDateN = LocalDate.parse(startDate);
-        LocalDate endDateN = LocalDate.parse(endDate);
+        LocalDate startDateN = LocalDate.parse(startDate,  DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate endDateN = LocalDate.parse(endDate,  DateTimeFormatter.ISO_LOCAL_DATE);
         List<JourneyDTO> journeys = this.journeyService.getJourneyByUser(userId, startDateN, endDateN);
         return ResponseEntity.status(HttpStatus.OK).body(journeys);
 

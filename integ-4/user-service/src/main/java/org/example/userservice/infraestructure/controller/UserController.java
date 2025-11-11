@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -115,8 +116,8 @@ public class UserController {
         List<UserTopUsageDto> users;
         try{
             AccountType typeN = AccountType.valueOf(type.toUpperCase());
-            LocalDate startDateN = LocalDate.parse(startDate);
-            LocalDate endDateN = LocalDate.parse(endDate);
+            LocalDate startDateN = LocalDate.parse(startDate, DateTimeFormatter.ISO_LOCAL_DATE);
+            LocalDate endDateN = LocalDate.parse(endDate,  DateTimeFormatter.ISO_LOCAL_DATE);
             users =  this.userService.getTopUsers(typeN, startDateN, endDateN);
         } catch (StateInvalidException e) {
            return  ResponseEntity.badRequest().body(e.getMessage());

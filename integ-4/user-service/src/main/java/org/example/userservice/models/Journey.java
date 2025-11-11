@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -14,9 +17,9 @@ public class Journey {
     private Long journeyId;
 
     private Long scooterId;
-    private LocalDateTime date;
-    private int initHour;
-    private int finishHour;
+    private LocalDate date;
+    private LocalTime initHour;
+    private LocalTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
 }

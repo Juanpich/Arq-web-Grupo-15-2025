@@ -102,7 +102,7 @@ public class UserService {
             return null;
         }
         for(UserDto user : users){
-            List<Journey> journeys = this.journeysFeignClient.getJourneyByUser(user.getId(), startDateN, endDateN);
+            List<Journey> journeys = this.journeysFeignClient.getJourneyByUser(user.getId(), startDateN.toString(), endDateN.toString());
             userTopUsageDtos.add(new UserTopUsageDto(user, journeys.size()));
         }
         return userTopUsageDtos.stream()
