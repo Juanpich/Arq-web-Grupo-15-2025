@@ -1,6 +1,7 @@
 package org.example.userservice.infraestructure.controller;
 
 import org.example.userservice.aplication.services.UserService;
+import org.example.userservice.domain.dto.ScootesNearbyDto;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.dto.UserTopUsageDto;
 import org.example.userservice.domain.entities.User;
@@ -125,5 +126,16 @@ public class UserController {
         return ResponseEntity.ok(users);
 
     }
-
+    // Como usuario quiero buscar un listado de los monopatines cercanos a mi zona, para poder
+    //encontrar un monopatín cerca de mi ubicación
+    @GetMapping("{id}/scooter/nearby/{gps}")
+    public ResponseEntity<?> getNearbyRates(@PathVariable("id") Long id, @PathVariable("gps") String gps) {
+        List<ScootesNearbyDto> scootesNearby;
+        try{
+            scootesNearby = this.userService.getNearbyRates(id, gps);
+            return ResponseEntity.ok(scootesNearby);
+        }catch(UserNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
 }

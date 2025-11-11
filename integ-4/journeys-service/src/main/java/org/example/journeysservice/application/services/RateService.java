@@ -2,6 +2,7 @@ package org.example.journeysservice.application.services;
 
 import jakarta.transaction.Transactional;
 import org.example.journeysservice.application.repositories.RateRepository;
+
 import org.example.journeysservice.domain.dto.RateDTO;
 import org.example.journeysservice.domain.entities.Rate;
 import org.example.journeysservice.domain.exceptions.RateNotFoundException;
