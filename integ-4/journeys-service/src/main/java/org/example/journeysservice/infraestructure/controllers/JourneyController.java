@@ -67,8 +67,9 @@ public class JourneyController {
 
     //Consultar viaje por monopatin en determinado año.
     // journey/scooter/2/year/2025
+    // journey/scooter/2?year=2025
     @GetMapping("scooter/{id}/year/{anio}")
-    public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable Long scooter_id, @PathVariable Integer anio) {
+    public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable(name="id") Long scooter_id, @PathVariable Integer anio) {
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooterANDYear(scooter_id, anio);
         return ResponseEntity.ok(result);
     }
@@ -82,6 +83,7 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el viaje de id " + journeyId);
         }
     }
+    //Los viajes de un usuario.
     @GetMapping("/byUser/{userId}")
     public ResponseEntity<?> getJourneyByUser(@PathVariable Long userId, @RequestParam(required = true) String startDate
             , @RequestParam(required = true) String endDate) {
@@ -91,13 +93,14 @@ public class JourneyController {
         return ResponseEntity.status(HttpStatus.OK).body(journeys);
 
     }
-    @PutMapping("/endJourney/{journeyId}")
-    public ResponseEntity<?> endJourney(@RequestBody Journey journey ,@PathVariable Long journeyId) {
-        var result = this.journeyService.endJourney(journeyId, journey);
+    //Finalizarf un viaje.
+    @PutMapping("/finishJourney/{id}")
+    public ResponseEntity<?> endJourney(@PathVariable(name = "id") Long journeyId) {
+        var result = this.journeyService.endJourney(journeyId);
         if (result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el viaje de id " + journeyId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo finalizar el viaje con id " + journeyId);
         }
     }
 }

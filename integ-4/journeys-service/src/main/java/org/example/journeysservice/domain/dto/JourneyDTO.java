@@ -8,6 +8,7 @@ import org.example.journeysservice.domain.entities.Journey;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,8 +20,8 @@ public class JourneyDTO {
 
     private Long scooterId;
     private LocalDate date;
-    private LocalDateTime initHour;
-    private LocalDateTime finishHour;
+    private LocalTime initHour;
+    private LocalTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
 

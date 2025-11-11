@@ -1,14 +1,12 @@
 package org.example.journeysservice.domain.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 @Entity
@@ -24,8 +22,8 @@ public class Journey {
     private Long scooterId;
     private Long userId;
     private LocalDate date;
-    private LocalDateTime initHour;
-    private LocalDateTime finishHour;
+    private LocalTime initHour;
+    private LocalTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
     private int totalHoures;
@@ -33,8 +31,6 @@ public class Journey {
     public Journey(Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
         this.scooterId = scooterId;
         this.userId = userId;
-        this.date = LocalDate.now();
-        this.initHour = LocalDateTime.now();
         this.finishHour = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
@@ -46,7 +42,7 @@ public class Journey {
         this.userId = userId;
         this.scooterId = scooterId;
         this.date = LocalDate.now();
-        this.initHour = LocalDateTime.now();
+        this.initHour = LocalTime.now();
         this.finishHour = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
@@ -55,5 +51,15 @@ public class Journey {
 
     public void calcTotalHoures() {
         this.totalHoures = Math.toIntExact(ChronoUnit.HOURS.between(this.initHour, this.finishHour));
+    }
+
+    @PrePersist
+    protected void onCreate(){
+        this.date = LocalDate.now();
+        this.initHour = LocalTime.now();
+    }
+
+    public void finishJourney() {
+        this.finishHour = LocalTime.now();
     }
 }
