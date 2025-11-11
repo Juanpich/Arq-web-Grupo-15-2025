@@ -27,14 +27,11 @@ public class JourneyService {
     private final JourneyRepository journeyRepo;
 
     private final RateRepository rateRepo;
+    private AccountFeingClient accountFeingClient;
 
-    public JourneyService(JourneyRepository journeyRepo, RateRepository rateRepo) {
+    public JourneyService(JourneyRepository journeyRepo, RateRepository rateRepo, AccountFeingClient accountFeingClient) {
         this.journeyRepo = journeyRepo;
         this.rateRepo = rateRepo;
-    private final AccountFeingClient accountFeingClient;
-
-    public JourneyService(JourneyRepository journeyRepo, AccountFeingClient  accountFeingClient) {
-        this.journeyRepo = journeyRepo;
         this.accountFeingClient = accountFeingClient;
     }
 

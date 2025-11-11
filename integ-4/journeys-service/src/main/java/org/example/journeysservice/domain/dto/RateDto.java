@@ -10,13 +10,13 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class RateDTO {
+public class RateDto {
     private Long rate_id;
     private LocalDateTime init_date;
     private LocalDateTime finish_date;
     private Float price;
 
-    public RateDTO(Rate rate) {
+    public RateDto(Rate rate) {
         this.rate_id = rate.getRate_id();
         this.init_date = rate.getInit_date();
         this.finish_date = rate.getFinish_date();
