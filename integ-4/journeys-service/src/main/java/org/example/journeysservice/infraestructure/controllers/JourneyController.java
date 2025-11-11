@@ -83,8 +83,8 @@ public class JourneyController {
         }
     }
     @GetMapping("/byUser/{userId}")
-    public ResponseEntity<?> getJourneyByUser(@PathVariable Long userId, @RequestParam(required = true) String startDate
-            , @RequestParam(required = true) String endDate) {
+    public ResponseEntity<?> getJourneyByUser(@PathVariable Long userId, @RequestParam(required = true, name="start-date") String startDate
+            , @RequestParam(required = true, name="end-date") String endDate) {
         LocalDate startDateN = LocalDate.parse(startDate);
         LocalDate endDateN = LocalDate.parse(endDate);
         List<JourneyDTO> journeys = this.journeyService.getgetJourneyByUser(userId, startDateN, endDateN);

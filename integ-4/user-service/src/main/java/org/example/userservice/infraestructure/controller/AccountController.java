@@ -67,7 +67,7 @@ public class AccountController {
         AccountDto accountNew = accountService.save(account);
         return ResponseEntity.ok(accountNew);
     }
-    @PutMapping("/{id}/loadAmount")
+    @PutMapping("/{id}/load-amount")
     public ResponseEntity<?> loadAmount(@RequestBody Account account, @PathVariable("id") Long id){
         try {
             account.setAccount_id(id);
@@ -86,7 +86,7 @@ public class AccountController {
 
         }
     }
-    @PutMapping("/{id}/changeType")
+    @PutMapping("/{id}/change-type")
     public ResponseEntity<?> changeType(@RequestBody Account account, @PathVariable("id") Long id){
         try {
             account.setAccount_id(id);

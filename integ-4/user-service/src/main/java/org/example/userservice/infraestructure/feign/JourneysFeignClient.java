@@ -13,8 +13,8 @@ import java.util.List;
 public interface JourneysFeignClient {
     @GetMapping("/byUser/{userId}")
     List<Journey> getJourneyByUser(@PathVariable("userId") Long userId,
-                                   @RequestParam("startDate") LocalDate startDate,
-                                   @RequestParam("endDate") LocalDate endDate );
+                                   @RequestParam("start-date") LocalDate startDate,
+                                   @RequestParam("end-date") LocalDate endDate );
 
 
 }
