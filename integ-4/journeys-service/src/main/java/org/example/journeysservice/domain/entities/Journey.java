@@ -61,5 +61,6 @@ public class Journey {
 
     public void finishJourney() {
         this.finishHour = LocalTime.now();
+        calcTotalHoures();
     }
 }
