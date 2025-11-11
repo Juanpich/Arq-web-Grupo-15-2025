@@ -89,7 +89,7 @@ public class JourneyService {
         return new JourneyDTO(upadtedJourney);
     }
     @Transactional(readOnly = true)
-    public List<JourneyDTO> getgetJourneyByUser(Long userId, LocalDate startDate, LocalDate endDate) {
+    public List<JourneyDTO> getJourneyByUser(Long userId, LocalDate startDate, LocalDate endDate) {
         return this.journeyRepo.getJourneyByUser(userId, startDate, endDate);
     }
     public Object endJourney(Long journeyId) {

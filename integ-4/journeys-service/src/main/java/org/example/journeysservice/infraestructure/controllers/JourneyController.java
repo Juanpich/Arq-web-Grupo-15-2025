@@ -96,7 +96,7 @@ public class JourneyController {
             , @RequestParam(required = true, name="end-date") String endDate) {
         LocalDate startDateN = LocalDate.parse(startDate);
         LocalDate endDateN = LocalDate.parse(endDate);
-        List<JourneyDTO> journeys = this.journeyService.getgetJourneyByUser(userId, startDateN, endDateN);
+        List<JourneyDTO> journeys = this.journeyService.getJourneyByUser(userId, startDateN, endDateN);
         return ResponseEntity.status(HttpStatus.OK).body(journeys);
 
     }
