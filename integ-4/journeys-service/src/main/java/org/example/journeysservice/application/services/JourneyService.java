@@ -63,6 +63,12 @@ public class JourneyService {
         return this.journeyRepo.findAllJourneysByScooter(scooter_id);
     }
 
+    // viajes por usuario
+    @Transactional
+    public List<JourneyDTO> findAllJourneysByUser(Long userId) {
+        return this.journeyRepo.findAllJourneysByUser(userId);
+    }
+
     //Los viajes de un scooter en un anio.
     @Transactional
     public List<JourneyDTO> FindAllJourneysByScooterANDYear(Long scooter_id, Integer anio) {
@@ -86,13 +92,9 @@ public class JourneyService {
     public List<JourneyDTO> getgetJourneyByUser(Long userId, LocalDate startDate, LocalDate endDate) {
         return this.journeyRepo.getJourneyByUser(userId, startDate, endDate);
     }
-    public Object endJourney(Long journeyId, Journey journey) {
-        Journey oldJourney = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + journeyId));
-        oldJourney.setFinishHour(journey.getFinishHour());
-        oldJourney.calcTotalHoures();
-
-        Journey upadtedJourney = this.journeyRepo.save(oldJourney);
-        return new JourneyDTO(upadtedJourney);
-
+    public Object endJourney(Long journeyId) {
+        Journey journey = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el viaje con id " + journeyId));
+        journey.finishJourney();
+        return new JourneyDTO(journey);
     }
 }
