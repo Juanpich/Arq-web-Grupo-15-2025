@@ -5,20 +5,26 @@ import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
+import org.example.journeysservice.infraestructure.feing.AccountFeingClient;
+import org.example.journeysservice.models.Account;
+import org.example.journeysservice.models.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class JourneyService {
 
     private final JourneyRepository journeyRepo;
+    private final AccountFeingClient accountFeingClient;
 
-    public JourneyService(JourneyRepository journeyRepo) {
+    public JourneyService(JourneyRepository journeyRepo, AccountFeingClient  accountFeingClient) {
         this.journeyRepo = journeyRepo;
+        this.accountFeingClient = accountFeingClient;
     }
 
     //Trae todos los viajes.
@@ -99,7 +105,45 @@ public class JourneyService {
         return new JourneyDTO(journey);
     }
 
-    public List<JourneyDTO> findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate) {
-        return this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
+    public DateRangeUserIdDTO findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate, String includeOtherUsers) {
+
+        //si se quiere incluir la info de los usuarios de misma cuenta, entra en el if
+        if (includeOtherUsers.equals("include")) {
+
+            //dto principal (de el usuario principal)
+            DateRangeUserIdDTO mainUser = this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
+
+            //cuentas del usuario
+            List<Account> relatedAccounts = this.accountFeingClient.getAccountsByUser(userId);
+
+            // usuarios de todas las cuentas
+            ArrayList<List<User>> relatedUsers = new ArrayList<>();
+            for (Account account : relatedAccounts) {
+                relatedUsers.add(this.accountFeingClient.getUsersByAccountId(account.getAccount_id()));
+            }
+
+            // lista de usuarios para que no se repitan (guarda el id de cada usuario)
+            ArrayList<Long> visitedUsersId = new ArrayList<>();
+
+            // genera el dto con la info de cada usuario relacionado al principal
+            ArrayList<DateRangeUserIdDTO> relatedUsersInfo = new ArrayList<>();
+
+            for (List<User> userList : relatedUsers) {
+                for (User relatedUser : userList) {
+
+                    if (!visitedUsersId.contains(relatedUser.getId())) {
+                        visitedUsersId.add(relatedUser.getId());
+                        relatedUsersInfo.add(this.journeyRepo.findJourneysByDateRange(relatedUser.getId(), initDate, finishDate));
+                    }
+                }
+            }
+
+            mainUser.setRelatedUsers(relatedUsersInfo);
+            return mainUser;
+        } else {
+            return this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
+        }
+
     }
 }
+

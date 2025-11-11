@@ -3,6 +3,7 @@ package org.example.journeysservice.application.repositories;
 
 
 
+import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -61,6 +62,8 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "FROM Journey j " +
             "WHERE j.userId = :userId " +
             "AND j.date = :initDate " +
-            "AND j.finishDate = :finishDate")
-    List<JourneyDTO> findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate);
+            "AND j.finishDate = :finishDate " +
+            "GROUP BY j.userId ")
+    DateRangeUserIdDTO findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate);
+
 }
