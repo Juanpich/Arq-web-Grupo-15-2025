@@ -14,5 +14,8 @@ public interface RateRepository extends JpaRepository<Rate, Long> {
 
     @Query("SELECT r FROM Rate r WHERE r.init_date <= :date AND (r.finish_date IS NULL OR r.finish_date >= :date)")
     Optional<Rate> findActiveRateForDate(@Param("date") LocalDateTime date);
+
+    //Todos los rates donde la fecha_init y finish este entre dos fechas
+
 }
 

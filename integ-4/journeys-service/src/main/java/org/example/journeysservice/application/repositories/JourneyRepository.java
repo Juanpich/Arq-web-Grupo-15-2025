@@ -57,4 +57,13 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
     List<ScooterKmReportDTO> scooterKmReport(int kmSearched);
 
+    //Todos los viajes que estan entre dos meses
+    @Query("SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j " +
+            "WHERE YEAR(j.date) = :year " +
+            "AND MONTH(j.date) BETWEEN :startMonth AND :endMonth")
+    List<Journey> findByYearAndMonthRange(
+            @Param("year") int year,
+            @Param("startMonth") int startMonth,
+            @Param("endMonth") int endMonth);
+
 }
