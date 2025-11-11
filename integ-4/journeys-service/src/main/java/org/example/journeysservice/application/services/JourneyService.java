@@ -63,6 +63,12 @@ public class JourneyService {
         return this.journeyRepo.findAllJourneysByScooter(scooter_id);
     }
 
+    // viajes por usuario
+    @Transactional
+    public List<JourneyDTO> findAllJourneysByUser(Long userId) {
+        return this.journeyRepo.findAllJourneysByUser(userId);
+    }
+
     //Los viajes de un scooter en un anio.
     @Transactional
     public List<JourneyDTO> FindAllJourneysByScooterANDYear(Long scooter_id, Integer anio) {

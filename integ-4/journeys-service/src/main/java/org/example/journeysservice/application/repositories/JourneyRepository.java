@@ -36,7 +36,7 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
 
     //Los viajes de un scooter por un anio
     @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.scooterId = :id AND YEAR(j.date) = :anio")
-    public List<JourneyDTO> findAllJourneysByScooterByYear(@Param("id") Long id, @Param("anio") Integer anio);
+    public List<JourneyDTO> findAllJourneysByScooterByYear(@Param("id") Long id, Integer anio);
 
     @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
                     "CAST(SUM(j.kmTraveled) AS LONG) AS totalKm, " +
