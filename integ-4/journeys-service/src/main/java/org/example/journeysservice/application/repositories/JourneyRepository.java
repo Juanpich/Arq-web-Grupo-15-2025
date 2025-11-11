@@ -62,5 +62,5 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "WHERE j.userId = :userId " +
             "AND j.date = :initDate " +
             "AND j.finishDate = :finishDate")
-    List<JourneyDTO> findJourneysByUserInGivenDate(Long userId, LocalDate initDate, LocalDate finishDate);
+    List<JourneyDTO> findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate);
 }

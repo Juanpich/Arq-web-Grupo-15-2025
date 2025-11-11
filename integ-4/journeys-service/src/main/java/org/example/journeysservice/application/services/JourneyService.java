@@ -100,7 +100,6 @@ public class JourneyService {
     }
 
     public List<JourneyDTO> findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate) {
-        List<DateRangeUserIdDTO> result = this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
         return this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
     }
 }
