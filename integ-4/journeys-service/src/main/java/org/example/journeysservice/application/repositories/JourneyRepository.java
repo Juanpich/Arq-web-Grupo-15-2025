@@ -65,12 +65,16 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             @Param("startMonth") int startMonth,
             @Param("endMonth") int endMonth);
 
-    @Query("SELECT new org.example.journeysservice.domain.dto.DateRangeUserIdDTO(j.userId, COUNT(DISTINCT j.scooterId), CAST(COUNT(j) AS INTEGER), CAST(SUM(j.kmTraveled) AS INTEGER), CAST(SUM(j.totalHoures) AS INTEGER) ) " +
+    @Query("SELECT new org.example.journeysservice.domain.dto.DateRangeUserIdDTO(" +
+            "j.userId, " +
+            "COUNT(DISTINCT j.scooterId), " +
+            "CAST(COUNT(j) AS INTEGER), " +
+            "CAST(SUM(j.kmTraveled) AS INTEGER), " +
+            "CAST(SUM(j.totalHoures) AS INTEGER)) " +
             "FROM Journey j " +
             "WHERE j.userId = :userId " +
-            "AND j.date = :initDate " +
-            "AND j.finishDate = :finishDate " +
-            "GROUP BY j.userId ")
+            "AND j.date >= :initDate " +
+            "AND j.finishDate <= :finishDate " +
+            "GROUP BY j.userId")
     DateRangeUserIdDTO findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate);
-
 }
