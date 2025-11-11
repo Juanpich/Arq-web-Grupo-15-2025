@@ -22,9 +22,9 @@ public class DateRangeUserIdDTO {
     private Long totalHoures;
     private List<DateRangeUserIdDTO> relatedUsers;
 
-    public DateRangeUserIdDTO(Long userId, int totalScooters, int journeysCount, int totalKm, int totalHoures) {
+    public DateRangeUserIdDTO(Long userId, Long totalScooters, int journeysCount, int totalKm, int totalHoures) {
         this.userId = userId;
-        this.totalScooters = Long.valueOf(totalScooters);
+        this.totalScooters = totalScooters;
         this.journeysCount = Long.valueOf(journeysCount);
         this.totalKm = Long.valueOf(totalKm);
         this.totalHoures = Long.valueOf(totalHoures);
