@@ -74,13 +74,13 @@ public class JourneyController {
 
     //Consultar viaje por monopatin en determinado año.
     // journey/scooter/2/year/2025
-    // journey/scooter/2?year=2025
     @GetMapping("scooter/{id}/year/{anio}")
     public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable(name="id") Long scooter_id, @PathVariable Integer anio) {
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooterANDYear(scooter_id, anio);
         return ResponseEntity.ok(result);
     }
 
+    //Actualizar un viaje.
     @PutMapping("/{journeyId}")
     public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @RequestParam Long journeyId) {
         var result = this.journeyService.updateJourney(journeyId, journey);
@@ -90,7 +90,7 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el viaje de id " + journeyId);
         }
     }
-    //Los viajes de un usuario.
+    //Los viajes de un usuario entre fechas.
     @GetMapping("/byUser/{userId}")
     public ResponseEntity<?> getJourneyByUser(@PathVariable Long userId, @RequestParam(required = true) String startDate
             , @RequestParam(required = true) String endDate) {

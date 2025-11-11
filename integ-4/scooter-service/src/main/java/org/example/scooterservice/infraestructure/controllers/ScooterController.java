@@ -90,4 +90,15 @@ public class ScooterController {
         this.scooterService.deleteScooter(id);
         return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
+    //los monopatines con más de X viajes en un cierto año.
+    @GetMapping("/year/{anio}/countJourneys/{count}")
+    public ResponseEntity<?> scootersForYear(@PathVariable Integer anio, @PathVariable Integer count){
+        try{
+            List<ScooterDto> result = this.scooterService.scootersForYear(anio, count);
+            return ResponseEntity.ok(result);
+        }catch (ScooterNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
+    }
 }
