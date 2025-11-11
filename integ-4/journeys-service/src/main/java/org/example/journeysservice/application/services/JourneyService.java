@@ -1,13 +1,18 @@
 package org.example.journeysservice.application.services;
 
 import org.example.journeysservice.application.repositories.JourneyRepository;
+import org.example.journeysservice.application.repositories.RateRepository;
 import org.example.journeysservice.domain.dto.JourneyDTO;
+import org.example.journeysservice.domain.dto.JourneyPriceDTO;
+import org.example.journeysservice.domain.dto.RateDto;
 import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +20,11 @@ import java.util.Optional;
 public class JourneyService {
 
     private final JourneyRepository journeyRepo;
+    private final RateRepository rateRepo;
 
-    public JourneyService(JourneyRepository journeyRepo) {
+    public JourneyService(JourneyRepository journeyRepo, RateRepository rateRepo) {
         this.journeyRepo = journeyRepo;
+        this.rateRepo = rateRepo;
     }
 
     //Trae todos los viajes.
@@ -95,6 +102,41 @@ public class JourneyService {
     public Object endJourney(Long journeyId) {
         Journey journey = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el viaje con id " + journeyId));
         journey.finishJourney();
-        return new JourneyDTO(journey);
+        Journey journeyNew = this.journeyRepo.save(journey);
+        return new JourneyDTO(journeyNew);
+    }
+
+    //Los viajes de un rango.
+    public JourneyPriceDTO findByYearAndMonthRange(int year, int startMonth, int endMonth) {
+        //Los viajes de un rango y anio.
+        List<JourneyDTO> journeys = this.journeyRepo.findByYearAndMonthRange(year, startMonth, endMonth);
+        Float totalPriceJourneys = 0.f;
+
+        for (JourneyDTO journey : journeys) {
+            // Convertir las fechas + horas del viaje a LocalDateTime
+            LocalDateTime journeyStart = LocalDateTime.of(journey.getDate(), journey.getInitHour());
+            LocalDateTime journeyEnd = LocalDateTime.of(journey.getFinishDate(), journey.getFinishHour());
+
+            // Buscar rates que afectan al viaje
+            List<RateDto> rates = this.rateRepo.findRatesForRange(journeyStart, journeyEnd);
+
+            float totalPriceJourney = 0f;
+
+            for (RateDto rate : rates) {
+                // Determinar la parte del rate que se solapa con el viaje
+                LocalDateTime overlapStart = journeyStart.isAfter(rate.getInit_date()) ? journeyStart : rate.getInit_date();
+                LocalDateTime overlapEnd = journeyEnd.isBefore(rate.getFinish_date()) ? journeyEnd : rate.getFinish_date();
+
+                Duration duration = Duration.between(overlapStart, overlapEnd);
+                float hours = duration.toMinutes() / 60f;
+
+                if (hours > 0) {
+                    totalPriceJourney += hours * rate.getPrice();
+                }
+
+            }
+            totalPriceJourneys += totalPriceJourney;
+        }
+        return new JourneyPriceDTO(startMonth, endMonth, year, totalPriceJourneys);
     }
 }

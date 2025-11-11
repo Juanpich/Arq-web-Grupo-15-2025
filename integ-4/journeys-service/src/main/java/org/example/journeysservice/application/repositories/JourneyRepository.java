@@ -61,7 +61,7 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
     @Query("SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j " +
             "WHERE YEAR(j.date) = :year " +
             "AND MONTH(j.date) BETWEEN :startMonth AND :endMonth")
-    List<Journey> findByYearAndMonthRange(
+    List<JourneyDTO> findByYearAndMonthRange(
             @Param("year") int year,
             @Param("startMonth") int startMonth,
             @Param("endMonth") int endMonth);

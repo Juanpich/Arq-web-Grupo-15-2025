@@ -24,6 +24,7 @@ public class JourneyDTO {
     private LocalTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
+    private LocalDate finishDate;
 
     public JourneyDTO(Journey newjourney) {
         this.journeyId = newjourney.getJourneyId();

@@ -4,25 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class ScooterKmReportDTO {
 
     private Long scooterId;
     private Long kmTraveled;
-    private Long totalHoures;
+    private LocalTime totalHoures;
     private Long pauseMinutes;
 
-    public ScooterKmReportDTO(Long id, Long kmTraveled, int totalHoures, Long pauseMinutes) {
+    public ScooterKmReportDTO(Long id, Long kmTraveled, LocalTime totalHoures, Long pauseMinutes) {
         this.scooterId = id;
         this.kmTraveled = kmTraveled;
-        this.totalHoures = Long.valueOf(totalHoures);
+        this.totalHoures = totalHoures;
         this.pauseMinutes = pauseMinutes;
     }
-    public ScooterKmReportDTO (Long id, Long km, int hours){
+    public ScooterKmReportDTO (Long id, Long km, LocalTime hours){
         this.scooterId = id;
         this.kmTraveled = km;
-        this.totalHoures = Long.valueOf(hours);
+        this.totalHoures = hours;
     }
 }

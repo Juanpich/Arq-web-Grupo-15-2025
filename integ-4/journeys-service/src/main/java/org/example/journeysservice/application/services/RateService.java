@@ -7,6 +7,7 @@ import org.example.journeysservice.domain.entities.Rate;
 import org.example.journeysservice.domain.exceptions.RateNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
