@@ -99,6 +99,13 @@ public class ScooterController {
         }catch (ScooterNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
-
+    }
+    @GetMapping("/gps/{gps}")
+    public ResponseEntity<?> getScooterByGps(@PathVariable("gps") String gps) {
+        List<ScooterDto> scooters= this.scooterService.getAllByGps(gps);
+        if(scooters == null){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(scooters);
     }
 }

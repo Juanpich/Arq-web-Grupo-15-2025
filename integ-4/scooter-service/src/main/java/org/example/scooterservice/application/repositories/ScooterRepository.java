@@ -21,6 +21,8 @@ public interface ScooterRepository extends MongoRepository<Scooter,Long> {
     @Query(value = "{'scooter_id': ?0}", delete = true)
     void deleteByScooter_id(Long id);
 
-    @Query("{ 'state' :?0 }")
+    @Query("{ 'state' : ?0   }")
     List<Scooter> findAllByState(State stateEnum);
+    @Query("{ 'gps': { $regex: ?0, $options: 'i' }, 'state': 'AVAILABLE' }")
+    List<Scooter> findAllByGps(String gps);
 }

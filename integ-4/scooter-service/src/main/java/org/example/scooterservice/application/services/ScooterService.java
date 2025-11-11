@@ -104,4 +104,9 @@ public class ScooterService {
         }
         return scooterResult;
     }
+
+    public List<ScooterDto> getAllByGps(String gps) {
+        List<ScooterDto> scooterResult = this.scooterRepository.findAllByGps(gps).stream().map(ScooterDto:: new).toList();
+        return scooterResult;
+    }
 }
