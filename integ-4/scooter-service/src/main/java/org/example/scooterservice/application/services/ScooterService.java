@@ -3,12 +3,15 @@ package org.example.scooterservice.application.services;
 import org.example.scooterservice.domain.entities.State;
 import org.example.scooterservice.domain.exceptions.ScooterNotFoundException;
 import org.example.scooterservice.domain.exceptions.ScooterWithIDAlreadyExistsException;
+import org.example.scooterservice.infraestructure.feingClient.ScooterFeignClient;
+import org.example.scooterservice.infraestructure.models.Journey;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.example.scooterservice.application.repositories.ScooterRepository;
 import org.example.scooterservice.domain.dtos.ScooterDto;
 import org.example.scooterservice.domain.entities.Scooter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +19,11 @@ import java.util.Optional;
 @Service
 public class ScooterService {
     private final ScooterRepository scooterRepository;
+    private final ScooterFeignClient scooterFeignClient;
 
-    public ScooterService(ScooterRepository scooterRepository) {
+    public ScooterService(ScooterRepository scooterRepository, ScooterFeignClient scooterFeignClient) {
         this.scooterRepository = scooterRepository;
+        this.scooterFeignClient = scooterFeignClient;
     }
     
     //Listar todos los scooters
@@ -27,7 +32,6 @@ public class ScooterService {
         return this.scooterRepository.findAll().stream().map(ScooterDto:: new).toList();
     }
 
-    //todo cambiar el get por id
     //Listar un scooter por su id
     @Transactional(readOnly = true)
     public ScooterDto findScooterById(Long id) {
@@ -82,5 +86,22 @@ public class ScooterService {
         scooter.get().setState(stateEnum);
         Scooter updatedScooter = this.scooterRepository.save(scooter.get()); //scooter editado
         return new ScooterDto(updatedScooter);
+    }
+
+    //los monopatines con más de X viajes en un cierto año.
+    @Transactional
+    public List<ScooterDto> scootersForYear(Integer year, Integer count){
+        //scooter a retornar
+        List<ScooterDto> scooterResult = new ArrayList<>();
+        //todos los scooters
+        List<Scooter> scootersGet = this.scooterRepository.findAll();
+        for (int i = 0; i < scootersGet.size(); i++) {
+            Long scooter_id = scootersGet.get(i).getScooter_id();
+            List<Journey> countJourney = this.scooterFeignClient.FindAllJourneysByScooterANDYear(scooter_id, year);
+            if(countJourney.size() >= count){
+                scooterResult.add(new ScooterDto(scootersGet.get(i)));
+            }
+        }
+        return scooterResult;
     }
 }
