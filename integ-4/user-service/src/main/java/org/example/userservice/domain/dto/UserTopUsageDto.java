@@ -14,14 +14,14 @@ public class UserTopUsageDto {
     private String mail;
     private String phone_number;
     private State state;
-    private int cantJourneys;
-    public UserTopUsageDto(UserDto user, int cantJourneys) {
+    private int cant_journeys;
+    public UserTopUsageDto(UserDto user, int cant_journeys) {
         this.id = user.getId();
         this.name = user.getName();
         this.last_name = user.getLast_name();
         this.mail = user.getMail();
         this.phone_number = user.getPhone_number();
         this.state = user.getState();
-        this.cantJourneys = cantJourneys;
+        this.cant_journeys = cant_journeys;
     }
 }
