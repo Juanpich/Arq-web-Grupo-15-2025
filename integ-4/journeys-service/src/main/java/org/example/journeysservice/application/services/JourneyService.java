@@ -1,6 +1,7 @@
 package org.example.journeysservice.application.services;
 
 import org.example.journeysservice.application.repositories.JourneyRepository;
+import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
@@ -96,5 +97,9 @@ public class JourneyService {
         Journey journey = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el viaje con id " + journeyId));
         journey.finishJourney();
         return new JourneyDTO(journey);
+    }
+
+    public List<JourneyDTO> findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate) {
+        return this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
     }
 }

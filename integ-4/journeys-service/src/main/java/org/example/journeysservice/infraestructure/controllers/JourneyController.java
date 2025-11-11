@@ -81,6 +81,12 @@ public class JourneyController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/user/{userId}/dateRange")
+    public ResponseEntity<?> findJourneysByUserInGivenDate(@PathVariable(name="userId") Long userId, @RequestParam LocalDate initDate, @RequestParam LocalDate finishDate) {
+        List<JourneyDTO> result = this.journeyService.findJourneysByDateRange(userId, initDate, finishDate);
+        return ResponseEntity.ok(result);
+    }
+
     //Actualizar un viaje.
     @PutMapping("/{journeyId}")
     public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @RequestParam Long journeyId) {
