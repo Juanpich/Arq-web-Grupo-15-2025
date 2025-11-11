@@ -65,6 +65,13 @@ public class JourneyController {
         return ResponseEntity.ok(result);
     }
 
+    //Consultar viaje por usuario
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<?> findAllJourneysByUser(@PathVariable Long userId){
+        List<JourneyDTO> result = this.journeyService.findAllJourneysByUser(userId);
+        return ResponseEntity.ok(result);
+    }
+
     //Consultar viaje por monopatin en determinado año.
     // journey/scooter/2/year/2025
     @GetMapping("scooter/{id}/year/{anio}")

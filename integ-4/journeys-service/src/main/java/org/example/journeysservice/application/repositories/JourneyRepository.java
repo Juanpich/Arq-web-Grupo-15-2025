@@ -1,8 +1,5 @@
 package org.example.journeysservice.application.repositories;
 
-
-
-
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,10 +31,14 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
     @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.scooterId = :id")
     public List<JourneyDTO> findAllJourneysByScooter(@Param("id") Long id);
 
+    //Los viajes de un usuario
+    @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.userId = :id")
+    public List<JourneyDTO> findAllJourneysByUser(@Param("id") Long userId);
+
     //Los viajes de un scooter por un anio
     @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.scooterId = :id AND YEAR(j.date) = :anio")
     public List<JourneyDTO> findAllJourneysByScooterByYear(@Param("id") Long id, Integer anio);
-
+    // Reporte de km recorridos, horas totales de uso y minutos de pausa de cada scooter
     @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
                     "CAST(SUM(j.kmTraveled) AS LONG) AS totalKm, " +
             "j.totalHoures , " +
@@ -47,6 +48,7 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
     List<ScooterKmReportDTO> scooterKmPauseMinutesReport(int kmSearched);
 
+    // Reporte de km recorridos, horas totales de uso de cada scooter
     @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
             "CAST(SUM(j.kmTraveled) AS LONG) AS totalKm, " +
             "j.totalHoures ) " +
