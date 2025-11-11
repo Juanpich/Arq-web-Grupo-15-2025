@@ -2,6 +2,7 @@ package org.example.journeysservice.infraestructure.controllers;
 
 import org.apache.coyote.Response;
 import org.example.journeysservice.application.services.JourneyService;
+import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
@@ -78,6 +79,15 @@ public class JourneyController {
     @GetMapping("scooter/{id}/year/{anio}")
     public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable(name="id") Long scooter_id, @PathVariable Integer anio) {
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooterANDYear(scooter_id, anio);
+        return ResponseEntity.ok(result);
+    }
+
+    // (Punto h)
+    // Consultar viajes entre fechas
+    @GetMapping("/user/{userId}/dateRange")
+    public ResponseEntity<?> findJourneysByUserInGivenDate(@PathVariable(name="userId") Long userId, @RequestParam LocalDate initDate, @RequestParam LocalDate finishDate,
+                                                           @RequestParam(required = true) String includeOtherUsers) {
+        DateRangeUserIdDTO result = this.journeyService.findJourneysByDateRange(userId, initDate, finishDate, includeOtherUsers);
         return ResponseEntity.ok(result);
     }
 

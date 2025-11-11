@@ -3,6 +3,7 @@ package org.example.userservice.aplication.services;
 
 import org.example.userservice.aplication.repositories.AccountRepository;
 import org.example.userservice.aplication.repositories.UserRepository;
+import org.example.userservice.domain.dto.ScootesNearbyDto;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.dto.UserTopUsageDto;
 import org.example.userservice.domain.entities.Account;
@@ -13,7 +14,9 @@ import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.example.userservice.infraestructure.feign.JourneysFeignClient;
+import org.example.userservice.infraestructure.feign.ScooterFeignClient;
 import org.example.userservice.models.Journey;
+import org.example.userservice.models.Scooter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,10 +32,12 @@ public class UserService {
     private UserRepository userRepository;
     private AccountRepository accountRepository;
     private JourneysFeignClient journeysFeignClient;
-    public UserService(UserRepository ur, AccountRepository accountRepository,  JourneysFeignClient journeysFeignClient) {
+    private ScooterFeignClient scooterFeignClient;
+    public UserService(UserRepository ur, AccountRepository accountRepository,  JourneysFeignClient journeysFeignClient, ScooterFeignClient scooterFeignClient) {
         this.userRepository=ur;
         this.accountRepository = accountRepository;
         this.journeysFeignClient=journeysFeignClient;
+        this.scooterFeignClient = scooterFeignClient;
     }
 
     @Transactional(readOnly = true)
@@ -106,7 +111,21 @@ public class UserService {
             userTopUsageDtos.add(new UserTopUsageDto(user, journeys.size()));
         }
         return userTopUsageDtos.stream()
-                .sorted(Comparator.comparingInt(UserTopUsageDto::getCantJourneys).reversed())
+                .sorted(Comparator.comparingInt(UserTopUsageDto::getCant_journeys).reversed())
                 .toList();
+    }
+
+    public List<ScootesNearbyDto> getNearbyRates(Long id, String gps) {
+        Optional<User> user =  this.userRepository.findById(id);
+        if(user.isEmpty()){
+            throw new UserNotFoundException(id);
+        }
+        List<Scooter> scooters = this.scooterFeignClient.getScooterByGps(gps);
+        List<ScootesNearbyDto> scootesNearby =  new ArrayList<>();
+        for(Scooter s :scooters){
+            scootesNearby.add(new ScootesNearbyDto(s));
+        }
+        return scootesNearby;
+
     }
 }

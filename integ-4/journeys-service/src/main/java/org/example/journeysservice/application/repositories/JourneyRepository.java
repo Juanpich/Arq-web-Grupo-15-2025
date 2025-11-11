@@ -1,8 +1,6 @@
 package org.example.journeysservice.application.repositories;
 
-
-
-
+import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
 import org.example.journeysservice.domain.dto.JourneyDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -57,6 +55,7 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
     List<ScooterKmReportDTO> scooterKmReport(int kmSearched);
 
+
     //Todos los viajes que estan entre dos meses
     @Query("SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j " +
             "WHERE YEAR(j.date) = :year " +
@@ -65,5 +64,13 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             @Param("year") int year,
             @Param("startMonth") int startMonth,
             @Param("endMonth") int endMonth);
+
+    @Query("SELECT new org.example.journeysservice.domain.dto.DateRangeUserIdDTO(j.userId, COUNT(DISTINCT j.scooterId), CAST(COUNT(j) AS INTEGER), CAST(SUM(j.kmTraveled) AS INTEGER), CAST(SUM(j.totalHoures) AS INTEGER) ) " +
+            "FROM Journey j " +
+            "WHERE j.userId = :userId " +
+            "AND j.date = :initDate " +
+            "AND j.finishDate = :finishDate " +
+            "GROUP BY j.userId ")
+    DateRangeUserIdDTO findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate);
 
 }
