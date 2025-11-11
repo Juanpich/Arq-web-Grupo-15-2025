@@ -2,7 +2,7 @@ package org.example.journeysservice.application.services;
 
 import jakarta.transaction.Transactional;
 import org.example.journeysservice.application.repositories.RateRepository;
-import org.example.journeysservice.domain.dto.RateDto;
+import org.example.journeysservice.domain.dto.RateDTO;
 import org.example.journeysservice.domain.entities.Rate;
 import org.example.journeysservice.domain.exceptions.RateNotFoundException;
 import org.springframework.stereotype.Service;
@@ -21,25 +21,25 @@ public class RateService {
     }
 
     @Transactional
-    public List<RateDto> getAll() {
-        return rateRepository.findAll().stream().map(RateDto::new).collect(Collectors.toList());
+    public List<RateDTO> getAll() {
+        return rateRepository.findAll().stream().map(RateDTO::new).collect(Collectors.toList());
     }
 
     @Transactional
-    public RateDto getRateById(Long id) {
+    public RateDTO getRateById(Long id) {
         Rate rate = rateRepository.findById(id)
                 .orElseThrow(() -> new RateNotFoundException(id));
-        return new RateDto(rate);
+        return new RateDTO(rate);
     }
 
     @Transactional
-    public RateDto save(Rate rate) {
+    public RateDTO save(Rate rate) {
         Rate savedRate = rateRepository.save(rate);
-        return new RateDto(savedRate);
+        return new RateDTO(savedRate);
     }
 
     @Transactional
-    public RateDto update(Long id, Rate rateDetails) {
+    public RateDTO update(Long id, Rate rateDetails) {
         Rate rate = rateRepository.findById(id)
                 .orElseThrow(() -> new RateNotFoundException(id));
 
@@ -48,7 +48,7 @@ public class RateService {
         rate.setPrice(rateDetails.getPrice());
 
         Rate updatedRate = rateRepository.save(rate);
-        return new RateDto(updatedRate);
+        return new RateDTO(updatedRate);
     }
 
     @Transactional
@@ -60,15 +60,15 @@ public class RateService {
     }
 
     @Transactional
-    public RateDto getCurrentRate() {
+    public RateDTO getCurrentRate() {
         return getRateByDate(LocalDateTime.now());
     }
 
     @Transactional
-    public RateDto getRateByDate(LocalDateTime date) {
+    public RateDTO getRateByDate(LocalDateTime date) {
         Rate rate = rateRepository.findActiveRateForDate(date)
                 .orElseThrow(() -> new RateNotFoundException("No active rate found for date: " + date));
-        return new RateDto(rate);
+        return new RateDTO(rate);
     }
 }
 

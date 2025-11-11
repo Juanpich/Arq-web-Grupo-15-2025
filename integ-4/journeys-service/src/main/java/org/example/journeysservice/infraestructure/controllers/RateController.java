@@ -1,7 +1,7 @@
 package org.example.journeysservice.infraestructure.controllers;
 
 import org.example.journeysservice.application.services.RateService;
-import org.example.journeysservice.domain.dto.RateDto;
+import org.example.journeysservice.domain.dto.RateDTO;
 import org.example.journeysservice.domain.entities.Rate;
 import org.example.journeysservice.domain.exceptions.RateNotFoundException;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,8 +23,8 @@ public class RateController {
     }
 
     @GetMapping("")
-    public ResponseEntity<List<RateDto>> getAllRates() {
-        List<RateDto> rates = rateService.getAll();
+    public ResponseEntity<List<RateDTO>> getAllRates() {
+        List<RateDTO> rates = rateService.getAll();
         if (rates.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -34,7 +34,7 @@ public class RateController {
     @GetMapping("/{id}")
     public ResponseEntity<?> getRateById(@PathVariable Long id) {
         try {
-            RateDto rate = rateService.getRateById(id);
+            RateDTO rate = rateService.getRateById(id);
             return ResponseEntity.ok(rate);
         } catch (RateNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -42,15 +42,15 @@ public class RateController {
     }
 
     @PostMapping("")
-    public ResponseEntity<RateDto> save(@RequestBody Rate rate) {
-        RateDto newRate = rateService.save(rate);
+    public ResponseEntity<RateDTO> save(@RequestBody Rate rate) {
+        RateDTO newRate = rateService.save(rate);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRate);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Rate rate) {
         try {
-            RateDto updatedRate = rateService.update(id, rate);
+            RateDTO updatedRate = rateService.update(id, rate);
             return ResponseEntity.ok(updatedRate);
         } catch (RateNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -70,7 +70,7 @@ public class RateController {
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentRate() {
         try {
-            RateDto rate = rateService.getCurrentRate();
+            RateDTO rate = rateService.getCurrentRate();
             return ResponseEntity.ok(rate);
         } catch (RateNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -80,7 +80,7 @@ public class RateController {
     @GetMapping("/byDate")
     public ResponseEntity<?> getRateByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
         try {
-            RateDto rate = rateService.getRateByDate(date);
+            RateDTO rate = rateService.getRateByDate(date);
             return ResponseEntity.ok(rate);
         } catch (RateNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

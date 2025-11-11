@@ -57,4 +57,10 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
     List<ScooterKmReportDTO> scooterKmReport(int kmSearched);
 
+    @Query("SELECT new org.example.journeysservice.domain.dto.DateRangeUserIdDTO(j.userId, COUNT(DISTINCT j.scooterId), CAST(COUNT(j) AS INTEGER), CAST(SUM(j.kmTraveled) AS INTEGER), CAST(SUM(j.totalHoures) AS INTEGER) ) " +
+            "FROM Journey j " +
+            "WHERE j.userId = :userId " +
+            "AND j.date = :initDate " +
+            "AND j.finishDate = :finishDate")
+    List<JourneyDTO> findJourneysByUserInGivenDate(Long userId, LocalDate initDate, LocalDate finishDate);
 }

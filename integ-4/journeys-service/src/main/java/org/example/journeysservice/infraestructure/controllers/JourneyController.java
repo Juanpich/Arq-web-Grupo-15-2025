@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -78,6 +77,12 @@ public class JourneyController {
     @GetMapping("scooter/{id}/year/{anio}")
     public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable(name="id") Long scooter_id, @PathVariable Integer anio) {
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooterANDYear(scooter_id, anio);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/user/{userId}/dateRange")
+    public ResponseEntity<?> findJourneysByUserInGivenDate(@PathVariable(name="userId") Long userId, @RequestParam LocalDate initDate, @RequestParam LocalDate finishDate) {
+        List<JourneyDTO> result = this.journeyService.findJourneysByDateRange(userId, initDate, finishDate);
         return ResponseEntity.ok(result);
     }
 
