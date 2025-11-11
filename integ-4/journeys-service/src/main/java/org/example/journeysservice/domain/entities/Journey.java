@@ -27,6 +27,7 @@ public class Journey {
     private int kmTraveled;
     private Long pauseMinutes;
     private int totalHoures;
+    private LocalDate finishDate;
 
     public Journey(Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
         this.scooterId = scooterId;
@@ -44,13 +45,22 @@ public class Journey {
         this.date = LocalDate.now();
         this.initHour = LocalTime.now();
         this.finishHour = null;
+        this.finishDate = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
         this.totalHoures = 0;
     }
 
     public void calcTotalHoures() {
-        this.totalHoures = Math.toIntExact(ChronoUnit.HOURS.between(this.initHour, this.finishHour));
+        if (this.date != null && this.finishDate != null && this.initHour != null && this.finishHour != null) {
+            LocalDateTime startDateTime = LocalDateTime.of(this.date, this.initHour);
+            LocalDateTime endDateTime = LocalDateTime.of(this.finishDate, this.finishHour);
+
+            long minutes = ChronoUnit.MINUTES.between(startDateTime, endDateTime);
+            this.totalHoures = (int) Math.ceil(minutes / 60.0);
+        } else {
+            this.totalHoures = 0;
+        }
     }
 
     @PrePersist
@@ -61,5 +71,6 @@ public class Journey {
 
     public void finishJourney() {
         this.finishHour = LocalTime.now();
+        this.finishDate = LocalDate.now();
     }
 }
