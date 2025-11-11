@@ -29,7 +29,9 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate
     );
-
+    //Los viajes de un usuario
+    @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.userId = :id")
+    public List<JourneyDTO> findAllJourneysByUser(@Param("id") Long userId);
     //Los viajes de un scooter
     @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.scooterId = :id")
     public List<JourneyDTO> findAllJourneysByScooter(@Param("id") Long id);

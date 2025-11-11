@@ -27,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<?> getAllUsers(@RequestParam(required = false) String type) {
+    public ResponseEntity<?> getAllUsers(@RequestParam(required = false, name="type") String type) {
         List<UserDto> users;
         try {
             if (type != null) {
@@ -75,8 +75,8 @@ public class UserController {
                     .body(e.getMessage());
         }
     }
-    @PostMapping("/{id}/associate/{id_account}")
-    public ResponseEntity<?> associate(@PathVariable("id") Long id, @PathVariable("id_account") Long id_account) {
+    @PostMapping("/{id}/associate/{id-account}")
+    public ResponseEntity<?> associate(@PathVariable("id") Long id, @PathVariable("id-account") Long id_account) {
         try{
             this.userService.associate(id, id_account);
             return ResponseEntity.status(HttpStatus.CREATED).body("associate");
@@ -90,7 +90,7 @@ public class UserController {
                     .body(e.getMessage());
         }
     }
-    @PutMapping("/{id}/changeState")
+    @PutMapping("/{id}/change-state")
     public ResponseEntity<?>  changeState(@RequestBody Map<String, String> body, @PathVariable Long id){
         UserDto user;
         try{
@@ -106,11 +106,12 @@ public class UserController {
     }
     //Como administrador quiero ver los usuarios que más utilizan los monopatines, filtrado por
     //período y por tipo de usuario
-    ///api/scooters/usage/top-users?startDate=2025-01-01&endDate=2025-01-31&type=PREMIUM
     @GetMapping("/usage/top-users")
-    public ResponseEntity<?> getTopUsers(@RequestParam(required = true) String startDate
-            , @RequestParam(required = true) String endDate,
-                                         @RequestParam(required = true) String type) {
+    public ResponseEntity<?> getTopUsers(
+            @RequestParam(name = "start-date", required = true) String startDate,
+            @RequestParam(name = "end-date", required = true) String endDate,
+            @RequestParam(name = "type", required = true) String type
+    ) {
         List<UserTopUsageDto> users;
         try{
             AccountType typeN = AccountType.valueOf(type.toUpperCase());
