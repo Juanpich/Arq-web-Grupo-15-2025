@@ -10,13 +10,19 @@ import lombok.NoArgsConstructor;
 public class ScooterKmReportDTO {
 
     private Long scooterId;
-    private int kmTraveled;
+    private Long kmTraveled;
     private Long totalHoures;
     private Long pauseMinutes;
 
-    public ScooterKmReportDTO(Long id, int kmTraveled, Long totalHoures) {
+    public ScooterKmReportDTO(Long id, Long kmTraveled, int totalHoures, Long pauseMinutes) {
         this.scooterId = id;
         this.kmTraveled = kmTraveled;
-        this.totalHoures = totalHoures;
+        this.totalHoures = Long.valueOf(totalHoures);
+        this.pauseMinutes = pauseMinutes;
+    }
+    public ScooterKmReportDTO (Long id, Long km, int hours){
+        this.scooterId = id;
+        this.kmTraveled = km;
+        this.totalHoures = Long.valueOf(hours);
     }
 }

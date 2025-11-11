@@ -19,12 +19,11 @@ import java.util.List;
 
 @Repository
 public interface JourneyRepository extends JpaRepository<Journey, Long> {
-    @Query("""
-    SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j)
-    FROM Journey j
-    WHERE j.userId = :userId
-      AND j.date BETWEEN :startDate AND :endDate
-""")
+    @Query("SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) " +
+   " FROM Journey j " +
+    " WHERE j.userId = :userId " +
+     " AND j.date BETWEEN :startDate AND :endDate")
+
     List<JourneyDTO> getJourneyByUser(
             @Param("userId") Long userId,
             @Param("startDate") LocalDate startDate,
@@ -39,9 +38,8 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
     @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.scooterId = :id AND YEAR(j.date) = :anio")
     public List<JourneyDTO> findAllJourneysByScooterByYear(@Param("id") Long id, Integer anio);
 
-
     @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
-                    "CAST(SUM(j.kmTraveled) AS INTEGER) AS totalKm, " +
+                    "CAST(SUM(j.kmTraveled) AS LONG) AS totalKm, " +
             "j.totalHoures , " +
             "CAST(SUM(j.pauseMinutes) AS LONG) AS totalPausedMinutes)" +
             "FROM Journey j " +
@@ -50,7 +48,7 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
     List<ScooterKmReportDTO> scooterKmPauseMinutesReport(int kmSearched);
 
     @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
-            "CAST(SUM(j.kmTraveled) AS INTEGER) AS totalKm, " +
+            "CAST(SUM(j.kmTraveled) AS LONG) AS totalKm, " +
             "j.totalHoures ) " +
             "FROM Journey j " +
             "GROUP BY j.scooterId " +

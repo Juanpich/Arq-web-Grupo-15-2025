@@ -34,9 +34,10 @@ public class JourneyController {
         return this.journeyService.findJourneyById(journeyId);
     }
 
+    //Reporte kilometros.
     @GetMapping("/kmByScooter/{kmSearch}")
-    public List<ScooterKmReportDTO> scooterKmReport(@PathVariable int kmSearch,@RequestParam(required = true) String includePausedMinutes) {
-        return this.journeyService.findAllScooterKm(kmSearch,includePausedMinutes);
+    public List<ScooterKmReportDTO> scooterKmReport(@PathVariable int kmSearch, @RequestParam(required = true) String includePausedMinutes) {
+        return this.journeyService.findAllScooterKm(kmSearch, includePausedMinutes);
     }
 
     //Eliminar viaje.
@@ -58,7 +59,7 @@ public class JourneyController {
     }
     
     //Consultar viaje por monopatin.
-    @GetMapping("/scooter/{id}")
+    @GetMapping("/scooter/{scooter_id}")
     public ResponseEntity<?> FindAllJourneysByScooter(@PathVariable Long scooter_id){
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooter(scooter_id);
         return ResponseEntity.ok(result);
