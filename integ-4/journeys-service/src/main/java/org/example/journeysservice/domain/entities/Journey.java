@@ -29,6 +29,9 @@ public class Journey {
     private Long pauseMinutes;
     private Duration totalHoures;
     private LocalDate finishDate;
+    private LocalTime init_pause;
+    private LocalTime finish_pause;
+    private Duration totalMinutespause;
 
     public Journey(Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
         this.scooterId = scooterId;
@@ -37,6 +40,9 @@ public class Journey {
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
         this.totalHoures = null;
+        this.init_pause = null;
+        this.finish_pause = null;
+        this.totalMinutespause = null;
     }
 
     public Journey(Long journeyId, Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
@@ -50,6 +56,9 @@ public class Journey {
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
         this.totalHoures = null;
+        this.init_pause = null;
+        this.finish_pause = null;
+        this.totalMinutespause = null;
     }
 
     public void calcTotalHoures() {
@@ -73,5 +82,19 @@ public class Journey {
         this.finishHour = LocalTime.now();
         this.finishDate = LocalDate.now();
         this.calcTotalHoures();
+    }
+
+    public void initPause() {
+        if(this.finishHour == null && this.finishDate == null) {
+            this.init_pause = LocalTime.now();
+        }
+    }
+
+    public void finishPause(){
+        if(this.init_pause != null && this.finishHour == null && this.finishDate == null){
+            this.finish_pause = LocalTime.now();
+            this.totalMinutespause = Duration.between(this.init_pause, this.finish_pause);
+        }
+
     }
 }

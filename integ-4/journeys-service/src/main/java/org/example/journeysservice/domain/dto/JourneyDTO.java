@@ -28,6 +28,9 @@ public class JourneyDTO {
     private int kmTraveled;
     private Long pauseMinutes;
     private LocalDate finishDate;
+    private LocalTime init_pause;
+    private LocalTime finish_pause;
+    private Duration totalMinutespause;
 
     @JsonIgnore
     private Duration totalHoures;
@@ -46,6 +49,9 @@ public class JourneyDTO {
         this.finishDate = newjourney.getFinishDate();
         this.totalHoures = newjourney.getTotalHoures();
         this.journeyDuration = this.getFormattedTotalHours();
+        this.init_pause = newjourney.getInit_pause();
+        this.finish_pause = newjourney.getFinish_pause();
+        this.totalMinutespause = newjourney.getTotalMinutespause();
     }
     //Totalhoures guarda la duracion del viaje en nanosegundos por lo que
     // se lo quiere mostrar al usuario de una manera mas amigable.

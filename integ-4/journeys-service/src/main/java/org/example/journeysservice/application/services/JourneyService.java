@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -123,6 +124,17 @@ public class JourneyService {
         LocalDateTime journeyStart = LocalDateTime.of(journey.getDate(), journey.getInitHour());
         LocalDateTime journeyEnd = LocalDateTime.of(journey.getFinishDate(), journey.getFinishHour());
 
+        //Logica de la pausa
+        Duration totalMinutesPause = journey.getTotalMinutespause(); // puede ser null
+
+        if(totalMinutesPause != null ){
+            long minutesPause = totalMinutesPause.toMinutes();  // convertir a minutos
+
+            if (minutesPause > 15) {
+                // si la pausa dura más de 15 min, se suman TODOS los minutos de pausa a la duracion del viaje
+                journeyEnd = journeyEnd.plusMinutes(minutesPause);
+            }// si es <= 15, no se modifica
+        }
         // Buscar rates que afectan al viaje
         List<RateDto> rates = this.rateRepo.findRatesForRange(journeyStart, journeyEnd);
 
@@ -154,6 +166,18 @@ public class JourneyService {
             LocalDateTime journeyStart = LocalDateTime.of(journey.getDate(), journey.getInitHour());
             LocalDateTime journeyEnd = LocalDateTime.of(journey.getFinishDate(), journey.getFinishHour());
 
+            //Logica de la pausa
+            Duration totalMinutesPause = journey.getTotalMinutespause(); // puede ser null
+
+            if(totalMinutesPause != null ){
+                long minutesPause = totalMinutesPause.toMinutes();  // convertir a minutos
+
+                if (minutesPause > 15) {
+                    // si la pausa dura más de 15 min, se suman TODOS los minutos de pausa a la duracion del viaje
+                    journeyEnd = journeyEnd.plusMinutes(minutesPause);
+                }// si es <= 15, no se modifica
+            }
+            
             // Buscar rates que afectan al viaje
             List<RateDto> rates = this.rateRepo.findRatesForRange(journeyStart, journeyEnd);
 
@@ -221,7 +245,23 @@ public class JourneyService {
         } else {
             return this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
         }
+    }
 
+    @Transactional
+    //pausar un viaje
+    public JourneyDTO pauseJourney(Long id){
+        Journey journey = this.journeyRepo.findById(id).orElseThrow(() -> new RuntimeException("No se encontro el viaje con id " + id));
+        journey.initPause();
+        Journey journeysave = this.journeyRepo.save(journey);
+        return new JourneyDTO(journeysave);
+    }
+
+    @Transactional
+    public JourneyDTO finishPause(Long id){
+        Journey journey = this.journeyRepo.findById(id).orElseThrow(() -> new RuntimeException("No se encontro el viaje con id " + id));
+        journey.finishPause();
+        Journey journeysave = this.journeyRepo.save(journey);
+        return new JourneyDTO(journeysave);
     }
 }
 

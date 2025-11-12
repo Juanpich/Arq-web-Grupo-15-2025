@@ -132,12 +132,33 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo calcular el total facturado en el rango ingresado.");
         }
     }
+    //saber el precio de un viaje.
     @GetMapping("/{id}/price")
     public ResponseEntity<?> getPriceByJourneyId(@PathVariable Long id){
         try{
             PriceJourneyDto priceJourneyDto = this.journeyService.getPriceJourney(id);
             return ResponseEntity.status(HttpStatus.OK).body(priceJourneyDto);
         }catch(JourneyNotFoundException | UnfinishedJourneyException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    //pausar un viaje
+    @PutMapping("/{id}/pause")
+    public ResponseEntity<?> pauseJourney(@PathVariable Long id){
+        try{
+            JourneyDTO journey = this.journeyService.pauseJourney(id);
+            return ResponseEntity.status(HttpStatus.OK).body(journey);
+        }catch (JourneyNotFoundException | UnfinishedJourneyException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    // despausar un viaje
+    @PutMapping("/{id}/finishPause")
+    public ResponseEntity<?> finishPauseJourney(@PathVariable Long id) {
+        try{
+            JourneyDTO journey = this.journeyService.finishPause(id);
+            return ResponseEntity.status(HttpStatus.OK).body(journey);
+        }catch (JourneyNotFoundException | UnfinishedJourneyException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
