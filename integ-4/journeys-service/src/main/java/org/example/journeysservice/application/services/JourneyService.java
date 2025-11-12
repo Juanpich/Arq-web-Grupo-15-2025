@@ -136,7 +136,7 @@ public class JourneyService {
                 LocalDateTime overlapEnd = journeyEnd.isBefore(rate.getFinish_date()) ? journeyEnd : rate.getFinish_date();
 
                 Duration duration = Duration.between(overlapStart, overlapEnd);
-                float hours = duration.toMinutes() / 60f;
+                float hours = duration.toNanos() / (float) Duration.ofHours(1).toNanos();
 
                 if (hours > 0) {
                     totalPriceJourney += hours * rate.getPrice();

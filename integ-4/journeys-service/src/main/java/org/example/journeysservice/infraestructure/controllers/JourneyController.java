@@ -130,7 +130,7 @@ public class JourneyController {
             JourneyPriceDTO total = this.journeyService.findByYearAndMonthRange(year, startMonth, endMonth);
             return ResponseEntity.status(HttpStatus.OK).body(total);
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo calcular el total facturado en el rango ingresado.");
         }
     }
 }
