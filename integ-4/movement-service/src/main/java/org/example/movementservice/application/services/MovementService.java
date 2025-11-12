@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class MovementService {
 
-    @Autowired
+
     private MovementRepository movementRepo;
 
     public MovementService(MovementRepository movementRepo) {
