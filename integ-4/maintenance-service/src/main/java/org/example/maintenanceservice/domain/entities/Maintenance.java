@@ -17,7 +17,7 @@ public class Maintenance {
     private Long maintenance_id;
 
     @Column(nullable = false)
-    private Long scooter_id;
+    private Long scooterId;
 
     @Column(nullable = false)
     private Long user_id;
@@ -26,13 +26,13 @@ public class Maintenance {
     private LocalDateTime init_date;
 
     @Column
-    private LocalDateTime finish_date;
+    private LocalDateTime finishDate;
 
     public Maintenance(Long scooter_id, Long user_id, LocalDateTime init_date, LocalDateTime finish_date) {
-        this.scooter_id = scooter_id;
+        this.scooterId = scooter_id;
         this.user_id = user_id;
         this.init_date = init_date;
-        this.finish_date = finish_date;
+        this.finishDate = finish_date;
     }
 }
 

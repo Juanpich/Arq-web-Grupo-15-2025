@@ -21,9 +21,9 @@ public class MaintenanceDto {
 
     public MaintenanceDto(Maintenance maintenance) {
         this.maintenance_id = maintenance.getMaintenance_id();
-        this.scooter_id = maintenance.getScooter_id();
+        this.scooter_id = maintenance.getScooterId();
         this.user_id = maintenance.getUser_id();
         this.init_date = maintenance.getInit_date();
-        this.finish_date = maintenance.getFinish_date();
+        this.finish_date = maintenance.getFinishDate();
     }
 }

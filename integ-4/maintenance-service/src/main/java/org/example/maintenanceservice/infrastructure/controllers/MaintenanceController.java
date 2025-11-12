@@ -86,7 +86,7 @@ public class MaintenanceController {
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
             maintenanceService.delete(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok().build();
         } catch (MaintenanceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

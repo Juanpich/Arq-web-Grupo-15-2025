@@ -40,13 +40,13 @@ public class MaintenanceService {
 
     @Transactional
     public MaintenanceDto save(Maintenance maintenance) {
-        if (maintenance.getScooter_id() == null || maintenance.getUser_id() == null) {
+        if (maintenance.getScooterId() == null || maintenance.getUser_id() == null) {
             throw new InvalidMaintenanceDataException("Scooter ID and User ID cannot be null.");
         }
         if (maintenance.getInit_date() == null) {
             throw new InvalidMaintenanceDataException("Init date cannot be null.");
         }
-        if (maintenance.getFinish_date() != null) {
+        if (maintenance.getFinishDate() != null) {
             throw new InvalidMaintenanceDataException("New maintenance cannot have a finish date.");
         }
         return new MaintenanceDto(maintenanceRepository.save(maintenance));
@@ -68,13 +68,13 @@ public class MaintenanceService {
         Maintenance maintenance = maintenanceRepository.findById(maintenanceId)
                 .orElseThrow(() -> new MaintenanceNotFoundException(maintenanceId));
 
-        if (maintenance.getFinish_date() != null) {
+        if (maintenance.getFinishDate() != null) {
             throw new MaintenanceAlreadyFinishedException(maintenanceId);
         }
 
-        maintenance.setFinish_date(LocalDateTime.now());
+        maintenance.setFinishDate(LocalDateTime.now());
         Map<String, String> stateBody = Map.of("state", "AVAILABLE");
-        scooterFeignClient.updateScooterState(maintenance.getScooter_id(), stateBody);
+        scooterFeignClient.updateScooterState(maintenance.getScooterId(), stateBody);
         return new MaintenanceDto(maintenanceRepository.save(maintenance));
     }
 
