@@ -38,22 +38,24 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
     @Query(" SELECT new org.example.journeysservice.domain.dto.JourneyDTO(j) FROM Journey j WHERE j.scooterId = :id AND YEAR(j.date) = :anio")
     public List<JourneyDTO> findAllJourneysByScooterByYear(@Param("id") Long id, Integer anio);
 
-    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
-                    "CAST(SUM(j.kmTraveled) AS LONG) AS totalKm, " +
-            "j.totalHoures , " +
-            "CAST(SUM(j.pauseMinutes) AS LONG) AS totalPausedMinutes)" +
-            "FROM Journey j " +
-            "GROUP BY j.scooterId " +
-            "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
-    List<ScooterKmReportDTO> scooterKmPauseMinutesReport(int kmSearched);
+    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO( j.scooterId, " +
+        "CAST(SUM(j.kmTraveled)AS LONG) ,  CAST(SUM(j.totalHoures) AS LONG), " +
+            "CAST(SUM(j.pauseMinutes) AS LONG)) " +
+    "FROM Journey j " +
+   " GROUP BY j.scooterId " +
+    "HAVING SUM(j.kmTraveled) >= :kmSearched")
+    List<ScooterKmReportDTO> scooterKmPauseMinutesReport(@Param("kmSearched") int kmSearched);
 
-    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(j.scooterId, " +
-            "CAST(SUM(j.kmTraveled) AS LONG) AS totalKm, " +
-            "j.totalHoures ) " +
+
+    @Query("SELECT new org.example.journeysservice.domain.dto.ScooterKmReportDTO(" +
+            "j.scooterId, " +
+            "CAST(SUM(j.kmTraveled) AS long), " +
+            "CAST(SUM(j.totalHoures) AS long)) " +
             "FROM Journey j " +
             "GROUP BY j.scooterId " +
-            "HAVING CAST(SUM(j.kmTraveled) AS INTEGER) >= :kmSearched ")
-    List<ScooterKmReportDTO> scooterKmReport(int kmSearched);
+            "HAVING CAST(SUM(j.kmTraveled) AS int) >= :kmSearched")
+    List<ScooterKmReportDTO> scooterKmReport(@Param("kmSearched") int kmSearched);
+
 
 
     //Todos los viajes que estan entre dos meses
