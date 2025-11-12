@@ -19,15 +19,15 @@ public class DateRangeUserIdDTO {
     private Long totalScooters;
     private Long journeysCount;
     private Long totalKm;
-    private Long totalHoures;
+    //private Long totalHoures;
     private List<DateRangeUserIdDTO> relatedUsers;
 
-    public DateRangeUserIdDTO(Long userId, Long totalScooters, int journeysCount, int totalKm, int totalHoures) {
+    public DateRangeUserIdDTO(Long userId, Long totalScooters, int journeysCount, int totalKm/*, int totalHoures*/) {
         this.userId = userId;
         this.totalScooters = totalScooters;
         this.journeysCount = Long.valueOf(journeysCount);
         this.totalKm = Long.valueOf(totalKm);
-        this.totalHoures = Long.valueOf(totalHoures);
+        //this.totalHoures = Long.valueOf(totalHoures);
         this.relatedUsers = new ArrayList<DateRangeUserIdDTO>();
     }
 

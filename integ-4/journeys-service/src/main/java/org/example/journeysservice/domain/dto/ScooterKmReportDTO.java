@@ -12,18 +12,18 @@ public class ScooterKmReportDTO {
 
     private Long scooterId;
     private Long kmTraveled;
-    private Long totalHoures;
+    //private Long totalHoures;
     private Long pauseMinutes;
 
-    public ScooterKmReportDTO(Long id, Long kmTraveled, Long totalHoures, Long pauseMinutes) {
+    public ScooterKmReportDTO(Long id, Long kmTraveled, /*Long totalHoures,*/ Long pauseMinutes) {
         this.scooterId = id;
         this.kmTraveled = kmTraveled;
-        this.totalHoures = totalHoures;
+        //this.totalHoures = totalHoures;
         this.pauseMinutes = pauseMinutes;
     }
-    public ScooterKmReportDTO (Long id, Long km, Long hours){
+    public ScooterKmReportDTO (Long id, Long km/*, Long hours*/){
         this.scooterId = id;
         this.kmTraveled = km;
-        this.totalHoures = hours;
+        //this.totalHoures = hours;
     }
 }
