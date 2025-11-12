@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/movement")
 public class MovementController {
 
-    private final MovementService movementService;
+    private MovementService movementService;
     public MovementController(MovementService movementService) {
         this.movementService = movementService;
     }
@@ -60,7 +60,7 @@ public class MovementController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMovement(@PathVariable Long movementId) {
+    public ResponseEntity<?> deleteMovement(@PathVariable("id") Long movementId) {
         this.movementService.delete(movementId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
