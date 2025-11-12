@@ -4,6 +4,7 @@ import org.apache.coyote.Response;
 import org.example.journeysservice.application.services.JourneyService;
 import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
 import org.example.journeysservice.domain.dto.JourneyDTO;
+import org.example.journeysservice.domain.dto.JourneyPriceDTO;
 import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
 import org.example.journeysservice.domain.entities.Journey;
 import org.springframework.http.HttpStatus;
@@ -119,6 +120,17 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.OK).body(result);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo finalizar el viaje con id " + journeyId);
+        }
+    }
+
+    //El total facturado en un rango de meses de cierto año
+    @GetMapping("/year/{year}/range/{startMonth}/{endMonth}")
+    public ResponseEntity<?> findByYearAndMonthRange(@PathVariable(name = "year") int year, @PathVariable(name="startMonth") int startMonth, @PathVariable(name = "endMonth") int endMonth){
+        try{
+            JourneyPriceDTO total = this.journeyService.findByYearAndMonthRange(year, startMonth, endMonth);
+            return ResponseEntity.status(HttpStatus.OK).body(total);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No");
         }
     }
 }

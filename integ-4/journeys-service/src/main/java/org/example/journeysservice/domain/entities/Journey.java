@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,7 +27,7 @@ public class Journey {
     private LocalTime finishHour;
     private int kmTraveled;
     private Long pauseMinutes;
-    private LocalTime totalHoures;
+    private Duration totalHoures;
     private LocalDate finishDate;
 
     public Journey(Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
@@ -51,21 +52,14 @@ public class Journey {
 
     public void calcTotalHoures() {
         if (this.date != null && this.finishDate != null && this.initHour != null && this.finishHour != null) {
-            LocalDateTime startDateTime = LocalDateTime.of(this.date, this.initHour);
-            LocalDateTime endDateTime = LocalDateTime.of(this.finishDate, this.finishHour);
-
-            long minutes = ChronoUnit.MINUTES.between(startDateTime, endDateTime);
-
-            // Convertimos los minutos totales a horas:minutos reales
-            long hoursPart = minutes / 60;
-            long minutesPart = minutes % 60;
-
-            this.totalHoures = LocalTime.of((int) hoursPart, (int) minutesPart);
+            LocalDateTime start = LocalDateTime.of(this.date, this.initHour);
+            LocalDateTime end = LocalDateTime.of(this.finishDate, this.finishHour);
+            this.totalHoures = Duration.between(start, end);
         } else {
-            this.totalHoures = LocalTime.of(0, 0);
+            this.totalHoures = Duration.ZERO;
         }
-    }
 
+    }
 
     @PrePersist
     protected void onCreate(){
