@@ -180,7 +180,9 @@ public class JourneyService {
                     }
                 }
             }
-
+            if(mainUser == null){
+                return null;
+            }
             mainUser.setRelatedUsers(relatedUsersInfo);
             return mainUser;
         } else {

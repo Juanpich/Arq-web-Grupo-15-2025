@@ -34,5 +34,6 @@ public class JourneyDTO {
         this.finishHour = newjourney.getFinishHour();
         this.kmTraveled = newjourney.getKmTraveled();
         this.pauseMinutes = newjourney.getPauseMinutes();
+        this.finishDate = newjourney.getFinishDate();
     }
 }
