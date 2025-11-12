@@ -36,6 +36,7 @@ public class Journey {
         this.finishHour = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
+        this.totalHoures = null;
     }
 
     public Journey(Long journeyId, Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
@@ -48,6 +49,7 @@ public class Journey {
         this.finishDate = null;
         this.kmTraveled = kmTraveled;
         this.pauseMinutes = pauseMinutes;
+        this.totalHoures = null;
     }
 
     public void calcTotalHoures() {
