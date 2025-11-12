@@ -2,11 +2,10 @@ package org.example.journeysservice.infraestructure.controllers;
 
 import org.apache.coyote.Response;
 import org.example.journeysservice.application.services.JourneyService;
-import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
-import org.example.journeysservice.domain.dto.JourneyDTO;
-import org.example.journeysservice.domain.dto.JourneyPriceDTO;
-import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
+import org.example.journeysservice.domain.dto.*;
 import org.example.journeysservice.domain.entities.Journey;
+import org.example.journeysservice.domain.exceptions.JourneyNotFoundException;
+import org.example.journeysservice.domain.exceptions.UnfinishedJourneyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -131,6 +130,15 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.OK).body(total);
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo calcular el total facturado en el rango ingresado.");
+        }
+    }
+    @GetMapping("/{id}/price")
+    public ResponseEntity<?> getPriceByJourneyId(@PathVariable Long id){
+        try{
+            PriceJourneyDto priceJourneyDto = this.journeyService.getPriceJourney(id);
+            return ResponseEntity.status(HttpStatus.OK).body(priceJourneyDto);
+        }catch(JourneyNotFoundException | UnfinishedJourneyException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

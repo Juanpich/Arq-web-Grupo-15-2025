@@ -2,12 +2,15 @@ package org.example.userservice.infraestructure.controller;
 
 import org.example.userservice.aplication.services.AccountService;
 import org.example.userservice.domain.dto.AccountDto;
+import org.example.userservice.domain.dto.PaymentMadeDto;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.InvalidAmountException;
 import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
+import org.example.userservice.infraestructure.feign.JourneysFeignClient;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,7 @@ import java.util.List;
 @RequestMapping("/account")
 public class AccountController {
     private AccountService accountService;
-    public  AccountController(AccountService accountService){
+    public  AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
     @GetMapping("")
@@ -102,5 +105,17 @@ public class AccountController {
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         this.accountService.delete(id);
         return ResponseEntity.ok("DELETED");
+    }
+
+    @PostMapping("/{id}/journey/{idJourney}")
+    public ResponseEntity<?> makePayment(@PathVariable("id") Long id_account, @PathVariable("idJourney") Long id_journey){
+        try{
+            PaymentMadeDto paymentMadeDto = this.accountService.makePayment(id_account, id_journey);
+            return ResponseEntity.ok(paymentMadeDto);
+        }catch(AccountNotFoundException | UserNotFoundException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }catch(Exception e){
+             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

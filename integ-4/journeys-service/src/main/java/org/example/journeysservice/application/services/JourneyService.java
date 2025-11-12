@@ -2,12 +2,10 @@ package org.example.journeysservice.application.services;
 
 import org.example.journeysservice.application.repositories.JourneyRepository;
 import org.example.journeysservice.application.repositories.RateRepository;
-import org.example.journeysservice.domain.dto.DateRangeUserIdDTO;
-import org.example.journeysservice.domain.dto.JourneyDTO;
-import org.example.journeysservice.domain.dto.JourneyPriceDTO;
-import org.example.journeysservice.domain.dto.RateDto;
-import org.example.journeysservice.domain.dto.ScooterKmReportDTO;
+import org.example.journeysservice.domain.dto.*;
 import org.example.journeysservice.domain.entities.Journey;
+import org.example.journeysservice.domain.exceptions.JourneyNotFoundException;
+import org.example.journeysservice.domain.exceptions.UnfinishedJourneyException;
 import org.example.journeysservice.infraestructure.feing.AccountFeingClient;
 import org.example.journeysservice.models.Account;
 import org.example.journeysservice.models.User;
@@ -112,6 +110,37 @@ public class JourneyService {
         journey.finishJourney();
         Journey journeyNew = this.journeyRepo.save(journey);
         return new JourneyDTO(journeyNew);
+    }
+    @Transactional(readOnly = true)
+    public PriceJourneyDto getPriceJourney(Long idJourney){
+        Journey journey = this.journeyRepo.findById(idJourney).orElse(null);
+        if(journey == null){
+            throw new JourneyNotFoundException(idJourney);
+        }
+        if(journey.getFinishDate() == null || journey.getFinishHour() == null)
+            throw new UnfinishedJourneyException(idJourney);
+
+        LocalDateTime journeyStart = LocalDateTime.of(journey.getDate(), journey.getInitHour());
+        LocalDateTime journeyEnd = LocalDateTime.of(journey.getFinishDate(), journey.getFinishHour());
+
+        // Buscar rates que afectan al viaje
+        List<RateDto> rates = this.rateRepo.findRatesForRange(journeyStart, journeyEnd);
+
+        float totalPriceJourney = 0f;
+
+        for (RateDto rate : rates) {
+            // Determinar la parte del rate que se solapa con el viaje
+            LocalDateTime overlapStart = journeyStart.isAfter(rate.getInit_date()) ? journeyStart : rate.getInit_date();
+            LocalDateTime overlapEnd = journeyEnd.isBefore(rate.getFinish_date()) ? journeyEnd : rate.getFinish_date();
+
+            Duration duration = Duration.between(overlapStart, overlapEnd);
+            float hours = duration.toNanos() / (float) Duration.ofHours(1).toNanos();
+
+            if (hours > 0) {
+                totalPriceJourney += hours * rate.getPrice();
+            }
+        }
+        return new PriceJourneyDto(idJourney, journey.getUserId(), journey.getKmTraveled(), journey.getTotalHoures(), totalPriceJourney);
     }
 
     //Los viajes de un rango.

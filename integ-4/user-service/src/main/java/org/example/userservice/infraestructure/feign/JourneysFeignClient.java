@@ -1,6 +1,7 @@
 package org.example.userservice.infraestructure.feign;
 
 import org.example.userservice.models.Journey;
+import org.example.userservice.models.PriceJourney;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,4 +16,6 @@ public interface JourneysFeignClient {
     List<Journey> getJourneyByUser(@PathVariable("userId") Long userId,
                                    @RequestParam("start-date") String startDate,
                                    @RequestParam("end-date") String endDate );
+    @GetMapping("/{id}/price")
+    PriceJourney getPriceJourneyById(@PathVariable("id") Long idJourney);
 }
