@@ -1,5 +1,6 @@
 package org.example.userservice.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,8 +25,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private State state;
     // LADO INVERSO (no propietario)
-    @ManyToMany(mappedBy = "users")
-    private Set<Account> accounts =new HashSet<>();
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @JsonIgnore // ← evita que se serialice recursivamente
+    private Set<Account> accounts = new HashSet<>();
+
+
     public void addAccount(Account account) {
         this.accounts.add(account);
         account.getUsers().add(this);

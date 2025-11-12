@@ -72,5 +72,5 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "AND j.finishDate = :finishDate " +
             "GROUP BY j.userId ")
     DateRangeUserIdDTO findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate);
-
+    //todo cambiar query beetwen
 }

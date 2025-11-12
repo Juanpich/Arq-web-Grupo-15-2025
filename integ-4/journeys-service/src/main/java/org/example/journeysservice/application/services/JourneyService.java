@@ -148,6 +148,7 @@ public class JourneyService {
         return new JourneyPriceDTO(startMonth, endMonth, year, totalPriceJourneys);
     }
 
+    @Transactional
     public DateRangeUserIdDTO findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate, String includeOtherUsers) {
 
         //si se quiere incluir la info de los usuarios de misma cuenta, entra en el if
@@ -156,6 +157,9 @@ public class JourneyService {
             //dto principal (de el usuario principal)
             DateRangeUserIdDTO mainUser = this.journeyRepo.findJourneysByDateRange(userId, initDate, finishDate);
 
+            if(mainUser== null){
+                return null;
+            }
             //cuentas del usuario
             List<Account> relatedAccounts = this.accountFeingClient.getAccountsByUser(userId);
 

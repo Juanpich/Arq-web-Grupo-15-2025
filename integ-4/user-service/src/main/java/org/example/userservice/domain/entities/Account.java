@@ -1,5 +1,6 @@
 package org.example.userservice.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -24,8 +25,15 @@ public class Account {
     private LocalDateTime created_at;
 
     // LADO PROPIETARIO (define la tabla intermedia)
-    @ManyToMany
-    private Set<User> users= new HashSet<>();
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "user_account",
+            joinColumns = @JoinColumn(name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    @JsonIgnore // ← también lo ignoramos si no necesitás mostrar los usuarios dentro de la cuenta
+    private Set<User> users = new HashSet<>();
+
     public void addUser(User user) {
         this.users.add(user);
         user.getAccounts().add(this);
