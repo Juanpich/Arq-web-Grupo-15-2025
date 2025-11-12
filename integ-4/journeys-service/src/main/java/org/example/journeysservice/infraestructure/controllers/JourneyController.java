@@ -93,7 +93,7 @@ public class JourneyController {
 
     //Actualizar un viaje.
     @PutMapping("/{journeyId}")
-    public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @RequestParam Long journeyId) {
+    public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @PathVariable Long journeyId) {
         var result = this.journeyService.updateJourney(journeyId, journey);
         if (result != null) {
             return ResponseEntity.status(HttpStatus.OK).body(result);

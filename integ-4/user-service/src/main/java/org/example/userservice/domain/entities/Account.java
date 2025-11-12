@@ -38,9 +38,13 @@ public class Account {
         this.users.add(user);
         user.getAccounts().add(this);
     }
+
     @PrePersist
     protected void onCreate() {
         this.created_at = LocalDateTime.now();
+    }
+    public boolean equals(Account account) {
+        return account.getAccount_id().equals(this.account_id);
     }
 }
 
