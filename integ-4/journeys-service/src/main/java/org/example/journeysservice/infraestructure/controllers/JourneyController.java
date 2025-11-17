@@ -46,7 +46,7 @@ public class JourneyController {
     @DeleteMapping("/{journeyId}")
     public ResponseEntity<?> deleteJourneyById(@PathVariable Long journeyId) {
         this.journeyService.deleteJourneyById(journeyId);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body("El viaje se eliminó exitosamente");
     }
 
     //Crear viaje.
@@ -101,6 +101,7 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se modifico el viaje de id " + journeyId);
         }
     }
+
     //Los viajes de un usuario entre fechas.
     @GetMapping("/byUser/{userId}")
     public ResponseEntity<?> getJourneyByUser(@PathVariable Long userId, @RequestParam(required = true, name="start-date") String startDate
@@ -111,6 +112,7 @@ public class JourneyController {
         return ResponseEntity.status(HttpStatus.OK).body(journeys);
 
     }
+
     //Finalizar un viaje.
     @PutMapping("/finishJourney/{id}")
     public ResponseEntity<?> endJourney(@PathVariable(name = "id") Long journeyId) {
