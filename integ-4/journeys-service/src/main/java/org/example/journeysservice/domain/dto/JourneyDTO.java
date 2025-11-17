@@ -26,7 +26,7 @@ public class JourneyDTO {
     private LocalTime initHour;
     private LocalTime finishHour;
     private int kmTraveled;
-    private Long pauseMinutes;
+    private String pauseMinutes;
     private LocalDate finishDate;
     private LocalTime init_pause;
     private LocalTime finish_pause;

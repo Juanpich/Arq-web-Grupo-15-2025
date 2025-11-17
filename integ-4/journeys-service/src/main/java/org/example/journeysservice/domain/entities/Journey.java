@@ -26,26 +26,26 @@ public class Journey {
     private LocalTime initHour;
     private LocalTime finishHour;
     private int kmTraveled;
-    private Long pauseMinutes;
+    private String pauseMinutes;
     private Duration totalHoures;
     private LocalDate finishDate;
     private LocalTime init_pause;
     private LocalTime finish_pause;
     private Duration totalMinutespause;
 
-    public Journey(Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long scooterId, Long userId, int kmTraveled) {
         this.scooterId = scooterId;
         this.userId = userId;
         this.finishHour = null;
         this.kmTraveled = kmTraveled;
-        this.pauseMinutes = pauseMinutes;
+        this.pauseMinutes = null;
         this.totalHoures = null;
         this.init_pause = null;
         this.finish_pause = null;
         this.totalMinutespause = null;
     }
 
-    public Journey(Long journeyId, Long scooterId, Long userId, int kmTraveled, Long pauseMinutes) {
+    public Journey(Long journeyId, Long scooterId, Long userId, int kmTraveled) {
         this.journeyId = journeyId;
         this.userId = userId;
         this.scooterId = scooterId;
@@ -54,7 +54,7 @@ public class Journey {
         this.finishHour = null;
         this.finishDate = null;
         this.kmTraveled = kmTraveled;
-        this.pauseMinutes = pauseMinutes;
+        this.pauseMinutes = null;
         this.totalHoures = null;
         this.init_pause = null;
         this.finish_pause = null;
@@ -94,7 +94,32 @@ public class Journey {
         if(this.init_pause != null && this.finishHour == null && this.finishDate == null){
             this.finish_pause = LocalTime.now();
             this.totalMinutespause = Duration.between(this.init_pause, this.finish_pause);
+            this.pauseMinutes = formatDuration(totalMinutespause);
         }
 
+    }
+
+    public static String formatDuration(Duration duration) {
+        if(duration == null){
+            return null;
+        }
+        long seconds = duration.getSeconds();
+
+        long days = seconds / (24 * 3600);
+        seconds %= (24 * 3600);
+
+        long hours = seconds / 3600;
+        seconds %= 3600;
+
+        long minutes = seconds / 60;
+        seconds %= 60;
+
+        StringBuilder sb = new StringBuilder();
+        if (days > 0) sb.append(days).append(" días ");
+        if (hours > 0) sb.append(hours).append(" horas ");
+        if (minutes > 0) sb.append(minutes).append(" minutos ");
+        if (seconds > 0) sb.append(seconds).append(" segundos");
+
+        return sb.toString().trim();
     }
 }
