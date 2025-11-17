@@ -227,7 +227,8 @@ public class JourneyService {
 
             // genera el dto con la info de cada usuario relacionado al principal
             ArrayList<DateRangeUserIdDTO> relatedUsersInfo = new ArrayList<>();
-
+            // agrego al usario que voy a buscar para que npo se cargue
+            visitedUsersId.add(userId);
             for (List<User> userList : relatedUsers) {
                 for (User relatedUser : userList) {
 
