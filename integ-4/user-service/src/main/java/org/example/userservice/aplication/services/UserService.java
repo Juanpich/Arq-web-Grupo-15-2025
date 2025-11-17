@@ -48,6 +48,7 @@ public class UserService {
     public List<UserDto> getAllByAccountType(AccountType type) {
         return userRepository.findAllByAccountType(type);
     }
+//todo -> actualizar para que al crear un usuario exista ese solo gmail
     @Transactional
     public UserDto save(User user){
         User userNew =  userRepository.save(user);
