@@ -1,7 +1,7 @@
 package org.example.gateway.config;
 
 
-import org.example.gateway.security.AuthotityConstant;
+
 import org.example.gateway.security.jwt.JwtFilter;
 import org.example.gateway.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
@@ -43,12 +43,17 @@ public class SecurityConfig {
         http
             .securityMatcher("/api/**" )
             .authorizeHttpRequests( authz -> authz
-                    .requestMatchers(HttpMethod.POST, "/api/authenticate").permitAll()
-                    .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-                    .requestMatchers( "/api/users/**").hasAuthority( AuthotityConstant._ALUMNO )
-                    .requestMatchers("/api/users/**").hasAuthority( AuthotityConstant._ALUMNO )
-                    .requestMatchers( "/api/users/**").hasAuthority( AuthotityConstant._ADMIN )
+                    .requestMatchers(
+                            HttpMethod.POST, "/api/authenticate"
+                    ).permitAll()
+                    .requestMatchers(
+                            HttpMethod.POST, "/api/users"
+                    ).permitAll()
+                    .requestMatchers(
+                            "/api/users/**"
+                    ).hasAnyAuthority("USER", "ADMIN")
                     .anyRequest().authenticated()
+
             )
             .httpBasic( Customizer.withDefaults() )
             .addFilterBefore( new JwtFilter( this.tokenProvider ), UsernamePasswordAuthenticationFilter.class );

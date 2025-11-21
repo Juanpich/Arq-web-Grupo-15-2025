@@ -1,8 +1,9 @@
 package org.example.gateway.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
 import lombok.*;
+import org.example.gateway.security.Type;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -24,6 +25,8 @@ public class User {
     private String mail;
     private String phone_number;
     private String state;
+    private String password;
+    private Type type;
     public User(User user) {
         this.id = user.getId();
         this.name = user.getName();
@@ -31,5 +34,7 @@ public class User {
         this.mail = user.getMail();
         this.phone_number = user.getPhone_number();
         this.state = user.getState();
+        this.password = user.getPassword();
+        this.type = user.getType();
     }
 }
