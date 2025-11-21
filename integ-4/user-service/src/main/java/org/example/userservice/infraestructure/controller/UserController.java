@@ -56,9 +56,13 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
     @PostMapping("")
-    public ResponseEntity<UserDto> save(@RequestBody User user) {
-        UserDto userNew = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userNew);
+    public ResponseEntity<?> save(@RequestBody User user) {
+        try{
+            UserDto userNew = userService.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(userNew);
+        }catch(Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
@@ -76,6 +80,7 @@ public class UserController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
+        //todo verificar que si el gmail se cambia no exista sino lanzar excepcion
     }
     @PostMapping("/{id}/associate/{id-account}")
     public ResponseEntity<?> associate(@PathVariable("id") Long id, @PathVariable("id-account") Long id_account) {

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Entity
+
 @Getter
 @Setter
 @ToString
@@ -18,31 +18,18 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
-    @Id
-    @GeneratedValue( strategy = GenerationType.IDENTITY )
     private Long id;
-
-    @Column( nullable = false )
-    private String username;
-
-    @Column( nullable = false )
-    private String password;
-
-    @JsonIgnore
-    @ManyToMany( fetch = FetchType.LAZY, cascade = CascadeType.PERSIST )
-    @JoinTable(
-            name = "user_authority",
-            joinColumns = { @JoinColumn(name = "user_id", referencedColumnName = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "authority_name", referencedColumnName = "name") }
-    )
-    private Set<Authority> authorities = new HashSet<>();
-
-    public User( final String username ) {
-        this.username = username.toLowerCase();
-    }
-
-    public void setAuthorities( final Collection<Authority> authorities ) {
-        this.authorities = new HashSet<>( authorities );
+    private String name;
+    private String last_name;
+    private String mail;
+    private String phone_number;
+    private String state;
+    public User(User user) {
+        this.id = user.getId();
+        this.name = user.getName();
+        this.last_name = user.getLast_name();
+        this.mail = user.getMail();
+        this.phone_number = user.getPhone_number();
+        this.state = user.getState();
     }
 }

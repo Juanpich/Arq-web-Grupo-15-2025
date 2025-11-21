@@ -11,6 +11,7 @@ import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.enums.AccountType;
 import org.example.userservice.domain.enums.State;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
+import org.example.userservice.domain.exceptions.EmailAlreadyExists;
 import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.example.userservice.infraestructure.feign.JourneysFeignClient;
@@ -48,10 +49,17 @@ public class UserService {
     public List<UserDto> getAllByAccountType(AccountType type) {
         return userRepository.findAllByAccountType(type);
     }
-//todo -> actualizar para que al crear un usuario exista ese solo gmail
+
     @Transactional
     public UserDto save(User user){
-        User userNew =  userRepository.save(user);
+        //constructor que uso para crear
+        if(user.getMail() == null)
+            throw new RuntimeException("Faltan datos, Email obligatorio");
+        int userEmail = userRepository.findByMail(user.getMail());
+        if( userEmail > 0)
+            throw new EmailAlreadyExists();
+        User newU = new User(user.getMail(), user.getName(), user.getLast_name(), user.getPhone_number());
+        User userNew =  userRepository.save(newU);
         return new UserDto(userNew);
     }
     @Transactional(readOnly = true)
@@ -63,6 +71,11 @@ public class UserService {
     @Transactional
     public UserDto update(User user){
         Long id = user.getUser_id();
+        if(user.getMail() != null) {
+            int userEmail = userRepository.findByMail(user.getMail());
+            if (userEmail > 0)
+                throw new EmailAlreadyExists();
+        }
         if (!userRepository.findById(id).isPresent()) {
             throw new UserNotFoundException(id);
         }

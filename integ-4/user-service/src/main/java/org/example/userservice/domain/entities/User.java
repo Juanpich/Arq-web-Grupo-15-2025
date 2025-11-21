@@ -29,6 +29,13 @@ public class User {
     @JsonIgnore // ← evita que se serialice recursivamente
     private Set<Account> accounts = new HashSet<>();
 
+    public User(String mail, String name, String last_name, String phone_number) {
+        this.mail = mail;
+        this.name = name;
+        this.last_name = last_name;
+        this.phone_number = phone_number;
+        this.state = State.UNCANCELLED;
+    }
 
     public void addAccount(Account account) {
         this.accounts.add(account);

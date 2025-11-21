@@ -16,4 +16,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
                 "JOIN u.accounts a "+
                 "WHERE a.type = :type")
     List<UserDto> findAllByAccountType(@Param("type") AccountType type);
+    @Query(" select  count(*) " +
+            "FROM User u " +
+            "WHERE LOWER(u.mail) LIKE LOWER(:mail) ")
+    int findByMail(String mail);
 }
