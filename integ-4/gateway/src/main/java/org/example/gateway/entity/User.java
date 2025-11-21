@@ -3,7 +3,8 @@ package org.example.gateway.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
-import org.example.gateway.security.Type;
+import org.example.gateway.security.Role;
+
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ public class User {
     private String phone_number;
     private String state;
     private String password;
-    private Type type;
+    private Role role;
     public User(User user) {
         this.id = user.getId();
         this.name = user.getName();
@@ -35,6 +36,7 @@ public class User {
         this.phone_number = user.getPhone_number();
         this.state = user.getState();
         this.password = user.getPassword();
-        this.type = user.getType();
+        this.role = user.getRole();
     }
+
 }

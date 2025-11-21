@@ -3,7 +3,7 @@ package org.example.gateway.service.dto.user;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.example.gateway.security.Type;
+
 
 import java.util.Set;
 

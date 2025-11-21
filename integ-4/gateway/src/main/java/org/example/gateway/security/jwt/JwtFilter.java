@@ -30,20 +30,33 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     @Override
-    public void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String jwt = resolveToken( request );
-        try {
-            if ( StringUtils.hasText(jwt) && this.tokenProvider.validateToken( jwt ) ) {
-                Authentication authentication = this.tokenProvider.getAuthentication( jwt );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        } catch ( ExpiredJwtException e ) {
-            log.info( "REST request UNAUTHORIZED - La sesión ha expirado." );
-            response.setStatus( 498 );
-            response.setContentType( MediaType.APPLICATION_JSON_VALUE );
-            response.getWriter().write( new JwtErrorDTO().toJson() );
+    public void doFilterInternal(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 FilterChain filterChain) throws ServletException, IOException {
+
+        String path = request.getRequestURI();
+        log.info("Request path: {}", path);
+        // 👉 Ignorar endpoints públicos
+        if (path.matches("^/authenticate/?$") || path.matches("^/users(/.*)?$")) {
+            filterChain.doFilter(request, response);
             return;
         }
+
+        String jwt = resolveToken(request);
+        try {
+            if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
+                Authentication authentication = this.tokenProvider.getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                log.info("Authorities: {}", authentication.getAuthorities());
+            }
+        } catch (ExpiredJwtException e) {
+            log.info("REST request UNAUTHORIZED - La sesión ha expirado.");
+            response.setStatus(498);
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write(new JwtErrorDTO().toJson());
+            return;
+        }
+
         filterChain.doFilter(request, response);
     }
 
@@ -63,6 +76,7 @@ public class JwtFilter extends OncePerRequestFilter {
         public JwtErrorDTO(){}
 
         public String toJson() {
+
             try {
                 return new ObjectMapper().writeValueAsString(this);
             } catch (RuntimeException | JsonProcessingException ex ) {

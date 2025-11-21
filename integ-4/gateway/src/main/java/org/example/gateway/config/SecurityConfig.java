@@ -35,29 +35,26 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(final HttpSecurity http ) throws Exception {
-        http
-            .csrf( AbstractHttpConfigurer::disable );
-        http
-            .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.STATELESS ) );
-        http
-            .securityMatcher("/api/**" )
-            .authorizeHttpRequests( authz -> authz
-                    .requestMatchers(
-                            HttpMethod.POST, "/api/authenticate"
-                    ).permitAll()
-                    .requestMatchers(
-                            HttpMethod.POST, "/api/users"
-                    ).permitAll()
-                    .requestMatchers(
-                            "/api/users/**"
-                    ).hasAnyAuthority("USER", "ADMIN")
-                    .anyRequest().authenticated()
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-            )
-            .httpBasic( Customizer.withDefaults() )
-            .addFilterBefore( new JwtFilter( this.tokenProvider ), UsernamePasswordAuthenticationFilter.class );
+        http.csrf(AbstractHttpConfigurer::disable);
+
+        http.sessionManagement(s ->
+                s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        http.authorizeHttpRequests(authz -> authz
+                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/users/**").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/users/**").permitAll()
+                .requestMatchers("/users/**").permitAll()
+        );
+
+        http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
+
+
 
 }

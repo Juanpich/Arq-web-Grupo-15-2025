@@ -1,5 +1,5 @@
 package org.example.gateway.security;
 
-public enum Type {
+public enum Role {
     USER, ADMIN;
 }
