@@ -58,7 +58,7 @@ public class UserService {
         int userEmail = userRepository.countFindByMail(user.getMail());
         if( userEmail > 0)
             throw new EmailAlreadyExists();
-        User newU = new User(user.getMail(), user.getName(), user.getLast_name(), user.getPhone_number());
+        User newU = new User(user.getMail(), user.getName(), user.getLast_name(), user.getPhone_number(), user.getPassword());
         User userNew =  userRepository.save(newU);
         return new UserDto(userNew);
     }

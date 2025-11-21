@@ -1,7 +1,7 @@
 package org.example.gateway.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+
 import lombok.*;
 import org.example.gateway.security.Type;
 
