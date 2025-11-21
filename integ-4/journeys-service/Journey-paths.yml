@@ -1,0 +1,423 @@
+openapi: 3.0.3
+info:
+  title: "Journey Service API"
+  version: "1.0.0"
+  description: "Microservicio responsable del registro y manejo de viajes en scooter"
+servers:
+  - url: /
+paths:
+
+  "/journey":
+# ------------ Buscar todos los viajes ------------ #
+    get:
+      operationId: findAllJourneys
+      summary: Buscar todos los viajes
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JourneyDTO"
+
+# ------------ Insertar un viaje ------------ #
+    post:
+      operationId: insertJourney
+      summary: Insertar un viaje
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Journey"
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+        "400":
+          description: No se creo el viaje
+
+  "/journey/{journeyId}":
+    
+# ------------ Buscar un viaje por su id ------------ #
+    get:
+      operationId: findJourneyById
+      summary: Buscar viaje por id
+      parameters:
+        - name: journeyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+
+# ------------ Eliminar un viaje ------------ #
+    delete:
+      operationId: deleteJourneyById
+      summary: Eliminar un viaje
+      parameters:
+        - name: journeyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Se elimino el viaje exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+
+    # ------------ Modificar un viaje ------------ #
+    put:
+      operationId: updateJourney
+      summary: Modificar un viaje
+      parameters:
+        - name: journeyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/JourneyDTO"
+      responses:
+        "200":
+          description: Se modifico el viaje
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+        "404":
+          description: No se encontro el viaje
+
+# ------------ Viajes de un monopatin ------------ #
+  "/journey/scooter/{scooter_id}":
+    get:
+      operationId: FindAllJourneysByScooter
+      summary: "Todos los viajes de un scooter"
+      parameters:
+        - name: scooterId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JourneyDTO"
+  
+# ------------ Viajes de un usuario ------------ #
+  "/journey/user/{userId}":
+    get:
+      operationId: findAllJourneysByUser
+      summary: "Todos los viajes de un usuario"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/JourneyDTO"
+  
+# ------------ Reporte uso de monopatines ------------ #
+  "/journey/kmByScooter/{kmSearch}":
+    get:
+      operationId: scooterKmReport
+      summary: Reporte uso de monopatines
+      description: Reporte que muestra horas de uso y km recorridos de los monopatines con mas de "kmSearch" kilometros. Opcionalmente, se agregan los minutos en los que estuvo en pausa.
+      parameters:
+        - name: kmSearch
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: include
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ScooterKmReportDTO"
+  
+# ------------ Viajes de un scooter en un año ------------ #
+  "/journey/scooter/{id}/year/{anio}":
+    get:
+      operationId: FindAllJourneysByScooterANDYear
+      summary: Todos los viajes de un scooter en un año
+      parameters:
+        - name: scooterId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: anio
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+                
+  # ------------ Reporte de viajes de un usuario entre fechas ------------ #
+  "/journey/user/{userId}/dateRange":
+    get:
+      operationId: findJourneysByUserInGivenDate
+      summary: Viajes de un usuario entre fechas
+      description: Informacion compactada de todos los viajes de un usuario entre 2 fechas. Retorna cantidad de km recorridos, horas de uso y cantidad de scooters diferentes usados. Opcionalmente, esta misma informacion de todas las personas que estan en las mismas cuentas que el usuario "principal".
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: initDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: finishDate
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: include
+          in: path
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DateRangeUserDTO"
+
+  # ------------ Viajes de un usuario entre fechas ------------ #
+  "/journey/byUser/{userId}":
+    get:
+      operationId: getJourneyByUser
+      summary: Obtener todos los viajes de un usuario entre fechas
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: initDate
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: finishDate
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+
+  # ------------ Finalizar un viaje ------------ #
+  "/journey/finishJourney/{id}":
+    put:
+      operationId: endJourney
+      summary: Terminar un viaje
+      parameters:
+        - name: journeyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JourneyDTO'
+        "404":
+          description: No se encontro el viaje
+  
+  # ------------ Total facturado entre rango de meses ------------ #
+  "/journey/year/{year}/range/{startMonth}/{endMonth}":
+    get:
+      operationId: findByYearAndMonthRange
+      summary: Total facturado entre rango de meses
+      parameters:
+        - name: year
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: startMonth
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: endMonth
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyPriceDTO"
+                
+  # ------------ Precio de un viaje ------------ #
+  "/journey/{id}/price":
+    get:
+      operationId: getPriceByJourneyId
+      summary: Obtener el precio de un viaje
+      tags:
+        - Journey
+      parameters:
+        - name: d
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PriceJourneyDTO"
+
+  # ------------ Precio de un viaje ------------ #
+  "/journey/{id}/pause":
+    put:
+      operationId: pauseJourney
+      summary: Pausar viaje
+      tags:
+        - Journey
+      parameters:
+        - name: journeyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+
+# ------------ Terminar pausa de un viaje ------------ #
+  "/journey/{id}/finishPause":
+    put:
+      operationId: finishPauseJourney
+      summary: Terminar pausa de un viaje
+      parameters:
+        - name: jouneyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Respuesta exitosa
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JourneyDTO"
+components:
+  schemas:
+    Journey:
+      type: object
+      properties:
+        # completar con propiedades reales
+      example:
+        id: 1
+        name: example
+    JourneyDTO:
+      type: object
+      properties:
+        # completar con propiedades reales
+      example:
+        id: 1
+        name: example
+    ScooterKmReportDTO:
+      type: object
+      properties:
+        # completar con propiedades reales
+      example:
+        id: 1
+        name: example
+    DateRangeUserDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+        totalScooters:
+          type: integer
+        journeysCount:
+          type: integer
+        totalKm:
+          type: integer
+        totalHoures:
+          type: string
+        relatesUsers:
+          type: array
+    JourneyPriceDTO:
+      type: object
+      properties:
+        id:
+          type: string
+    PriceJourneyDTO:
+      type: object
+      properties:
+        id:
+          type: string
