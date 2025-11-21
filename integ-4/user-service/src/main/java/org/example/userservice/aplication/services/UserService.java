@@ -55,7 +55,7 @@ public class UserService {
         //constructor que uso para crear
         if(user.getMail() == null)
             throw new RuntimeException("Faltan datos, Email obligatorio");
-        int userEmail = userRepository.findByMail(user.getMail());
+        int userEmail = userRepository.countFindByMail(user.getMail());
         if( userEmail > 0)
             throw new EmailAlreadyExists();
         User newU = new User(user.getMail(), user.getName(), user.getLast_name(), user.getPhone_number());
@@ -72,7 +72,7 @@ public class UserService {
     public UserDto update(User user){
         Long id = user.getUser_id();
         if(user.getMail() != null) {
-            int userEmail = userRepository.findByMail(user.getMail());
+            int userEmail = userRepository.countFindByMail(user.getMail());
             if (userEmail > 0)
                 throw new EmailAlreadyExists();
         }
@@ -141,5 +141,11 @@ public class UserService {
         }
         return scootesNearby;
 
+    }
+
+    //Traer un usuario con ese mail
+    public UserDto userByEmail(String email){
+        UserDto user = this.userRepository.findByMail(email);
+        return  user;
     }
 }

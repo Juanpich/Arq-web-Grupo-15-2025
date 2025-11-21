@@ -143,4 +143,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    //traer un usuario por email
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getEmail(@PathVariable("email") String email) {
+        UserDto user = this.userService.userByEmail(email);
+        if( user != null){
+            return ResponseEntity.ok(user);
+        }
+        return null;
+    }
+
 }

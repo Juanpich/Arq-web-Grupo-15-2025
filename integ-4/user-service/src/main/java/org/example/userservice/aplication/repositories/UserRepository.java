@@ -19,5 +19,8 @@ public interface UserRepository extends JpaRepository<User,Long> {
     @Query(" select  count(*) " +
             "FROM User u " +
             "WHERE LOWER(u.mail) LIKE LOWER(:mail) ")
-    int findByMail(String mail);
+    int countFindByMail(String mail);
+    @Query("SELECT new org.example.userservice.domain.dto.UserDto(u) FROM User u " +
+            "WHERE LOWER(u.mail) LIKE LOWER(:mail)")
+    UserDto findByMail(String mail);
 }
