@@ -18,46 +18,33 @@ public class ToolRegistry {
     public List<Map<String, Object>> getToolsDefinitions() {
         List<Map<String, Object>> tools = new ArrayList<>();
 
-        // Tool 1: Calcular precio
+        // Tool 1: List all user journeys
         tools.add(createToolDefinition(
-            "calculate_trip_price",
-            "Calcula el precio de un viaje en monopatín basado en distancia y duración",
-            Map.of(
-                "distance", new ParamDef("number", "Distancia en kilómetros"),
-                "duration", new ParamDef("number", "Duración en minutos")
-            ),
-            List.of("distance", "duration")
-        ));
-
-        // Tool 2: Calcular distancia
-        tools.add(createToolDefinition(
-            "get_distance_to_location",
-            "Calcula la distancia desde la ubicación actual del usuario hasta un destino",
-            Map.of(
-                "destination", new ParamDef("string", "Nombre del lugar de destino")
-            ),
-            List.of("destination")
-        ));
-
-        // Tool 3: Estadísticas de uso
-        tools.add(createToolDefinition(
-            "get_user_scooter_usage",
-            "Obtiene estadísticas de uso de monopatines del usuario",
-            Map.of(
-                "period", new ParamDef("string", "Período: 'month', 'week', 'all'")
-            ),
+            "get_all_user_journeys",
+            "Obtiene el listado de todos los viajes realizados por un usuario.",
+            Map.of(), // no parameters from LLM; userId provided by executeTool
             List.of()
         ));
 
-        // Tool 4: Monopatines cercanos
+        // Tool 2: User journeys by date range
         tools.add(createToolDefinition(
-            "find_nearby_scooters",
-            "Encuentra monopatines disponibles cerca de una ubicación",
+            "get_user_journeys_by_date_range",
+            "Obtiene los viajes de un usuario en un rango de fechas. Las fechas deben estar en formato 'YYYY-MM-DD'.",
             Map.of(
-                "location", new ParamDef("string", "Ubicación de búsqueda"),
-                "radius", new ParamDef("number", "Radio de búsqueda en km")
+                "start_date", new ParamDef("string", "Fecha de inicio en formato YYYY-MM-DD"),
+                "end_date", new ParamDef("string", "Fecha de fin en formato YYYY-MM-DD")
             ),
-            List.of()
+            List.of("start_date", "end_date")
+        ));
+
+        // Tool 3: Get journey price
+        tools.add(createToolDefinition(
+            "get_journey_price",
+            "Consulta el precio de un viaje específico usando su ID.",
+            Map.of(
+                "journey_id", new ParamDef("number", "ID del viaje")
+            ),
+            List.of("journey_id")
         ));
 
         return tools;
@@ -66,17 +53,14 @@ public class ToolRegistry {
     public String executeTool(String toolName, String userId, JsonNode arguments) {
         try {
             switch (toolName) {
-                case "calculate_trip_price":
-                    return calculateTripPrice(arguments);
+                case "get_all_user_journeys":
+                    return getAllUserJourneys(userId);
 
-                case "get_distance_to_location":
-                    return getDistanceToLocation(userId, arguments);
+                case "get_user_journeys_by_date_range":
+                    return getUserJourneysByDateRange(userId, arguments);
 
-                case "get_user_scooter_usage":
-                    return getUserScooterUsage(userId, arguments);
-
-                case "find_nearby_scooters":
-                    return findNearbyScooters(userId, arguments);
+                case "get_journey_price":
+                    return getJourneyPrice(arguments);
 
                 default:
                     return "Error: Herramienta no encontrada - " + toolName;
@@ -86,43 +70,41 @@ public class ToolRegistry {
         }
     }
 
-    private String calculateTripPrice(JsonNode args) {
-        double distance = args.get("distance").asDouble();
-        double duration = args.get("duration").asDouble();
+    // New Tool implementations
 
-        String url = "http://pricing-service/api/pricing/calculate?distance=" + distance + "&duration=" + duration;
+    private String getAllUserJourneys(String userId) {
+        if (userId == null || userId.isBlank()) {
+            return "Error: userId no proporcionado";
+        }
+        String url = "http://localhost:8002/journey/user/" + userId;
         String response = restTemplate.getForObject(url, String.class);
-
-        return "Precio calculado: " + response;
+        return response != null ? response : "[]";
     }
 
-    private String getDistanceToLocation(String userId, JsonNode args) {
-        String destination = args.get("destination").asText();
+    private String getUserJourneysByDateRange(String userId, JsonNode arguments) {
+        if (userId == null || userId.isBlank()) {
+            return "Error: userId no proporcionado";
+        }
+        if (arguments == null || !arguments.has("start_date") || !arguments.has("end_date")) {
+            return "Error: se requieren los parámetros start_date y end_date";
+        }
+        String start = arguments.get("start_date").asText();
+        String end = arguments.get("end_date").asText();
 
-        String url = "http://location-service/api/locations/distance?userId=" + userId + "&destination=" + destination;
+        String url = "http://localhost:8002/journey/byUser/" + userId +
+                     "?start-date=" + start + "&end-date=" + end;
         String response = restTemplate.getForObject(url, String.class);
-
-        return "Distancia a " + destination + ": " + response;
+        return response != null ? response : "[]";
     }
 
-    private String getUserScooterUsage(String userId, JsonNode args) {
-        String period = args.has("period") ? args.get("period").asText() : "all";
-
-        String url = "http://trip-service/api/trips/usage/" + userId + "?period=" + period;
+    private String getJourneyPrice(JsonNode arguments) {
+        if (arguments == null || !arguments.has("journey_id")) {
+            return "Error: se requiere el parámetro journey_id";
+        }
+        String id = arguments.get("journey_id").asText();
+        String url = "http://localhost:8002/journey/" + id + "/price";
         String response = restTemplate.getForObject(url, String.class);
-
-        return "Estadísticas de uso: " + response;
-    }
-
-    private String findNearbyScooters(String userId, JsonNode args) {
-        String location = args.has("location") ? args.get("location").asText() : "current";
-        double radius = args.has("radius") ? args.get("radius").asDouble() : 2.0;
-
-        String url = "http://scooter-service/api/scooters/nearby?userId=" + userId +
-                     "&location=" + location + "&radius=" + radius;
-        String response = restTemplate.getForObject(url, String.class);
-
-        return "Monopatines cercanos: " + response;
+        return response != null ? response : "No se encontró precio para el viaje";
     }
 
     private Map<String, Object> createToolDefinition(String name, String description,
