@@ -34,4 +34,13 @@ public class ChatController {
 //
 //        return ResponseEntity.ok(response);
 //    }
+
+    @PostMapping
+    public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request) {
+        // Usar un ID de usuario fijo o pasar un argumento al servicio
+        String userId = "test_user";
+        ChatResponse response = aiAgentService.processQuery(userId, request.getMessage());
+        return ResponseEntity.ok(response);
+    }
+
 }
