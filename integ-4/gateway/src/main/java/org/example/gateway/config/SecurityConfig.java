@@ -53,7 +53,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/users/{id}").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/users/{id}").hasAuthority("USER")
-                .requestMatchers(HttpMethod.POST, "/users/{id}/account/{id-account}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/users/{id}/associate/{id-account}").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/users/{id}/change-type").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/users/usage/top-users").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/users/{id}/scooter/nearby/{gps}").hasAuthority("USER")
@@ -61,10 +61,10 @@ public class SecurityConfig {
 
                 // Microservicio de Cuenta
                 .requestMatchers(HttpMethod.GET, "/account").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/account/{id}").hasAuthority("USER")
-                .requestMatchers(HttpMethod.GET, "/account/{id}/users").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/account/{id}").hasAnyAuthority("USER", "ADMIN")
+                .requestMatchers(HttpMethod.GET, "/account/{id}/users").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/account/user/{id}").hasAuthority("USER")
-                .requestMatchers(HttpMethod.POST, "/account").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/account").hasAuthority("USER")//todo chequear que al crear sea con el monto en 0
                 .requestMatchers(HttpMethod.PUT, "/account/{id}/load-amount").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/account/{id}/change-type").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/account/{id}").hasAuthority("ADMIN")
@@ -99,7 +99,7 @@ public class SecurityConfig {
 
                 // Microservicio de Scooter
                 .requestMatchers(HttpMethod.GET, "/scooter").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/scooter/{id}").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, "/scooter/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/scooter").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/scooter/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/scooter/{id}/changeState").hasAuthority("ADMIN")
@@ -128,11 +128,11 @@ public class SecurityConfig {
 
                 // Microservicio de Mantenimiento
                 .requestMatchers(HttpMethod.GET, "/maintenance").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/maintenance/{id}").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, "/maintenance/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/maintenance/scooter/{scooterId}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/maintenance/active").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/maintenance").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/maintenance/start").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/maintenance").hasAuthority("ADMIN")//todo verificar que existan los campos que requiere
+                .requestMatchers(HttpMethod.POST, "/maintenance/start").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/maintenance/{id}/finish").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/maintenance/{id}").hasAuthority("ADMIN")
 

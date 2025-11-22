@@ -21,22 +21,22 @@ spring:
               uri: http://localhost:8004
               predicates:
                 - Path=/scooter/**
-                -
+
             - id: journeys-service
               uri: http://localhost:8002
               predicates:
-                - Path=/journeys/**,/rate/**
+                - Path=/journey/**,/rate/**
 
             - id: maintenance-service
               uri: http://localhost:8003
               predicates:
                 - Path=/maintenance/**
-                -
+
             - id: movement-service
               uri: http://localhost:8005
               predicates:
                 - Path=/movement/**
-                -
+
             - id: parking-dock-service
               uri: http://localhost:8000
               predicates:

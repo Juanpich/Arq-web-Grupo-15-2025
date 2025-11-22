@@ -52,7 +52,7 @@ public class ScooterController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
+//todo verficar que el parkin exista
     @PostMapping("")
     public ResponseEntity<?> createScooter(@RequestBody Scooter scooter){
         try{
