@@ -5,9 +5,14 @@ import org.example.journeysservice.application.repositories.RateRepository;
 import org.example.journeysservice.domain.dto.*;
 import org.example.journeysservice.domain.entities.Journey;
 import org.example.journeysservice.domain.exceptions.JourneyNotFoundException;
+import org.example.journeysservice.domain.exceptions.ScooterNotAviableException;
 import org.example.journeysservice.domain.exceptions.UnfinishedJourneyException;
+import org.example.journeysservice.domain.exceptions.UserNotAvailableException;
 import org.example.journeysservice.infraestructure.feing.AccountFeingClient;
+import org.example.journeysservice.infraestructure.feing.ScooterFeignClient;
+import org.example.journeysservice.infraestructure.feing.UserFeignClient;
 import org.example.journeysservice.models.Account;
+import org.example.journeysservice.models.Scooter;
 import org.example.journeysservice.models.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,11 +32,15 @@ public class JourneyService {
 
     private final RateRepository rateRepo;
     private AccountFeingClient accountFeingClient;
+    private UserFeignClient  userFeignClient;
+    private ScooterFeignClient scooterFeignClient;
 
-    public JourneyService(JourneyRepository journeyRepo, RateRepository rateRepo, AccountFeingClient accountFeingClient) {
+    public JourneyService(JourneyRepository journeyRepo, RateRepository rateRepo, AccountFeingClient accountFeingClient, UserFeignClient userFeignClient, ScooterFeignClient scooterFeignClient) {
         this.journeyRepo = journeyRepo;
         this.rateRepo = rateRepo;
         this.accountFeingClient = accountFeingClient;
+        this.userFeignClient = userFeignClient;
+        this.scooterFeignClient = scooterFeignClient;
     }
 
     //Trae todos los viajes.
@@ -65,9 +74,15 @@ public class JourneyService {
 
     //Insertar un viaje.
     @Transactional
-    public JourneyDTO insertJourney(Journey journeyBody) throws IllegalArgumentException {
-//        chequear si el id del scooter existe?
-        Journey result = this.journeyRepo.save(journeyBody);
+    public JourneyDTO insertJourney(Journey journeyBody) throws IllegalArgumentException, UserNotAvailableException, ScooterNotAviableException {
+        User user = this.userFeignClient.getUser(journeyBody.getUserId());
+        if(user == null || user.getState().equals("CANCELLED"))
+            throw new UserNotAvailableException(journeyBody.getUserId());
+        Scooter scooter = this.scooterFeignClient.getScooterById(journeyBody.getScooterId());
+        if(scooter ==  null || scooter.getState().equals("AVAILABLE") )
+            throw new ScooterNotAviableException(journeyBody.getScooterId());
+        Journey create = new Journey(journeyBody.getScooterId(), journeyBody.getUserId(), journeyBody.getKmTraveled());
+        Journey result = this.journeyRepo.save(create);
         return new JourneyDTO(result);
     }
 

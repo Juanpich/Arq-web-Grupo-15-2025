@@ -5,7 +5,9 @@ import org.example.journeysservice.application.services.JourneyService;
 import org.example.journeysservice.domain.dto.*;
 import org.example.journeysservice.domain.entities.Journey;
 import org.example.journeysservice.domain.exceptions.JourneyNotFoundException;
+import org.example.journeysservice.domain.exceptions.ScooterNotAviableException;
 import org.example.journeysservice.domain.exceptions.UnfinishedJourneyException;
+import org.example.journeysservice.domain.exceptions.UserNotAvailableException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,12 +54,20 @@ public class JourneyController {
     //crear viaje. USER
     @PostMapping("")
     public ResponseEntity<?> insertJourney(@RequestBody Journey journey) {
-        var result = this.journeyService.insertJourney(journey);
-        if (result != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(result);
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se creo el viaje (jurney)");
+        try{
+            var result = this.journeyService.insertJourney(journey);
+            if (result != null) {
+                return ResponseEntity.status(HttpStatus.OK).body(result);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se creo el viaje (jurney)");
+            }
+        } catch (UserNotAvailableException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (ScooterNotAviableException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+
+
     }
     
     //consultar viajes de un monopatin. ADMIN
