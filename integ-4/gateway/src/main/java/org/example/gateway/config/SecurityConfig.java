@@ -45,6 +45,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests(authz -> authz
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+
                 /*MIcroservicio de usuario*/
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .requestMatchers(HttpMethod.GET, "/users").hasAuthority("ADMIN")
@@ -57,6 +58,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/users/usage/top-users").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/users/{id}/scooter/nearby/{gps}").hasAuthority("USER")
                 .requestMatchers(HttpMethod.GET, "/users/email/{email}").hasAuthority("ADMIN")
+
                 /* Microservicio de cuenta*/
                 .requestMatchers(HttpMethod.GET, "/account").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/account/{id}").hasAuthority("USER")
@@ -67,6 +69,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/account/{id}/change-type").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/account/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/account/{id}/journey/{id-journey}" ).hasAuthority("USER")
+
                 /*Microservicio de viaje*/
                 .requestMatchers(HttpMethod.GET, "/journey").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/{id}" ).hasAuthority("USER")
@@ -77,6 +80,15 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/journey/scooter/{scoter_id}" ).hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/user/{userId}").hasAuthority("USER")
                 .requestMatchers(HttpMethod.GET, "/journey/scooter/{id}/year/{anio}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/journey/user/{userId}/dateRange").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/journey/{journeyId}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/byUser/{userId}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/journey/finishJourney/{id}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/year/{year}/range/{startMonth}/{endMonth}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/{id}/price").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/journey/{id}/pause").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/journey/{id}/finishPause").hasAuthority("USER")
+
                 /*Microservicio de rate*/
                 .requestMatchers(HttpMethod.GET, "/rate").hasAuthority("USER")
                 .requestMatchers(HttpMethod.GET, "/rate/{id}").hasAuthority("USER")
@@ -85,6 +97,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/rate/{id}").hasAuthority("USER")
                 .requestMatchers(HttpMethod.GET, "/rate/current").hasAuthority("USER")
                 .requestMatchers(HttpMethod.GET, "/rate/byDate").hasAuthority("USER")
+
                 /*Microservicio de scooter*/
                 .requestMatchers(HttpMethod.GET, "/scooter").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/scooter/{id}").hasAnyAuthority("ADMIN", "USER")
@@ -94,7 +107,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.DELETE, "/scooter/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/scooter/year/{anio}/countJourneys/{count}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/scooter/gps/{gps}").hasAuthority("ADMIN")
-                /*microservicio de parkin*/
+
+                /*microservicio de parking*/
                 .requestMatchers(HttpMethod.GET, "/parkingdock").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/parkingdock/{id}").hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(HttpMethod.POST, "/parkingdock").hasAuthority("ADMIN")
@@ -103,6 +117,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/parkingdock/{id}/scooters").hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(HttpMethod.PUT, "/parkingdock/{id}/addscooter").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/parkingdock/{parking_id}/removescooter/{scooter_id}").hasAuthority("ADMIN")
+
                 /*microservicio de movimiento*/
                 .requestMatchers(HttpMethod.GET, "/movement").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/movement/{movementId}").hasAnyAuthority("ADMIN", "USER")
@@ -111,7 +126,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.POST, "/movement").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/movement/{movementId}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/movement/{id}").hasAuthority("ADMIN")
-                /*microservicoo de mantenimineto*/
+
+                /*microservicoo de mantenimiento*/
                 .requestMatchers(HttpMethod.GET, "/maintenance").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/maintenance/{id}").hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers(HttpMethod.GET, "/maintenance/scooter/{scooterId}").hasAuthority("ADMIN")
@@ -121,11 +137,6 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PUT, "/maintenance/{id}/finish").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/maintenance/{id}").hasAuthority("ADMIN")
                 .anyRequest().hasAuthority("ADMIN")
-
-
-
-
-
 
 
                 .anyRequest().authenticated()
