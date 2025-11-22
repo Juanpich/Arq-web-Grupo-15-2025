@@ -24,32 +24,32 @@ public class JourneyController {
         this.journeyService = journeyService;
     }
 
-    //Consultar todos los viajes. ADMIN
+    //consultar todos los viajes. ADMIN
     @GetMapping("")
     public List<JourneyDTO> findAllJourneys() {
         return this.journeyService.findAllJourneys();
     }
 
-    //Consultar viaje por Id de viaje. USER
+    //consultar viaje por Id de viaje. USER
     @GetMapping("/{journeyId}")
     public List<JourneyDTO> findJourneyById(@PathVariable Long journeyId) {
         return this.journeyService.findJourneyById(journeyId);
     }
 
-    //Reporte kilometros de uso de monopatines por kilómetros para establecer si un monopatín requiere de mantenimiento. ADMIN
+    //reporte kilometros de uso de monopatines por kilómetros para establecer si un monopatín requiere de mantenimiento. ADMIN
     @GetMapping("/kmByScooter/{kmSearch}")
     public List<ScooterKmReportDTO> scooterKmReport(@PathVariable int kmSearch, @RequestParam(required = true) String includePausedMinutes) {
         return this.journeyService.findAllScooterKm(kmSearch, includePausedMinutes);
     }
 
-    //Eliminar viaje. ADMIN
+    //eliminar viaje. ADMIN
     @DeleteMapping("/{journeyId}")
     public ResponseEntity<?> deleteJourneyById(@PathVariable Long journeyId) {
         this.journeyService.deleteJourneyById(journeyId);
         return ResponseEntity.status(HttpStatus.OK).body("El viaje se eliminó exitosamente");
     }
 
-    //Crear viaje. USER
+    //crear viaje. USER
     @PostMapping("")
     public ResponseEntity<?> insertJourney(@RequestBody Journey journey) {
         var result = this.journeyService.insertJourney(journey);
@@ -60,28 +60,28 @@ public class JourneyController {
         }
     }
     
-    //Consultar viajes de un monopatin. ADMIN
+    //consultar viajes de un monopatin. ADMIN
     @GetMapping("/scooter/{scooter_id}")
     public ResponseEntity<?> FindAllJourneysByScooter(@PathVariable Long scooter_id){
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooter(scooter_id);
         return ResponseEntity.ok(result);
     }
 
-    //Consultar viaje por ID de usuario. USER
+    //consultar viaje por ID de usuario. USER
     @GetMapping("/user/{userId}")
     public ResponseEntity<?> findAllJourneysByUser(@PathVariable Long userId){
         List<JourneyDTO> result = this.journeyService.findAllJourneysByUser(userId);
         return ResponseEntity.ok(result);
     }
 
-    //Consultar los viajes de un monopatin en determinado año. ADMIN
+    //consultar los viajes de un monopatin en determinado año. ADMIN
     @GetMapping("scooter/{id}/year/{anio}")
     public ResponseEntity<?> FindAllJourneysByScooterANDYear(@PathVariable(name="id") Long scooter_id, @PathVariable Integer anio) {
         List<JourneyDTO> result = this.journeyService.FindAllJourneysByScooterANDYear(scooter_id, anio);
         return ResponseEntity.ok(result);
     }
 
-    // Consultar viajes entre fechas
+    // consultar viajes entre fechas. ADMIN
     @GetMapping("/user/{userId}/dateRange")
     public ResponseEntity<?> findJourneysByUserInGivenDate(@PathVariable(name="userId") Long userId, @RequestParam LocalDate initDate, @RequestParam LocalDate finishDate,
                                                            @RequestParam(required = true) String includeOtherUsers) {
@@ -89,7 +89,7 @@ public class JourneyController {
         return ResponseEntity.ok(result);
     }
 
-    //Actualizar un viaje.
+    //actualizar un viaje. ADMIN
     @PutMapping("/{journeyId}")
     public ResponseEntity<?> updateJourney(@RequestBody Journey journey, @PathVariable Long journeyId) {
         var result = this.journeyService.updateJourney(journeyId, journey);
@@ -100,7 +100,7 @@ public class JourneyController {
         }
     }
 
-    //Los viajes de un usuario entre fechas.
+    //los viajes de un usuario entre fechas. USER
     @GetMapping("/byUser/{userId}")
     public ResponseEntity<?> getJourneyByUser(@PathVariable Long userId, @RequestParam(required = true, name="start-date") String startDate
             , @RequestParam(required = true, name="end-date") String endDate) {
@@ -111,7 +111,7 @@ public class JourneyController {
 
     }
 
-    //Finalizar un viaje.
+    //finalizar un viaje. USER
     @PutMapping("/finishJourney/{id}")
     public ResponseEntity<?> endJourney(@PathVariable(name = "id") Long journeyId) {
         var result = this.journeyService.endJourney(journeyId);
@@ -122,7 +122,7 @@ public class JourneyController {
         }
     }
 
-    //El total facturado en un rango de meses de cierto año
+    //el total facturado en un rango de meses de cierto año. ADMIN
     @GetMapping("/year/{year}/range/{startMonth}/{endMonth}")
     public ResponseEntity<?> findByYearAndMonthRange(@PathVariable(name = "year") int year, @PathVariable(name="startMonth") int startMonth, @PathVariable(name = "endMonth") int endMonth){
         try{
@@ -132,7 +132,8 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se pudo calcular el total facturado en el rango ingresado.");
         }
     }
-    //saber el precio de un viaje.
+
+    //saber el precio de un viaje. USER
     @GetMapping("/{id}/price")
     public ResponseEntity<?> getPriceByJourneyId(@PathVariable Long id){
         try{
@@ -142,7 +143,8 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    //pausar un viaje
+
+    //pausar un viaje. USER
     @PutMapping("/{id}/pause")
     public ResponseEntity<?> pauseJourney(@PathVariable Long id){
         try{
@@ -152,7 +154,8 @@ public class JourneyController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-    // despausar un viaje
+
+    // despausar un viaje. USER
     @PutMapping("/{id}/finishPause")
     public ResponseEntity<?> finishPauseJourney(@PathVariable Long id) {
         try{

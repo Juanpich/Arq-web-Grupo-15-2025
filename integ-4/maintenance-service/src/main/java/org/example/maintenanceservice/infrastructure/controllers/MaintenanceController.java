@@ -23,11 +23,13 @@ public class MaintenanceController {
         this.maintenanceService = maintenanceService;
     }
 
+    //traer todos los registros de mantenimientos. ADMIN
     @GetMapping("")
     public ResponseEntity<List<MaintenanceDto>> getAllMaintenances() {
         return ResponseEntity.ok(maintenanceService.getAll());
     }
 
+    //traer un mantenimiento segun su id. ADMIN
     @GetMapping("/{id}")
     public ResponseEntity<?> getMaintenanceById(@PathVariable Long id) {
         try {
@@ -37,16 +39,19 @@ public class MaintenanceController {
         }
     }
 
+    //traer el mantenimiento de un scooter dado. ADMIN
     @GetMapping("/scooter/{scooterId}")
     public ResponseEntity<List<MaintenanceDto>> getMaintenancesByScooterId(@PathVariable Long scooterId) {
         return ResponseEntity.ok(maintenanceService.getMaintenancesByScooterId(scooterId));
     }
 
+    //traer los mantenimientos activos. ADMIN.
     @GetMapping("/active")
     public ResponseEntity<List<MaintenanceDto>> getActiveMaintenances() {
         return ResponseEntity.ok(maintenanceService.getActiveMaintenances());
     }
 
+    //poner un a un scooter en mantenimiento. ADMIN
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody Maintenance maintenance) {
         try {
@@ -56,6 +61,7 @@ public class MaintenanceController {
         }
     }
 
+    //crear un mantenimiento. ADMIN
     @PostMapping("/start")
     public ResponseEntity<?> startMaintenance(@RequestBody Map<String, Long> request) {
         try {
@@ -69,6 +75,7 @@ public class MaintenanceController {
         }
     }
 
+    //finalizar un mantenimiento. ADMIN
     @PutMapping("/{id}/finish")
     public ResponseEntity<?> finishMaintenance(@PathVariable Long id) {
         try {
@@ -82,6 +89,7 @@ public class MaintenanceController {
         }
     }
 
+    //eliminar un mantenimiento. ADMIN
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {

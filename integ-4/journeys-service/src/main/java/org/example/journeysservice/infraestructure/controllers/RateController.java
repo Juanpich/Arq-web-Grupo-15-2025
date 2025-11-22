@@ -22,6 +22,7 @@ public class RateController {
         this.rateService = rateService;
     }
 
+    //trer todos los rates. ADMIN
     @GetMapping("")
     public ResponseEntity<List<RateDto>> getAllRates() {
         List<RateDto> rates = rateService.getAll();
@@ -31,6 +32,7 @@ public class RateController {
         return ResponseEntity.ok(rates);
     }
 
+    //traer rate segun su id. ADMIN
     @GetMapping("/{id}")
     public ResponseEntity<?> getRateById(@PathVariable Long id) {
         try {
@@ -41,12 +43,14 @@ public class RateController {
         }
     }
 
+    //crear un rate. ADMIN
     @PostMapping("")
     public ResponseEntity<RateDto> save(@RequestBody Rate rate) {
         RateDto newRate = rateService.save(rate);
         return ResponseEntity.status(HttpStatus.CREATED).body(newRate);
     }
 
+    //editar un rate. ADMIN
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Long id, @RequestBody Rate rate) {
         try {
@@ -57,6 +61,7 @@ public class RateController {
         }
     }
 
+    //eliminar un rate. ADMIN
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         try {
@@ -67,6 +72,7 @@ public class RateController {
         }
     }
 
+    //traer el rate actual. USER
     @GetMapping("/current")
     public ResponseEntity<?> getCurrentRate() {
         try {
@@ -77,6 +83,7 @@ public class RateController {
         }
     }
 
+    //traer tarifa segun una fecha. ADMIN
     @GetMapping("/byDate")
     public ResponseEntity<?> getRateByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
         try {
