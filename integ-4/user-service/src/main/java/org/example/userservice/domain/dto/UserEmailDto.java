@@ -10,7 +10,7 @@ import org.example.userservice.domain.enums.State;
 @Getter
 @Setter
 @ToString
-public class UserDto {
+public class UserEmailDto {
     private Long id;
     private String name;
     private String last_name;
@@ -18,9 +18,10 @@ public class UserDto {
     private String phone_number;
     private State state;
     private Role role;
+    private String password;
 
 
-    public  UserDto(User user) {
+    public  UserEmailDto(User user) {
         this.id = user.getUser_id();
         this.name = user.getName();
         this.last_name = user.getLast_name();
@@ -28,6 +29,8 @@ public class UserDto {
         this.phone_number = user.getPhone_number();
         this.state = user.getState();
         this.role = user.getRole();
+        this.password = user.getPassword();
     }
 }
+
 

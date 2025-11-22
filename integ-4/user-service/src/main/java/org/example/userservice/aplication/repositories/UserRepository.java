@@ -1,6 +1,7 @@
 package org.example.userservice.aplication.repositories;
 
 import org.example.userservice.domain.dto.UserDto;
+import org.example.userservice.domain.dto.UserEmailDto;
 import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.enums.AccountType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -22,5 +23,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
     int countFindByMail(String mail);
     @Query("SELECT new org.example.userservice.domain.dto.UserDto(u) FROM User u " +
             "WHERE LOWER(u.mail) LIKE LOWER(:mail)")
-    UserDto findByMail(String mail);
+    UserEmailDto findByMail(String mail);
 }

@@ -5,6 +5,7 @@ import org.example.userservice.aplication.repositories.AccountRepository;
 import org.example.userservice.aplication.repositories.UserRepository;
 import org.example.userservice.domain.dto.ScootesNearbyDto;
 import org.example.userservice.domain.dto.UserDto;
+import org.example.userservice.domain.dto.UserEmailDto;
 import org.example.userservice.domain.dto.UserTopUsageDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.entities.User;
@@ -75,15 +76,24 @@ public class UserService {
     @Transactional
     public UserDto update(User user){
         Long id = user.getUser_id();
+        Optional<User> upd = userRepository.findById(id);
+        if (upd.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
         if(user.getMail() != null) {
             int userEmail = userRepository.countFindByMail(user.getMail());
             if (userEmail > 0)
                 throw new EmailAlreadyExists();
         }
-        if (!userRepository.findById(id).isPresent()) {
-            throw new UserNotFoundException(id);
-        }
-        User userUpdated = userRepository.save(user);
+        if(user.getName()!= null)
+            upd.get().setName(user.getName());
+        if(user.getLast_name() != null)
+            upd.get().setLast_name(user.getLast_name());
+        if(user.getPhone_number() != null)
+            upd.get().setPhone_number(user.getPhone_number());
+        if(user.getPassword() != null)
+            upd.get().setPassword(passwordEncoder.encode(user.getPassword()));
+        User userUpdated = userRepository.save(upd.get());
         return new UserDto(userUpdated);
     }
     @Transactional
@@ -148,8 +158,8 @@ public class UserService {
     }
 
     //Traer un usuario con ese mail
-    public UserDto userByEmail(String email){
-        UserDto user = this.userRepository.findByMail(email);
+    public UserEmailDto userByEmail(String email){
+        UserEmailDto user = this.userRepository.findByMail(email);
         return  user;
     }
 }
