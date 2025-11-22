@@ -3,6 +3,7 @@ package org.example.userservice.infraestructure.controller;
 import org.example.userservice.aplication.services.UserService;
 import org.example.userservice.domain.dto.ScootesNearbyDto;
 import org.example.userservice.domain.dto.UserDto;
+import org.example.userservice.domain.dto.UserEmailDto;
 import org.example.userservice.domain.dto.UserTopUsageDto;
 import org.example.userservice.domain.entities.User;
 import org.example.userservice.domain.enums.AccountType;
@@ -87,7 +88,6 @@ public class UserController {
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());
         }
-        //todo verificar que si el gmail se cambia no exista sino lanzar excepcion
     }
 
     //asociar usuario a una cuenta. USER
@@ -157,16 +157,13 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
     //traer un usuario por email. ADMIN
     @GetMapping("/email/{email}")
     public ResponseEntity<?> getEmail(@PathVariable("email") String email) {
-        UserDto user = this.userService.userByEmail(email);
+        UserEmailDto user = this.userService.userByEmail(email);
         if( user != null){
             return ResponseEntity.ok(user);
         }
         return null;
     }
-    // todo mandar todos los datos pero para lo comun no (crear dto) cambiar
-    //  user dto 9sincale) y crear uno especial para email
 }
