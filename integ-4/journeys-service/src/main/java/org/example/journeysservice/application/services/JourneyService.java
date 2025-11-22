@@ -106,7 +106,13 @@ public class JourneyService {
 
     @Transactional
     public JourneyDTO updateJourney(Long journeyId, Journey journeyBody) throws IllegalArgumentException {
+        //busco el viaje que se quiere actualizar.
         Journey oldJourney = this.journeyRepo.findById(journeyId).orElseThrow(() -> new RuntimeException("No se encontro el movimiento con id " + journeyId));
+        //seteo los nuevos valores.
+        //verificar que exista el scooter.
+        if(this.scooterFeignClient.getScooterById(journeyBody.getScooterId()) == null){
+            return null;
+        }
         oldJourney.setScooterId(journeyBody.getScooterId());
         oldJourney.setDate(journeyBody.getDate());
         oldJourney.setInitHour(journeyBody.getInitHour());
