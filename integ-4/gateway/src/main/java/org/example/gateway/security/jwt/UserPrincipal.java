@@ -1,7 +1,9 @@
 package org.example.gateway.security.jwt;
 
 import org.example.gateway.entity.User;
-import org.example.gateway.security.Type;
+
+
+import org.example.gateway.security.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,17 +15,17 @@ public class UserPrincipal implements UserDetails {
 
     private final String email;
     private final String password;
-    private final Type type;
+    private final Role role;
 
     public UserPrincipal(User user) {
         this.email = user.getMail();
         this.password = user.getPassword();
-        this.type = user.getType();
+        this.role = user.getRole();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(type.name()));
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override

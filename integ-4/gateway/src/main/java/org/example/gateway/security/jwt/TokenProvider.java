@@ -3,6 +3,7 @@ package org.example.gateway.security.jwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.example.gateway.security.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -65,11 +66,12 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        UserPrincipal principal = new UserPrincipal(
+                new org.example.gateway.entity.User(null, null, null, claims.getSubject(), null, null, null, Role.valueOf(authorities.iterator().next().getAuthority()))
+        );
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
-
     public boolean validateToken( String authToken ) {
         try {
             final var claims = Jwts.parser().verifyWith(this.key).build().parseSignedClaims(authToken);
