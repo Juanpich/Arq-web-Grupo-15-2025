@@ -77,14 +77,42 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/journey/scooter/{scoter_id}" ).hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/user/{userId}").hasAuthority("USER")
                 .requestMatchers(HttpMethod.GET, "/journey/scooter/{id}/year/{anio}").hasAuthority("ADMIN")
-
-                
-
-
-
-
-
-                .anyRequest().authenticated()
+                /*Microservicio de scooter*/
+                .requestMatchers(HttpMethod.GET, "/scooter").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/scooter/{id}").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, "/scooter").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/scooter/{id}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/scooter/{id}/changeState").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/scooter/{id}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/scooter/year/{anio}/countJourneys/{count}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/scooter/gps/{gps}").hasAuthority("ADMIN")
+                /*microservicio de parkin*/
+                .requestMatchers(HttpMethod.GET, "/parkingdock").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/parkingdock/{id}").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, "/parkingdock").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/parkingdock/{id}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/parkingdock/{id}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/parkingdock/{id}/scooters").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.PUT, "/parkingdock/{id}/addscooter").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/parkingdock/{parking_id}/removescooter/{scooter_id}").hasAuthority("ADMIN")
+                /*microservicio de movimiento*/
+                .requestMatchers(HttpMethod.GET, "/movement").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/movement/{movementId}").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, "/movement/userId/{userId}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/movement/accountId/{accountId}").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.POST, "/movement").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/movement/{movementId}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/movement/{id}").hasAuthority("ADMIN")
+                /*microservicoo de mantenimineto*/
+                .requestMatchers(HttpMethod.GET, "/maintenance").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/maintenance/{id}").hasAnyAuthority("ADMIN", "USER")
+                .requestMatchers(HttpMethod.GET, "/maintenance/scooter/{scooterId}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/maintenance/active").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/maintenance").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/maintenance/start").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/maintenance/{id}/finish").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/maintenance/{id}").hasAuthority("ADMIN")
+                .anyRequest().hasAuthority("ADMIN")
         );
 
         http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);
