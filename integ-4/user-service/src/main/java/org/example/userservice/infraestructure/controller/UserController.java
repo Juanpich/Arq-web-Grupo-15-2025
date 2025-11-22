@@ -28,6 +28,7 @@ public class UserController {
         this.userService = userService;
     }
 
+    //traer todos los usuarios. ADMIN
     @GetMapping("")
     public ResponseEntity<?> getAllUsers(@RequestParam(required = false, name="type") String type) {
         List<UserDto> users;
@@ -46,7 +47,7 @@ public class UserController {
         }
         return ResponseEntity.ok(users);
     }
-
+    //traer un usuario segun id. USER
     @GetMapping("/{id}")
     public ResponseEntity<UserDto> getUserById(@PathVariable("id") Long id) {
         UserDto user = userService.getUserById(id);
@@ -55,6 +56,8 @@ public class UserController {
         }
         return ResponseEntity.ok(user);
     }
+
+    //crear un usuario. TODOS
     @PostMapping("")
     public ResponseEntity<?> save(@RequestBody User user) {
         try{
@@ -64,11 +67,15 @@ public class UserController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    //eliminar un usuario. ADMIN
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         this.userService.delete(id);
         return ResponseEntity.ok("DELETED");
     }
+
+    //editar un suario. USER
     @PutMapping("/{id}")
     public ResponseEntity<?> save(@RequestBody User user, @PathVariable("id") Long id) {
         user.setUser_id(id);
@@ -82,6 +89,8 @@ public class UserController {
         }
         //todo verificar que si el gmail se cambia no exista sino lanzar excepcion
     }
+
+    //asociar usuario a una cuenta. USER
     @PostMapping("/{id}/associate/{id-account}")
     public ResponseEntity<?> associate(@PathVariable("id") Long id, @PathVariable("id-account") Long id_account) {
         try{
@@ -97,6 +106,9 @@ public class UserController {
                     .body(e.getMessage());
         }
     }
+
+    //cambiar el estado del usuario. ADMIN
+    // todo verificar que el usuario no este cancela al crear un viaje.
     @PutMapping("/{id}/change-state")
     public ResponseEntity<?>  changeState(@RequestBody Map<String, String> body, @PathVariable Long id){
         UserDto user;
@@ -111,8 +123,9 @@ public class UserController {
             return ResponseEntity.badRequest().body("State invalid" );
         }
     }
+
     //Como administrador quiero ver los usuarios que más utilizan los monopatines, filtrado por
-    //período y por tipo de usuario
+    //período y por tipo de usuario. ADMIN
     @GetMapping("/usage/top-users")
     public ResponseEntity<?> getTopUsers(
             @RequestParam(name = "start-date", required = true) String startDate,
@@ -131,8 +144,9 @@ public class UserController {
         return ResponseEntity.ok(users);
 
     }
+
     // Como usuario quiero buscar un listado de los monopatines cercanos a mi zona, para poder
-    //encontrar un monopatín cerca de mi ubicación
+    //encontrar un monopatín cerca de mi ubicación. USER
     @GetMapping("{id}/scooter/nearby/{gps}")
     public ResponseEntity<?> getNearbyRates(@PathVariable("id") Long id, @PathVariable("gps") String gps) {
         List<ScootesNearbyDto> scootesNearby;
@@ -144,7 +158,7 @@ public class UserController {
         }
     }
 
-    //traer un usuario por email
+    //traer un usuario por email. ADMIN
     @GetMapping("/email/{email}")
     public ResponseEntity<?> getEmail(@PathVariable("email") String email) {
         UserDto user = this.userService.userByEmail(email);
@@ -153,5 +167,6 @@ public class UserController {
         }
         return null;
     }
-
+    // todo mandar todos los datos pero para lo comun no (crear dto) cambiar
+    //  user dto 9sincale) y crear uno especial para email
 }

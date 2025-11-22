@@ -24,6 +24,8 @@ public class AccountController {
     public  AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
+
+    //traer todas las cuentas. ADMIN
     @GetMapping("")
     public ResponseEntity<List<AccountDto>> getAllAccount() {
         List<AccountDto> accounts = accountService.getAll();
@@ -33,6 +35,7 @@ public class AccountController {
         return ResponseEntity.ok(accounts);
     }
 
+    //traer una cuenta por su id. USER
     @GetMapping("/{id}")
     public ResponseEntity<?> getAccountById(@PathVariable("id") Long id) {
         AccountDto accountNew = accountService.getAccountById(id);
@@ -42,6 +45,8 @@ public class AccountController {
         }
         return ResponseEntity.ok(accountNew);
     }
+
+    //traer los usuarios que tiene asociados una cuenta. USER
     @GetMapping("/{id}/users")
     public ResponseEntity<?> getUsersByAccountId(@PathVariable("id") Long id){
         try{
@@ -54,6 +59,7 @@ public class AccountController {
         }
     }
 
+    //traer la/s cuenta/s de un usuario dado. USER .
     @GetMapping("/user/{id}")
     public ResponseEntity<?> getAccountsByUserId(@PathVariable("id") Long id) {
         try {
@@ -65,11 +71,15 @@ public class AccountController {
                     .body(e.getMessage());
         }
     }
+
+    //crear una cuenta. USER
     @PostMapping("")
     public ResponseEntity<AccountDto> save(@RequestBody Account account) {
         AccountDto accountNew = accountService.save(account);
         return ResponseEntity.ok(accountNew);
     }
+
+    //la carga de dinero que el usuario le hace a una cuenta. USER
     @PutMapping("/{id}/load-amount")
     public ResponseEntity<?> loadAmount(@RequestBody Account account, @PathVariable("id") Long id){
         try {
@@ -89,6 +99,8 @@ public class AccountController {
 
         }
     }
+
+    //cambiar el tipo de la cuienta (basic, premium). ADMIN
     @PutMapping("/{id}/change-type")
     public ResponseEntity<?> changeType(@RequestBody Account account, @PathVariable("id") Long id){
         try {
@@ -101,12 +113,15 @@ public class AccountController {
                     .body(e.getMessage());
         }
     }
+
+    //eliminar cuenta. ADMIN
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         this.accountService.delete(id);
         return ResponseEntity.ok("DELETED");
     }
 
+    //pagar un viaje. USER
     @PostMapping("/{id}/journey/{idJourney}")
     public ResponseEntity<?> makePayment(@PathVariable("id") Long id_account, @PathVariable("idJourney") Long id_journey){
         try{
