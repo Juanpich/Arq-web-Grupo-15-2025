@@ -21,7 +21,7 @@ spring:
               uri: http://localhost:8004
               predicates:
                 - Path=/scooter/**
-                -
+
             - id: journeys-service
               uri: http://localhost:8002
               predicates:
@@ -31,17 +31,17 @@ spring:
               uri: http://localhost:8003
               predicates:
                 - Path=/maintenance/**
-                -
+
             - id: movement-service
               uri: http://localhost:8005
               predicates:
                 - Path=/movement/**
-                -
+
             - id: parking-dock-service
               uri: http://localhost:8000
               predicates:
                 - Path=/parkingdock/**
-            
+
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
