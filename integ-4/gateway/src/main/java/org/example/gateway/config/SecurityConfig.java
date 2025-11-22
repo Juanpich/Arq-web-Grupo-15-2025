@@ -4,6 +4,7 @@ package org.example.gateway.config;
 
 import org.example.gateway.security.jwt.JwtFilter;
 import org.example.gateway.security.jwt.TokenProvider;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -43,11 +44,47 @@ public class SecurityConfig {
                 s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests(authz -> authz
-                .requestMatchers(HttpMethod.GET, "/users").permitAll()
+                .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
+                /*MIcroservicio de usuario*/
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/users/**").permitAll()
-                .requestMatchers(HttpMethod.DELETE, "/users/**").permitAll()
-                .requestMatchers("/users/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/users").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/users/{id}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/users/{id}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/users/{id}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/users/{id}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/users/{id}/account/{id-account}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/users/{id}/change-type").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/users/usage/top-users").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/users/{id}/scooter/nearby/{gps}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/users/email/{email}").hasAuthority("ADMIN")
+                /* Microservicio de cuenta*/
+                .requestMatchers(HttpMethod.GET, "/account").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/account/{id}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/account/{id}/users").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/account/user/{id}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/account").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/account/{id}/load-amount").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/account/{id}/change-type").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/account/{id}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/account/{id}/journey/{id-journey}" ).hasAuthority("USER")
+                /*Microservicio de viaje*/
+                .requestMatchers(HttpMethod.GET, "/journey").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/journey/{id}" ).hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/{id}" ).hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/journey/kmByScooter/{kmSearch}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/journey/{journeyId}").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/journey").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/scooter/{scoter_id}" ).hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/journey/user/{userId}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/scooter/{id}/year/{anio}").hasAuthority("ADMIN")
+
+                
+
+
+
+
+
+                .anyRequest().authenticated()
         );
 
         http.addFilterBefore(new JwtFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class);

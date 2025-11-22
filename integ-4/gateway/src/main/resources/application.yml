@@ -6,13 +6,28 @@ spring:
     name: gateway
 
   cloud:
+    config:
+      enabled: false
     gateway:
-      routes:
-        # USERS SERVICE
-        - id: user-service
-          uri: http://localhost:8001
-          predicates:
-            - Path=/users/**
+      server:
+        webmvc:
+          routes:
+            - id: user-service
+              uri: http://localhost:8001
+              predicates:
+                - Path=/users/**,/account/**
+
+            - id: scooter-service
+              uri: http://localhost:8004
+              predicates:
+                - Path=/scooter/**
 
       default-filters:
         - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_FIRST
+eureka:
+  client:
+    enabled: false
+logging:
+  level:
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.web.servlet: DEBUG

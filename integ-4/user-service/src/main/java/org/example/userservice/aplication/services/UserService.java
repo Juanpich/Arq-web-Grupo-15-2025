@@ -18,6 +18,7 @@ import org.example.userservice.infraestructure.feign.JourneysFeignClient;
 import org.example.userservice.infraestructure.feign.ScooterFeignClient;
 import org.example.userservice.models.Journey;
 import org.example.userservice.models.Scooter;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,11 +35,13 @@ public class UserService {
     private AccountRepository accountRepository;
     private JourneysFeignClient journeysFeignClient;
     private ScooterFeignClient scooterFeignClient;
-    public UserService(UserRepository ur, AccountRepository accountRepository,  JourneysFeignClient journeysFeignClient, ScooterFeignClient scooterFeignClient) {
+    private PasswordEncoder passwordEncoder;
+    public UserService(UserRepository ur, AccountRepository accountRepository,  JourneysFeignClient journeysFeignClient, ScooterFeignClient scooterFeignClient, PasswordEncoder passwordEncoder) {
         this.userRepository=ur;
         this.accountRepository = accountRepository;
         this.journeysFeignClient=journeysFeignClient;
         this.scooterFeignClient = scooterFeignClient;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional(readOnly = true)
@@ -58,6 +61,7 @@ public class UserService {
         int userEmail = userRepository.countFindByMail(user.getMail());
         if( userEmail > 0)
             throw new EmailAlreadyExists();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User newU = new User(user.getMail(), user.getName(), user.getLast_name(), user.getPhone_number(), user.getPassword());
         User userNew =  userRepository.save(newU);
         return new UserDto(userNew);

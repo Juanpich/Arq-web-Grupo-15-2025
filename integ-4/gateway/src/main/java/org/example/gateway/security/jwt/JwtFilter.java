@@ -36,11 +36,6 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
         log.info("Request path: {}", path);
-        // 👉 Ignorar endpoints públicos
-        if (path.matches("^/authenticate/?$") || path.matches("^/users(/.*)?$")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
 
         String jwt = resolveToken(request);
         try {
