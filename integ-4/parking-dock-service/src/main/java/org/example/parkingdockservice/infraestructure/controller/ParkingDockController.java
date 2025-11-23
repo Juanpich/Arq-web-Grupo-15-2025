@@ -66,7 +66,8 @@ public class ParkingDockController {
 
     //Editar una parada
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateParkingDock(@PathVariable Long id, @Valid @RequestBody ParkingDock parkingDock) {
+    public ResponseEntity<?> updateParkingDock(@PathVariable Long id,
+                                               @Valid @RequestBody ParkingDock parkingDock) {
         try{
             ParkingDockDTO parking = parkingDockService.updateParkingDock(id, parkingDock);
             return ResponseEntity.ok(parking);

@@ -49,6 +49,7 @@ public class UserService {
     public List<UserDto> getAll(){
         return userRepository.findAll().stream().map(UserDto::new).toList();
     }
+
     @Transactional(readOnly = true)
     public List<UserDto> getAllByAccountType(AccountType type) {
         return userRepository.findAllByAccountType(type);

@@ -104,7 +104,7 @@ public class ScooterService {
         }
         return scooterResult;
     }
-
+    //quiero buscar un listado de los monopatines cercanos a mi zona, para poder encontrar un monopatín cerca de mi ubicación
     public List<ScooterDto> getAllByGps(String gps) {
         List<ScooterDto> scooterResult = this.scooterRepository.findAllByGps(gps).stream().map(ScooterDto:: new).toList();
         return scooterResult;

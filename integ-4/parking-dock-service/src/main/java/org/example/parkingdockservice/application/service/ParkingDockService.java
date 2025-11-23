@@ -52,9 +52,13 @@ public class ParkingDockService {
         ParkingDock parking_obj = parkingDockRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ParkingDock not found"));
 
-        // Seteo los nuevos valores
-        parking_obj.setParkingDock_ubication(parking.getParkingDock_ubication());
-        parking_obj.setScooters(parking.getScooters());
+        // Seteo los nuevos valores si no son null y si existe la parada.
+        if(parking.getParkingDock_ubication() != null){
+            parking_obj.setParkingDock_ubication(parking.getParkingDock_ubication());
+        }
+        if(parking.getScooters() != null){
+            parking_obj.setScooters(parking.getScooters());
+        }
 
         // Guardo los cambios
         ParkingDock saved = parkingDockRepository.save(parking_obj);

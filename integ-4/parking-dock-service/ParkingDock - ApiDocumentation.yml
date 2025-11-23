@@ -1,0 +1,327 @@
+openapi: "3.0.3"
+info:
+  title: API - Parking Dock Service
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+paths:
+  #-------------------
+  #   Parking Dock
+  #-------------------
+
+  /parkingdock:
+    #---------------Trae todas las paradas---------------#
+    get:
+      summary: Trae todas las paradas disponibles.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      responses:
+        "200":
+          description: Las paradas fueron accedidas con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ParkingDock"
+              examples:
+                parkingDocks:
+                  $ref: "#/components/examples/arregloDeParkingDocks"
+    #---------------Crea una nueva parada---------------#
+    post:
+      summary: Crea una nueva parada.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: String
+              $ref: "#/components/schemas/ParkingDockPOST"
+            examples:
+              parkingDock:
+                $ref: "#/components/examples/ParkingDockExamplePOST"
+      responses:
+        "201":
+          description: La parada fue creada con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ParkingDock"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/ParkingDockExampleRESPONSE"
+        "400":
+          description: Error en los datos proporcionados.
+  
+  /parkingdock/{id}:
+    #---------------Trae una parada por id---------------#
+    get:
+      summary: Trae una parada por id.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN Y DE USER**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de una parada.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        "200":
+          description: La parada fue accedida con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ParkingDock"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/ParkingDockExampleRESPONSE"
+    #---------------Actualiza una parada por id---------------#
+    put:
+      summary: Actualiza una parada por id por todos o algunos campos.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de una parada.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ParkingDockPOST"
+            examples:
+              parkingDock:
+                $ref: "#/components/examples/ParkingDockExamplePOST"
+      responses:
+        "200":
+          description: La parada fue actualizada con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ParkingDock"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/ParkingDockExampleRESPONSE"
+        "400":
+          description: Error en los datos proporcionados.
+        "404":
+          description: No se encontro la parada.
+    #---------------Elimina una parada por id---------------#
+    delete:
+      summary: Elimina una parada por id.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de una parada.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: La parada fue eliminada con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ParkingDock"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/ParkingDockExampleRESPONSE"
+        "404":
+          description: No se encontro la parada.
+
+  /parkingdock/{id}/scooter:
+#-----------------Traer una lista de los id de todos los monopatines-----------------#
+    get:
+      summary: Trae una lista de los id de todos los monopatines en una parada.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN Y USER**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de una parada.
+          required: true
+          schema:
+            type: integer
+            format: int64
+            
+      responses:
+        "200":
+          description: La lista de ids de scooter fue accedida con exito.
+          content:
+            application/json:
+              example: [1,2,3]
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+                  example: 1, 2 ,3 
+
+        "404":
+          description: No se encontro la parada.
+
+#---------------Inserta un scooter en la parada----------------
+  /parkingdock/{id}/addscooter:
+    put:
+      summary: Inserta un scooter en la parada.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de una parada.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                scooter_id:
+                  type: integer
+                  format: int64
+            example:
+              scooter_id: 1
+      responses:
+        "200":
+          description: El scooter fue insertado con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ParkingDock"
+              examples:
+                scooter:
+                  $ref: "#/components/examples/ParkingDockExampleRESPONSE"
+        "400":
+          description: Error en los datos proporcionados.
+
+#-----------------Eliminar un scooter de una parada-----------------------
+  /parkingdock/{parking_id}/removescooter/{scooter_id}:
+    put:
+      summary: Eliminar un scooter de una parada.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: parking_id
+          description: el id de una parada.
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: scooter_id
+          description: el id de un scooter.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: El scooter fue eliminado con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/ParkingDock"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/ParkingDockExampleRESPONSE"
+        "400":
+          description: Error en los datos proporcionados.
+        "404":
+          description: No se encontro la parada o el scooter.
+
+#--------------------------------------
+# Componentes reutilizables y ejemplos
+#--------------------------------------
+components:
+  schemas:
+#el esquema de parking dock.
+    ParkingDock:
+      type: object
+      properties:
+        parkingDock_id:
+          type: integer
+          format: int64
+          example: 2
+        parkingDock_ubication:
+          type: string
+          example: "-34.6037, -58.3816"
+        scooters:
+          type: array
+          items: 
+            example: [1,2,3]
+
+#el esquema de parking dock al POST. sin id y lista de scooters.
+    ParkingDockPOST:
+      type: object
+      properties:
+        parkingDock_ubication:
+          type: string
+  examples:
+#un ejemplo de parking dock RESPONSE
+    ParkingDockExampleRESPONSE:
+      summary: Ejemplo de una parada de monopatines.
+      value:
+        parkingDock_id: 1
+        parkingDock_ubication: "-34.6037, -58.3816"
+        scooters: [1,2,3]
+
+#un ejemplo de parking dock POST.
+    ParkingDockExamplePOST:
+      summary: Ejemplo de una parada de monopatines.
+      value:
+        parkingDock_ubication: "-34.6037, -58.3816"
+
+
+#un ejemplo de un arreglo de varias parkingdocks.
+    arregloDeParkingDocks:
+      summary: Ejemplo de un arreglo de paradas de monopatines
+      value:
+        - parkingDock_id: 1
+          parkingDock_ubication: "-34.6037, -58.3816"
+          scooters: [1, 2]
+        - parkingDock_id: 2
+          parkingDock_ubication: "-34.6037, -58.3816"
+          scooters: [3]
+
+
+#componente de seguridad
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+    
+
