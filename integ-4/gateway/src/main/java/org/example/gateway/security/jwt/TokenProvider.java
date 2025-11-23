@@ -38,7 +38,7 @@ public class TokenProvider {
         byte[] keyBytes = Decoders.BASE64.decode( SECRET );
         this.key = Keys.hmacShaKeyFor( keyBytes );
         this.jwtParser = Jwts.parser().verifyWith( key ).build();
-        this.tokenValidityInMilliseconds = 1000 * 86400; // valido por 1 dia.
+        this.tokenValidityInMilliseconds = 1000 * 60 * 60 ; // valido por 1 minuto.
     }
 
     public String createToken( Authentication authentication ) {
