@@ -11,7 +11,7 @@ import java.util.List;
 @FeignClient(name="journeys-service", url="http://localhost:8002/journey")
 public interface JourneyFeignClient {
     @GetMapping("scooter/{id}/year/{anio}")
-    List<Scooter> getSccoterById (
+    List<Scooter> FindAllJourneysByScooterANDYear (
             @PathVariable(name = "id") Long scooter_id,
             @PathVariable(name = "anio") Integer anio);
 }

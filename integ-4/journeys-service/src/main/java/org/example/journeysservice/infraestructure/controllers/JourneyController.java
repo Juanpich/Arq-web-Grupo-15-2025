@@ -66,8 +66,6 @@ public class JourneyController {
         } catch (ScooterNotAviableException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-
     }
     
     //consultar viajes de un monopatin. ADMIN
