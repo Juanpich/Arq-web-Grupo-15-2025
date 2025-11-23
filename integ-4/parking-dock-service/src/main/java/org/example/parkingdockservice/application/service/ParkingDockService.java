@@ -14,6 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ParkingDockService {
     private final ParkingDockRepository parkingDockRepository;
+//    private final ScooterFeignClient scooterFeingClient;
 
     // =====================
     //      Parking

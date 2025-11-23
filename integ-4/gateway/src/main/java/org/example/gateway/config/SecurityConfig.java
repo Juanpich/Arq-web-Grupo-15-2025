@@ -72,20 +72,20 @@ public class SecurityConfig {
 
                 // Microservicio de Viaje
                 .requestMatchers(HttpMethod.GET, "/journey").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/journey").hasAuthority("USER")
+                .requestMatchers(HttpMethod.POST, "/journey").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/{id}").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/journey/{journeyId}").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/journey/{journeyId}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.PUT, "/journey/{journeyId}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/journey/finishJourney/{id}").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/journey/{id}/pause").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/journey/{id}/finishPause").hasAuthority("USER")
-                .requestMatchers(HttpMethod.GET, "/journey/{id}/price").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/{id}/price").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/kmByScooter/{kmSearch}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/scooter/{scoter_id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/scooter/{id}/year/{anio}").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/journey/user/{userId}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/user/{userId}").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/user/{userId}/dateRange").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/journey/byUser/{userId}").hasAuthority("USER")
+                .requestMatchers(HttpMethod.GET, "/journey/byUser/{userId}").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/journey/year/{year}/range/{startMonth}/{endMonth}").hasAuthority("ADMIN")
 
                 // Microservicio de Rate
