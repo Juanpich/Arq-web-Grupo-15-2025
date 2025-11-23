@@ -14,9 +14,9 @@ import java.time.LocalDate;
 @ToString
 public class MovementDTO {
     private Long movementId;
-    private int accountId;
-    private int userId;
-    private int amount;
+    private Long accountId;
+    private Long userId;
+    private Long amount;
     private LocalDate date;
 
     public MovementDTO(Movement movement){
@@ -30,7 +30,7 @@ public class MovementDTO {
     }
 
     public Movement DTOToEntity() {
-        Movement movement = new Movement(this.getAccountId(), this.getUserId(), this.getAmount(), this.getDate());
+        Movement movement = new Movement(this.getAccountId(), this.getUserId(), this.getAmount());
         return movement;
     }
 }

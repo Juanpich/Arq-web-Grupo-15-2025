@@ -2,12 +2,14 @@ package org.example.gateway.config;
 
 
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.example.gateway.security.jwt.JwtFilter;
 import org.example.gateway.security.jwt.TokenProvider;
 import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,6 +45,18 @@ public class SecurityConfig {
         http.sessionManagement(s ->
                 s.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
+        http.exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"Authentication required\"}");
+                })
+                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                    response.setStatus(HttpServletResponse.SC_FORBIDDEN); // 403
+                    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                    response.getWriter().write("{\"error\":\"Forbidden\",\"message\":\"Access denied\"}");
+                })
+        );
         http.authorizeHttpRequests(authz -> authz
                 // Autenticación
                 .requestMatchers(HttpMethod.POST, "/authenticate").permitAll()
@@ -64,7 +78,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/account/{id}").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/account/{id}/users").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/account/user/{id}").hasAuthority("USER")
-                .requestMatchers(HttpMethod.POST, "/account").hasAuthority("USER")//todo chequear que al crear sea con el monto en 0
+                .requestMatchers(HttpMethod.POST, "/account").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/account/{id}/load-amount").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/account/{id}/change-type").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/account/{id}").hasAuthority("ADMIN")
@@ -131,7 +145,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/maintenance/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/maintenance/scooter/{scooterId}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/maintenance/active").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/maintenance").hasAuthority("ADMIN")//todo verificar que existan los campos que requiere
+                .requestMatchers(HttpMethod.POST, "/maintenance").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/maintenance/start").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/maintenance/{id}/finish").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/maintenance/{id}").hasAuthority("ADMIN")

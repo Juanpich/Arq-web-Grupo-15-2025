@@ -31,12 +31,12 @@ public class MovementController {
     }
 
     @GetMapping("/userId/{userId}")
-    public List<MovementDTO> findAllMovementsByUser(@PathVariable int userId){
+    public List<MovementDTO> findAllMovementsByUser(@PathVariable Long userId){
         return this.movementService.findMovementsByUser(userId);
     }
 
     @GetMapping("/accountId/{accountId}")
-    public List<MovementDTO> findMovementsByAccountId(@PathVariable int accountId){
+    public List<MovementDTO> findMovementsByAccountId(@PathVariable Long accountId){
         return this.movementService.findMovementsByAccount(accountId);
     }
 
