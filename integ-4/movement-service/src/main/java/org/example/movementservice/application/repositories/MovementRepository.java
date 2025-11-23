@@ -15,10 +15,10 @@ public interface MovementRepository extends JpaRepository<Movement,Long> {
     @Query("SELECT new org.example.movementservice.domain.entities.Movement(m) " +
             "FROM Movement m " +
             "WHERE m.userId = :userIdParam")
-    public List<Movement> findMovementsByUser(int userIdParam);
+    public List<Movement> findMovementsByUser(Long userIdParam);
 
     @Query("SELECT new org.example.movementservice.domain.entities.Movement(m) " +
             "FROM Movement m " +
             "WHERE m.accountId = :accountId")
-    public List<Movement> findMovementsByAccount(int accountId);
+    public List<Movement> findMovementsByAccount(Long accountId);
 }

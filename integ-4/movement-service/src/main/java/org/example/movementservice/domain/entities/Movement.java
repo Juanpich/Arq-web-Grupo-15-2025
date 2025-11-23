@@ -1,15 +1,13 @@
 package org.example.movementservice.domain.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+
 
 
 import java.time.LocalDate;
+
 
 @Entity
 @NoArgsConstructor
@@ -20,19 +18,18 @@ public class Movement {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long movementId;
 
-    private int accountId;
-    private int userId;
-    private int amount;
+    private Long accountId;
+    private Long userId;
+    private Long amount;
     private LocalDate date;
 
-    public Movement(int accountId, int userId, int amount, LocalDate date) {
+    public Movement(Long accountId, Long userId, Long amount) {
         this.accountId = accountId;
         this.userId = userId;
         this.amount = amount;
-        this.date = date;
     }
 
-    public Movement(Long movement_id ,int accountId, int userId, int amount, LocalDate date) {
+    public Movement(Long movement_id ,Long accountId, Long userId, Long amount, LocalDate date) {
         this.movementId = movement_id;
         this.accountId = accountId;
         this.userId = userId;
@@ -46,5 +43,9 @@ public class Movement {
         this.userId = newMovement.getUserId();
         this.amount = newMovement.getAmount();
         this.date = newMovement.getDate();
+    }
+    @PrePersist
+    protected void onCreate() {
+        this.date = LocalDate.now();
     }
 }
