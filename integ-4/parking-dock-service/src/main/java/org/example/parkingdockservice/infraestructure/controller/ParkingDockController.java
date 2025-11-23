@@ -51,7 +51,6 @@ public class ParkingDockController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    // todo lanzar excepcion desde el service
 
     //Crear una parada
     @PostMapping("")
@@ -106,6 +105,8 @@ public class ParkingDockController {
     public ResponseEntity<?> addScooter(@PathVariable Long id, @Valid @RequestBody Map<String, Long> scooter) {
         Long scooter_id = scooter.get("scooter_id");
         try {
+            //antes de agregar la scooter en la parada, verificar que exista.
+
             ParkingDockDTO parking = parkingDockService.addScooter(id, scooter_id);
             return ResponseEntity.ok(parking);
         } catch (InvalidFields e) {

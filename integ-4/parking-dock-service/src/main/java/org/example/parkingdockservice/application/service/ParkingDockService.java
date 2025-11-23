@@ -2,8 +2,11 @@ package org.example.parkingdockservice.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.parkingdockservice.application.repository.ParkingDockRepository;
+import org.example.parkingdockservice.domain.Exceptions.ScooterNotFound;
 import org.example.parkingdockservice.domain.dto.ParkingDockDTO;
 import org.example.parkingdockservice.domain.entities.ParkingDock;
+import org.example.parkingdockservice.infraestructure.feingClient.ScooterFeignClient;
+import org.example.parkingdockservice.infraestructure.models.Scooter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,10 +14,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class ParkingDockService {
     private final ParkingDockRepository parkingDockRepository;
-//    private final ScooterFeignClient scooterFeingClient;
+    private final ScooterFeignClient scooterFeingClient;
+
+    public ParkingDockService(ParkingDockRepository parkingDockRepository, ScooterFeignClient s){
+        this.parkingDockRepository = parkingDockRepository;
+        this.scooterFeingClient = s;
+    }
 
     // =====================
     //      Parking
@@ -80,9 +87,17 @@ public class ParkingDockService {
     @Transactional
     //Inserta un scooter a una parada
     public ParkingDockDTO addScooter(Long parkingDock_id, Long scooter_id) {
+        //parada a la que se quiere insertar una scooter
         Optional<ParkingDock> parada = parkingDockRepository.findById(parkingDock_id);
-        parada.get().addScooter(scooter_id);
-        return new ParkingDockDTO(parada.get());
+        //verificar que el scooter exista antes de insertarla
+        Scooter scooter = this.scooterFeingClient.getSccoterById(scooter_id);
+        if(scooter!=null){
+            parada.get().addScooter(scooter_id);
+            return new ParkingDockDTO(parada.get());
+
+        }else{
+            throw new ScooterNotFound(scooter_id);
+        }
     }
 
     @Transactional
