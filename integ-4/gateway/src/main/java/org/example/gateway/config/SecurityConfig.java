@@ -64,7 +64,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/account/{id}").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/account/{id}/users").hasAnyAuthority("USER", "ADMIN")
                 .requestMatchers(HttpMethod.GET, "/account/user/{id}").hasAuthority("USER")
-                .requestMatchers(HttpMethod.POST, "/account").hasAuthority("USER")//todo chequear que al crear sea con el monto en 0
+                .requestMatchers(HttpMethod.POST, "/account").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/account/{id}/load-amount").hasAuthority("USER")
                 .requestMatchers(HttpMethod.PUT, "/account/{id}/change-type").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/account/{id}").hasAuthority("ADMIN")
@@ -131,7 +131,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/maintenance/{id}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/maintenance/scooter/{scooterId}").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.GET, "/maintenance/active").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/maintenance").hasAuthority("ADMIN")//todo verificar que existan los campos que requiere
+                .requestMatchers(HttpMethod.POST, "/maintenance").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/maintenance/start").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/maintenance/{id}/finish").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/maintenance/{id}").hasAuthority("ADMIN")

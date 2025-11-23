@@ -7,6 +7,7 @@ import org.example.userservice.domain.dto.PaymentMadeDto;
 import org.example.userservice.domain.dto.UserDto;
 import org.example.userservice.domain.entities.Account;
 import org.example.userservice.domain.entities.User;
+import org.example.userservice.domain.enums.AccountType;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.InvalidAmountException;
 import org.example.userservice.domain.exceptions.UserNotAssociatedWithTheAccount;
@@ -34,6 +35,8 @@ public class AccountService {
     }
     @Transactional
     public AccountDto save(Account account){
+        account.setAmount(0F);
+        account.setType(AccountType.BASIC);
         Account accountNew = accountRepository.save(account);
         return new AccountDto(accountNew);
     }

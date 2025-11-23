@@ -108,7 +108,6 @@ public class UserController {
     }
 
     //cambiar el estado del usuario. ADMIN
-    // todo verificar que el usuario no este cancela al crear un viaje.
     @PutMapping("/{id}/change-state")
     public ResponseEntity<?>  changeState(@RequestBody Map<String, String> body, @PathVariable Long id){
         UserDto user;

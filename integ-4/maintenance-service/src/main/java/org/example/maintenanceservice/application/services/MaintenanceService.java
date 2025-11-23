@@ -6,7 +6,10 @@ import org.example.maintenanceservice.domain.entities.Maintenance;
 import org.example.maintenanceservice.domain.exceptions.InvalidMaintenanceDataException;
 import org.example.maintenanceservice.domain.exceptions.MaintenanceAlreadyFinishedException;
 import org.example.maintenanceservice.domain.exceptions.MaintenanceNotFoundException;
+import org.example.maintenanceservice.domain.models.Scooter;
+import org.example.maintenanceservice.domain.models.User;
 import org.example.maintenanceservice.infrastructure.feing.ScooterFeignClient;
+import org.example.maintenanceservice.infrastructure.feing.UserFeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,10 +23,12 @@ public class MaintenanceService {
 
     private final MaintenanceRepository maintenanceRepository;
     private final ScooterFeignClient scooterFeignClient;
+    private UserFeignClient userFeignClient;
 
-    public MaintenanceService(MaintenanceRepository maintenanceRepository, ScooterFeignClient scooterFeignClient) {
+    public MaintenanceService(MaintenanceRepository maintenanceRepository, ScooterFeignClient scooterFeignClient, UserFeignClient userFeignClient) {
         this.maintenanceRepository = maintenanceRepository;
         this.scooterFeignClient = scooterFeignClient;
+        this.userFeignClient = userFeignClient;
     }
 
     @Transactional(readOnly = true)
@@ -49,7 +54,20 @@ public class MaintenanceService {
         if (maintenance.getFinishDate() != null) {
             throw new InvalidMaintenanceDataException("New maintenance cannot have a finish date.");
         }
-        return new MaintenanceDto(maintenanceRepository.save(maintenance));
+        //verificar que exista el scooter y cambiar el estado a mantenimiento
+        Scooter scooter = this.scooterFeignClient.getScooterById(maintenance.getScooterId());
+        if(scooter == null)
+            throw new InvalidMaintenanceDataException("Scooter whit id " + maintenance.getScooterId() + " not available");
+        User user = this.userFeignClient.getUserById(maintenance.getUser_id());
+        if(user == null)
+            throw new InvalidMaintenanceDataException("User whit id " + maintenance.getUser_id() + " not available");
+        this.scooterFeignClient.updateScooterState(scooter.getScooter_id(), Map.of("state", "MAINTENANCE"));
+        Maintenance maintenanceEntity = new Maintenance();
+        maintenanceEntity.setUser_id(maintenance.getUser_id());
+        maintenanceEntity.setScooterId(maintenance.getScooterId());
+        maintenanceEntity.setFinishDate(maintenance.getFinishDate());
+        maintenanceEntity.setInit_date(maintenance.getInit_date());
+        return new MaintenanceDto(maintenanceRepository.save(maintenanceEntity));
     }
 
     @Transactional
