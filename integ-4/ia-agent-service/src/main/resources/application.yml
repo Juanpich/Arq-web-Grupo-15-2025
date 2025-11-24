@@ -1,9 +1,10 @@
 server:
-  port: 8080
+  port: 8006
 
 spring:
+  name: ia-agent-service
   datasource:
-    url: jdbc:mysql://localhost:3306/AI_crud_persona?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/AIChat?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -19,7 +20,7 @@ spring:
 groq:
   api-key: ${GROQ_API_KEY}
   base-url: https://api.groq.com/openai
-  model: llama-3.1-8b-instant   # o llama3-70b-8192 si querés más calidad
+  model: llama-3.1-8b-instant   # o llama3-70b-8192 si se quiere mas calidad
   temperature: 0.3
 
 
