@@ -5,11 +5,11 @@ info:
 servers:
   - url: https://api.server.test/v1
 paths:
-#----------------------
-#  Movement service
-#----------------------
+  #----------------------
+  #  Movement service
+  #----------------------
   /movement:
-#---------------Trae todos los movimientos---------------#
+    #---------------Trae todos los movimientos---------------#
     get:
       summary: Trae todos los movimientos.
       security:
@@ -27,12 +27,12 @@ paths:
               examples:
                 movements:
                   $ref: "#/components/examples/movementsArr"
-#---------------Crea un nuevo movimiento---------------#
+    #---------------Crea un nuevo movimiento---------------#
     post:
       summary: Crea un nuevo movimiento.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **USER**.
       requestBody:
         required: true
         content:
@@ -56,12 +56,12 @@ paths:
           description: Error en los datos proporcionados.
 
   /movement/{movementId}:
-#---------------Trae un movimiento por ID---------------#
+    #---------------Trae un movimiento por ID---------------#
     get:
       summary: Trae un movimiento por su ID.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN** o **USER**.
       parameters:
         - in: path
           name: movementId
@@ -83,7 +83,7 @@ paths:
                   $ref: "#/components/examples/movementExampleResponse"
         '404':
           description: Movimiento no encontrado.
-#---------------Actualiza un movimiento---------------#
+    #---------------Actualiza un movimiento---------------#
     put:
       summary: Actualiza un movimiento por su ID.
       security:
@@ -120,7 +120,7 @@ paths:
           description: Movimiento no encontrado.
 
   /movement/{id}:
-#---------------Elimina un movimiento---------------#
+    #---------------Elimina un movimiento---------------#
     delete:
       summary: Elimina un movimiento por su ID.
       security:
@@ -141,12 +141,12 @@ paths:
           description: Movimiento no encontrado.
 
   /movement/userId/{userId}:
-#---------------Trae movimientos por ID de usuario---------------#
+    #---------------Trae movimientos por ID de usuario---------------#
     get:
       summary: Trae todos los movimientos de un usuario específico.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN** o **USER**.
       parameters:
         - in: path
           name: userId
@@ -170,12 +170,12 @@ paths:
                   $ref: "#/components/examples/movementsArr"
 
   /movement/accountId/{accountId}:
-#---------------Trae movimientos por ID de cuenta---------------#
+    #---------------Trae movimientos por ID de cuenta---------------#
     get:
       summary: Trae todos los movimientos de una cuenta específica.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN** o **USER**.
       parameters:
         - in: path
           name: accountId
@@ -200,7 +200,7 @@ paths:
 
 components:
   schemas:
-# Esquema de respuesta de un movimiento
+    # Esquema de respuesta de un movimiento
     movementSchemaResponse:
       type: object
       properties:
@@ -237,7 +237,7 @@ components:
           type: string
           example: "AUTH-001"
 
-# Esquema de solicitud para crear un movimiento
+    # Esquema de solicitud para crear un movimiento
     movementSchemaRequest:
       type: object
       properties:
@@ -255,7 +255,7 @@ components:
           example: 500
 
   examples:
-# Ejemplo de respuesta de un movimiento
+    # Ejemplo de respuesta de un movimiento
     movementExampleResponse:
       summary: Ejemplo de un movimiento
       value:
@@ -269,7 +269,7 @@ components:
         paymentStatusDetail: "accredited"
         authorizationCode: "AUTH-001"
 
-# Ejemplo de solicitud para crear un movimiento
+    # Ejemplo de solicitud para crear un movimiento
     movementExampleRequest:
       summary: Ejemplo para crear un movimiento
       value:
@@ -277,7 +277,7 @@ components:
         userId: 3
         amount: 500
 
-# Ejemplo de un arreglo de movimientos
+    # Ejemplo de un arreglo de movimientos
     movementsArr:
       summary: Un arreglo de movimientos
       value:
@@ -306,4 +306,3 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: Requiere rol **ADMIN**
-

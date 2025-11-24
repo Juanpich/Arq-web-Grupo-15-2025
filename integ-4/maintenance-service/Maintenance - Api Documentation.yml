@@ -14,7 +14,7 @@ paths:
       summary: Trae todos los registros de mantenimientos.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN**
       responses:
         '200':
           description: Los mantenimientos fueron accedidos con éxito.
@@ -23,37 +23,67 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/maintenanceSchema"
+                  $ref: "#/components/schemas/maintenanceSchemaResponse"
               examples:
                 maintenances:
                   $ref: "#/components/examples/maintenancesArr"
-#---------------Crea un nuevo mantenimiento---------------#
+
+#---------------Inicia un mantenimiento para un scooter---------------#
+  /maintenance/start:
     post:
-      summary: Crea un registro de mantenimiento.
+      summary: Pone un scooter en mantenimiento.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/maintenanceSchemaPOST"
-            examples:
-              maintenance:
-                $ref: "#/components/examples/maintenanceExamplePOST"
+          description: Requiere rol **ADMIN**
+      parameters:
+        - in: query
+          name: scooterId
+          description: El id del scooter a poner en mantenimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 15
+        - in: query
+          name: userId
+          description: El id del usuario que inicia el mantenimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 3
       responses:
-        '201':
-          description: El mantenimiento fue creado con éxito.
+        '200':
+          description: El mantenimiento fue iniciado con éxito.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/maintenanceSchema"
+                $ref: "#/components/schemas/maintenanceSchemaResponse"
               examples:
                 maintenance:
-                  $ref: "#/components/examples/maintenanceExampleRESPONSE"
+                  $ref: "#/components/examples/maintenanceExampleResponse"
         '400':
           description: Error en los datos proporcionados.
+
+#---------------Trae los mantenimientos activos---------------#
+  /maintenance/active:
+    get:
+      summary: Trae todos los mantenimientos activos (no finalizados).
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      responses:
+        '200':
+          description: Los mantenimientos activos fueron accedidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/maintenanceSchemaResponse"
+              examples:
+                maintenances:
+                  $ref: "#/components/examples/maintenancesArrActive"
 
 #---------------Trae un mantenimiento por id---------------#
   /maintenance/{id}:
@@ -61,7 +91,7 @@ paths:
       summary: Trae un mantenimiento según su id.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN**
       parameters:
         - in: path
           name: id
@@ -77,10 +107,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/maintenanceSchema"
+                $ref: "#/components/schemas/maintenanceSchemaResponse"
               examples:
                 maintenance:
-                  $ref: "#/components/examples/maintenanceExampleRESPONSE"
+                  $ref: "#/components/examples/maintenanceExampleResponse"
         '404':
           description: El mantenimiento no fue encontrado.
 #---------------Elimina un mantenimiento---------------#
@@ -88,7 +118,7 @@ paths:
       summary: Elimina un mantenimiento por id.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN**
       parameters:
         - in: path
           name: id
@@ -109,7 +139,7 @@ paths:
       summary: Finaliza un mantenimiento activo.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN**
       parameters:
         - in: path
           name: id
@@ -124,43 +154,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/maintenanceSchema"
+                $ref: "#/components/schemas/maintenanceSchemaResponse"
               examples:
                 maintenance:
-                  $ref: "#/components/examples/maintenanceExampleRESPONSE"
+                  $ref: "#/components/examples/maintenanceExampleFinished"
         '400':
           description: El mantenimiento ya se encuentra finalizado.
         '404':
           description: No se encontró el mantenimiento.
-
-#---------------Inicia un mantenimiento para un scooter---------------#
-  /maintenance/start:
-    post:
-      summary: Pone un scooter en mantenimiento.
-      security:
-        - BearerAuth: []
-          description: Requiere rol **ADMIN**.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/maintenanceStartSchema"
-            examples:
-              maintenanceStart:
-                $ref: "#/components/examples/maintenanceStartExample"
-      responses:
-        '201':
-          description: El mantenimiento fue iniciado con éxito.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/maintenanceSchema"
-              examples:
-                maintenance:
-                  $ref: "#/components/examples/maintenanceExampleRESPONSE"
-        '400':
-          description: Error en los datos proporcionados.
 
 #---------------Trae los mantenimientos de un scooter---------------#
   /maintenance/scooter/{scooterId}:
@@ -168,7 +169,7 @@ paths:
       summary: Trae los mantenimientos de un scooter específico.
       security:
         - BearerAuth: []
-          description: Requiere rol **ADMIN**.
+          description: Requiere rol **ADMIN**
       parameters:
         - in: path
           name: scooterId
@@ -186,27 +187,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/maintenanceSchema"
-              examples:
-                maintenances:
-                  $ref: "#/components/examples/maintenancesArr"
-
-#---------------Trae los mantenimientos activos---------------#
-  /maintenance/active:
-    get:
-      summary: Trae todos los mantenimientos activos (no finalizados).
-      security:
-        - BearerAuth: []
-          description: Requiere rol **ADMIN**.
-      responses:
-        '200':
-          description: Los mantenimientos activos fueron accedidos con éxito.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/maintenanceSchema"
+                  $ref: "#/components/schemas/maintenanceSchemaResponse"
               examples:
                 maintenances:
                   $ref: "#/components/examples/maintenancesArr"
@@ -214,90 +195,51 @@ paths:
 components:
   schemas:
 #el esquema de un mantenimiento (respuesta).
-    maintenanceSchema:
+    maintenanceSchemaResponse:
       type: object
       properties:
         maintenance_id:
           type: integer
           format: int64
-          example: 1
+          description: Identificador único del registro de mantenimiento.
         scooter_id:
           type: integer
           format: int64
-          example: 15
+          description: Identificador del scooter en mantenimiento.
         user_id:
           type: integer
           format: int64
-          example: 3
+          description: Identificador del usuario que gestiona el mantenimiento.
         init_date:
           type: string
           format: date-time
-          example: "2024-07-29T10:00:00"
+          description: Fecha y hora de inicio del mantenimiento.
         finish_date:
           type: string
           format: date-time
-          example: "2024-07-29T12:30:00"
-
-#el esquema de un mantenimiento en POST.
-    maintenanceSchemaPOST:
-      type: object
-      properties:
-        scooter_id:
-          type: integer
-          format: int64
-          example: 15
-        user_id:
-          type: integer
-          format: int64
-          example: 3
-        init_date:
-          type: string
-          format: date-time
-          example: "2024-07-29T10:00:00"
-        finish_date:
-          type: string
-          format: date-time
-          example: "2024-07-29T12:30:00"
-
-#el esquema para iniciar un mantenimiento.
-    maintenanceStartSchema:
-      type: object
-      properties:
-        scooter_id:
-          type: integer
-          format: int64
-          example: 15
-        user_id:
-          type: integer
-          format: int64
-          example: 3
+          nullable: true
+          description: Fecha y hora de finalización del mantenimiento (nulo si está activo).
 
   examples:
-#el ejemplo de un mantenimiento (respuesta).
-    maintenanceExampleRESPONSE:
-      summary: Ejemplo de un mantenimiento
+#el ejemplo de un mantenimiento activo.
+    maintenanceExampleResponse:
+      summary: Ejemplo de un mantenimiento activo
+      value:
+        maintenance_id: 2
+        scooter_id: 22
+        user_id: 3
+        init_date: "2024-07-30T14:00:00"
+        finish_date: null
+
+#el ejemplo de un mantenimiento finalizado.
+    maintenanceExampleFinished:
+      summary: Ejemplo de un mantenimiento finalizado
       value:
         maintenance_id: 1
         scooter_id: 15
         user_id: 3
         init_date: "2024-07-29T10:00:00"
         finish_date: "2024-07-29T12:30:00"
-
-#el ejemplo de un mantenimiento POST.
-    maintenanceExamplePOST:
-      summary: Ejemplo para crear un mantenimiento
-      value:
-        scooter_id: 15
-        user_id: 3
-        init_date: "2024-07-29T10:00:00"
-        finish_date: "2024-07-29T12:30:00"
-
-#el ejemplo para iniciar un mantenimiento.
-    maintenanceStartExample:
-      summary: Ejemplo para iniciar un mantenimiento
-      value:
-        scooter_id: 15
-        user_id: 3
 
 #el ejemplo de un arreglo de mantenimientos.
     maintenancesArr:
@@ -308,6 +250,16 @@ components:
           user_id: 3
           init_date: "2024-07-29T10:00:00"
           finish_date: "2024-07-29T12:30:00"
+        - maintenance_id: 2
+          scooter_id: 22
+          user_id: 3
+          init_date: "2024-07-30T14:00:00"
+          finish_date: null
+
+#el ejemplo de un arreglo de mantenimientos activos.
+    maintenancesArrActive:
+      summary: Un arreglo de mantenimientos activos
+      value:
         - maintenance_id: 2
           scooter_id: 22
           user_id: 3
