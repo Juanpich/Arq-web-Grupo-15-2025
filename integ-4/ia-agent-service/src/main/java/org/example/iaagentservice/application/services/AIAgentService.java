@@ -8,10 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.example.iaagentservice.clients.GroqClient;
 
+import org.example.iaagentservice.clients.GroqClient;
 import org.example.iaagentservice.domain.dto.ChatResponse;
-// [MOD] → para permitir DML dentro de una transacción
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -38,15 +37,13 @@ public class AIAgentService {
     @Autowired
     private GroqClient groqChatClient;
 
-    private final String CONTEXTO_SQL;
+    private final String SQL_CONTEXT;
 
     private static final Logger log = LoggerFactory.getLogger(AIAgentService.class);
 
-    // ========================================================================
-    // [MOD - NUEVO] Reglas de extracción/seguridad para la sentencia SQL
-    // ------------------------------------------------------------------------
-    // Aceptamos EXACTAMENTE una sentencia que empiece por SELECT|INSERT|UPDATE|DELETE
-    // y que termine en ';'. El DOTALL permite capturar saltos de línea.
+    // Reglas de extracción/seguridad para la sentencia SQL
+    // se acepta solo una sentencia que empiece por SELECT|INSERT|UPDATE|DELETE
+    // y que termine en ';'.
     private static final Pattern SQL_ALLOWED =
             Pattern.compile("(?is)\\b(SELECT|INSERT|UPDATE|DELETE)\\b[\\s\\S]*?;");
 
@@ -56,11 +53,11 @@ public class AIAgentService {
     // ========================================================================
 
     public AIAgentService() {
-        this.CONTEXTO_SQL = cargarEsquemaSQL("esquema_completo.sql");
+        this.SQL_CONTEXT = loadSQLschema("esquema_completo.sql");
     }
 
-    private String cargarEsquemaSQL(String nombreArchivo) {
-        try (InputStream inputStream = new ClassPathResource(nombreArchivo).getInputStream()) {
+    private String loadSQLschema(String fileName) {
+        try (InputStream inputStream = new ClassPathResource(fileName).getInputStream()) {
             return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Error al leer el archivo SQL desde resources: " + e.getMessage(), e);
@@ -84,7 +81,7 @@ public class AIAgentService {
                     MySQL completa y VÁLIDA (sin texto adicional, sin markdown, sin comentarios) que
                     termine con punto y coma. La sentencia puede ser SELECT/INSERT/UPDATE/DELETE.
                     %s
-                    """.formatted(CONTEXTO_SQL, promptUsuario);
+                    """.formatted(SQL_CONTEXT, promptUsuario);
 
             log.info("==== PROMPT ENVIADO A LA IA ====\n{}", promptFinal);
 

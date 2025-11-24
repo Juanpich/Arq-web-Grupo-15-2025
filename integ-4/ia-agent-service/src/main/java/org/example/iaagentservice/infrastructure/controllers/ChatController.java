@@ -1,46 +1,40 @@
 package org.example.iaagentservice.infrastructure.controllers;
 
 import org.example.iaagentservice.application.services.AIAgentService;
-import org.example.iaagentservice.domain.dto.ChatRequest;
-import org.example.iaagentservice.domain.dto.ChatResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.Authentication;
-//import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/chat")
+@RequestMapping("/api/ia")
 public class ChatController {
 
-    private final AIAgentService aiAgentService;
+    /**
+     * Definir en intelij una variable de entorno:
+     * OLLAMA_API_KEY con la API Key de Ollama.
+     * la api que pase en el grupo
+    *
 
-    public ChatController(AIAgentService aiAgentService) {
-        this.aiAgentService = aiAgentService;
+     *
+     *  IaController recibe prompt →
+     *  IaService añade esquema + manda a Ollama →
+     *  OllamaClient se conecta a la API →
+     *  Respuesta: IA devuelve consulta SQL →
+     *  IaService la ejecuta →
+     *  Respuesta JSON con resultados.
+     */
+
+    @Autowired
+    private AIAgentService aiAgentService;
+
+    @PostMapping(value = "/prompt", produces = "application/json") // Define endpoint POST /api/ia/prompt que recibe un prompt como cuerpo JSON.
+    public ResponseEntity<?> procesarPrompt(@RequestBody String prompt) {
+        try {
+            return aiAgentService.processPrompt(prompt);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el prompt: " + e.getMessage());
+        }
     }
-
-//    @PostMapping
-//    public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request, Authentication authentication) {
-//        boolean isPremium = authentication.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .anyMatch(role -> role.equals("ROLE_PREMIUM"));
-//
-//        if (!isPremium) {
-//            return ResponseEntity.status(403)
-//                    .body(new ChatResponse("Esta funcionalidad es exclusiva para usuarios premium"));
-//        }
-//
-//        String userId = authentication.getName();
-//        ChatResponse response = aiAgentService.processQuery(userId, request.getMessage());
-//
-//        return ResponseEntity.ok(response);
-//    }
-
-    @PostMapping
-    public ResponseEntity<ChatResponse> chat(@RequestBody ChatRequest request) {
-        // Usar un ID de usuario fijo o pasar un argumento al servicio
-        String userId = "test_user";
-        ChatResponse response = aiAgentService.processQuery(userId, request.getMessage());
-        return ResponseEntity.ok(response);
-    }
-
 }
+
