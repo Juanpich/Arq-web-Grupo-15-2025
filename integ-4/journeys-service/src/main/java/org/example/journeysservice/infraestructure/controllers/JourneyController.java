@@ -174,8 +174,8 @@ public class JourneyController {
         }
     }
 
-    @GetMapping("/execute-sql")
-    public ResponseEntity<?> executeSqlRequest(@RequestBody String sqlQuery) {
+    @GetMapping("/execute-sql/{sqlQuery}")
+    public ResponseEntity<?> executeSqlRequest(@PathVariable String sqlQuery) {
         try {
             List<Object[]> results = this.journeyService.executeSqlQuery(sqlQuery);
             return ResponseEntity.ok(results);
