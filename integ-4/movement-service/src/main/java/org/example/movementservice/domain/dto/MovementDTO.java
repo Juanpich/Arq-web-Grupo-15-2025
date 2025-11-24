@@ -18,6 +18,10 @@ public class MovementDTO {
     private Long userId;
     private Long amount;
     private LocalDate date;
+    private String paymentId;
+    private String paymentStatus;
+    private String paymentStatusDetail;
+    private String authorizationCode;
 
     public MovementDTO(Movement movement){
         if (movement != null) {
@@ -26,6 +30,10 @@ public class MovementDTO {
             this.userId = movement.getUserId();
             this.amount = movement.getAmount();
             this.date = movement.getDate();
+            this.paymentId = movement.getPaymentId();
+            this.paymentStatus = movement.getPaymentStatus();
+            this.paymentStatusDetail = movement.getPaymentStatusDetail();
+            this.authorizationCode = movement.getAuthorizationCode();
         }
     }
 
@@ -34,4 +42,3 @@ public class MovementDTO {
         return movement;
     }
 }
-

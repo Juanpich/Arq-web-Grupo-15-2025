@@ -10,6 +10,7 @@ import org.example.userservice.domain.enums.AccountType;
 import org.example.userservice.domain.enums.State;
 import org.example.userservice.domain.exceptions.AccountNotFoundException;
 import org.example.userservice.domain.exceptions.StateInvalidException;
+import org.example.userservice.domain.exceptions.UserAlreadyAssociatedException;
 import org.example.userservice.domain.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,11 +97,7 @@ public class UserController {
         try{
             this.userService.associate(id, id_account);
             return ResponseEntity.status(HttpStatus.CREATED).body("associate");
-        }catch(UserNotFoundException e){
-            return ResponseEntity
-                    .status(HttpStatus.NOT_FOUND)
-                    .body(e.getMessage());
-        }catch(AccountNotFoundException e){
+        }catch(UserNotFoundException | UserAlreadyAssociatedException | AccountNotFoundException e){
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(e.getMessage());

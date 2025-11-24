@@ -1,0 +1,1070 @@
+openapi: 3.0.3
+info:
+  title: Scooter Rental System API - Users & Accounts
+  description: |
+    API para gestión de usuarios y cuentas del sistema de alquiler de monopatines.
+    
+    **Autenticación:**
+    - Todo los endpoints requieren autenticación mediante JWT Bearer Token
+    - Obtén tu token en el endpoint `/authenticate`
+    - Usa el token en el header: `Authorization: Bearer {token}`
+    
+    **Roles disponibles:**
+    - `USER`: Usuario estándar del sistema
+    - `ADMIN`: Administrador con permisos completos
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:9000
+    description: Servidor local
+
+tags:
+  - name: Authentication
+    description: Endpoints de autenticación
+  - name: Users
+    description: Gestión de usuarios
+  - name: Accounts
+    description: Gestión de cuentas
+
+
+
+paths:
+  # ==================== AUTHENTICATION ====================
+  /authenticate:
+    post:
+      tags:
+        - Authentication
+      summary: Iniciar sesión
+      description: Autenticar usuario y obtener token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login exitoso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Credenciales inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ==================== USERS ====================
+  /users:
+    get:
+      tags:
+        - Users
+      summary: Obtener todos los usuarios
+      description: |
+        Lista todos los usuarios del sistema. Opcionalmente filtra por tipo de cuenta.
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: type
+          in: query
+          description: Filtrar por tipo de cuenta
+          required: false
+          schema:
+            type: string
+            enum: [BASIC, PREMIUM]
+          example: PREMIUM
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '204':
+          description: No hay usuarios
+        '400':
+          description: Tipo inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      tags:
+        - Users
+      summary: Crear usuario (Registro)
+      description: |
+        Registrar un nuevo usuario en el sistema. Endpoint público (no requiere autenticación).
+        El usuario se crea con:
+        - state: UNCANCELLED (por defecto)
+        - role: USER (por defecto)
+        - password: Se encripta automáticamente
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+      responses:
+        '201':
+          description: Usuario creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Datos inválidos, email ya existe o faltan campos obligatorios
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Obtener usuario por ID
+      description: |
+        Obtiene la información de un usuario específico.
+        **Requiere rol:** USER o ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Usuario no encontrado
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    put:
+      tags:
+        - Users
+      summary: Actualizar usuario
+      description: |
+        Actualiza la información de un usuario. Solo se actualizan los campos proporcionados.
+        **Requiere rol:** USER
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserUpdateRequest'
+      responses:
+        '201':
+          description: Usuario actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Email ya existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    delete:
+      tags:
+        - Users
+      summary: Eliminar usuario
+      description: |
+        Elimina un usuario del sistema.
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Usuario eliminado
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: DELETED
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /users/{id}/associate/{id-account}:
+    post:
+      tags:
+        - Users
+      summary: Asociar usuario a cuenta
+      description: |
+        Vincula un usuario con una cuenta existente. Una cuenta puede tener múltiples usuarios asociados.
+        **Requiere rol:** USER
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID del usuario
+          example: 1
+        - name: id-account
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID de la cuenta
+          example: 5
+      responses:
+        '201':
+          description: Asociación exitosa
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: associate
+        '404':
+          description: Usuario o cuenta no encontrada, Usuario ya asociado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /users/{id}/change-state:
+    put:
+      tags:
+        - Users
+      summary: Cambiar estado de usuario
+      description: |
+        Cambia el estado de un usuario entre CANCELLED (cancelado) y UNCANCELLED (activo).
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangeStateRequest'
+      responses:
+        '201':
+          description: Estado cambiado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Estado inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                error: "Bad Request"
+                message: "State invalid"
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /users/usage/top-users:
+    get:
+      tags:
+        - Users
+      summary: Usuarios con mayor uso
+      description: |
+        Lista usuarios que más utilizan monopatines, filtrado por período de tiempo y tipo de cuenta.
+        Los resultados están ordenados por cantidad de viajes (mayor a menor).
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: start-date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Fecha de inicio del período
+          example: "2024-01-01"
+        - name: end-date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+          description: Fecha de fin del período
+          example: "2024-12-31"
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [BASIC, PREMIUM]
+          description: Tipo de cuenta a filtrar
+          example: PREMIUM
+      responses:
+        '200':
+          description: Lista de usuarios ordenada por uso
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserTopUsage'
+        '400':
+          description: Parámetros inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /users/{id}/scooter/nearby/{gps}:
+    get:
+      tags:
+        - Users
+      summary: Monopatines cercanos
+      description: |
+        Busca monopatines cercanos a una ubicación GPS específica.
+        **Requiere rol:** USER
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID del usuario
+          example: 1
+        - name: gps
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Ciudad donde se desean buscar los monopatines
+          example: "Tandil"
+      responses:
+        '200':
+          description: Lista de monopatines cercanos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScootesNearby'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /users/email/{email}:
+    get:
+      tags:
+        - Users
+      summary: Buscar usuario por email
+      description: |
+        Obtiene un usuario mediante su email. Incluye información sensible como la contraseña hasheada.
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: email
+          in: path
+          required: true
+          schema:
+            type: string
+            format: email
+          example: juan.perez@example.com
+      responses:
+        '200':
+          description: Usuario encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserEmail'
+        '404':
+          description: Usuario no encontrado
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  # ==================== ACCOUNTS ====================
+  /account:
+    get:
+      tags:
+        - Accounts
+      summary: Obtener todas las cuentas
+      description: |
+        Lista todas las cuentas del sistema.
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Lista de cuentas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDto'
+        '204':
+          description: No hay cuentas
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    post:
+      tags:
+        - Accounts
+      summary: Crear cuenta
+      description: |
+        Crea una nueva cuenta. La cuenta se inicializa automáticamente con:
+        - amount: 0 (saldo inicial en 0)
+        - type: BASIC (tipo por defecto)
+        **Requiere rol:** USER
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreateRequest'
+      responses:
+        '200':
+          description: Cuenta creada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /account/{id}:
+    get:
+      tags:
+        - Accounts
+      summary: Obtener cuenta por ID
+      description: |
+        Obtiene información de una cuenta específica.
+        **Requiere rol:** USER o ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Cuenta encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+    delete:
+      tags:
+        - Accounts
+      summary: Eliminar cuenta
+      description: |
+        Elimina una cuenta del sistema.
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Cuenta eliminada
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: DELETED
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /account/{id}/users:
+    get:
+      tags:
+        - Accounts
+      summary: Obtener usuarios de una cuenta
+      description: |
+        Lista todos los usuarios asociados a una cuenta específica.
+        **Requiere rol:** USER o ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /account/user/{id}:
+    get:
+      tags:
+        - Accounts
+      summary: Obtener cuentas de un usuario
+      description: |
+        Lista todas las cuentas asociadas a un usuario específico.
+        **Requiere rol:** USER
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID del usuario
+          example: 1
+      responses:
+        '200':
+          description: Lista de cuentas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountDto'
+        '404':
+          description: Usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /account/{id}/load-amount:
+    put:
+      tags:
+        - Accounts
+      summary: Cargar saldo
+      description: |
+        Añade saldo a una cuenta existente. El monto se suma al saldo actual.
+        **Requiere rol:** USER
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountLoadAmountRequest'
+      responses:
+        '200':
+          description: Saldo cargado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+        '400':
+          description: Monto inválido (debe ser mayor a 0)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /account/{id}/change-type:
+    put:
+      tags:
+        - Accounts
+      summary: Cambiar tipo de cuenta
+      description: |
+        Cambia el tipo de cuenta entre BASIC y PREMIUM.
+        **Requiere rol:** ADMIN
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountChangeTypeRequest'
+      responses:
+        '200':
+          description: Tipo de cuenta actualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountDto'
+        '404':
+          description: Cuenta no encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+  /account/{id}/journey/{idJourney}:
+    post:
+      tags:
+        - Accounts
+      summary: Pagar viaje
+      description: |
+        Realiza el pago de un viaje descontando el precio del saldo de la cuenta.
+        Solo puede pagar si el usuario está asociado a la cuenta.
+        **Requiere rol:** USER
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID de la cuenta
+          example: 1
+        - name: idJourney
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          description: ID del viaje
+          example: 42
+      responses:
+        '200':
+          description: Pago realizado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMade'
+        '404':
+          description: Cuenta, viaje o usuario no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+
+#Componentes
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtenido del endpoint /authenticate
+
+  responses:
+    Unauthorized:
+      description: No autenticado - Token no válido o ausente
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Unauthorized"
+            message: "Authentication required"
+    
+    Forbidden:
+      description: Acceso denegado - Permisos insuficientes
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            error: "Forbidden"
+            message: "Access denied"
+
+  schemas:
+    # User Schemas
+    UserCreateRequest:
+      type: object
+      required:
+        - mail
+        - name
+        - last_name
+        - phone_number
+        - password
+      properties:
+        mail:
+          type: string
+          format: email
+          example: juan.perez@example.com
+        name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        phone_number:
+          type: string
+          example: "+5491123456789"
+        password:
+          type: string
+          format: password
+          example: password123
+          minLength: 6
+
+    UserUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        mail:
+          type: string
+          format: email
+          example: juan.perez@example.com
+        phone_number:
+          type: string
+          example: "+5491123456789"
+        password:
+          type: string
+          format: password
+          example: newpassword123
+          minLength: 6
+      description: Todos los campos son opcionales. Solo se actualizarán los campos proporcionados.
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: Juan
+        last_name:
+          type: string
+          example: Pérez
+        mail:
+          type: string
+          format: email
+          example: juan.perez@example.com
+        phone_number:
+          type: string
+          example: "+5491123456789"
+        state:
+          type: string
+          enum: [CANCELLED, UNCANCELLED]
+          example: UNCANCELLED
+        role:
+          type: string
+          enum: [USER, ADMIN]
+          example: USER
+
+    UserEmail:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            password:
+              type: string
+              example: $2a$10$hashed_password
+
+    UserTopUsage:
+      allOf:
+        - $ref: '#/components/schemas/User'
+        - type: object
+          properties:
+            cant_journeys:
+              type: integer
+              description: Cantidad de viajes realizados
+              example: 15
+
+    # Account Schemas
+    AccountCreateRequest:
+      type: object
+      description: No requiere campos. La cuenta se crea automáticamente con amount=0 y type=BASIC
+
+    AccountDto:
+      type: object
+      properties:
+        account_id:
+          type: integer
+          format: int64
+          example: 1
+        amount:
+          type: number
+          format: float
+          example: 1500.50
+        type:
+          type: string
+          enum: [BASIC, PREMIUM]
+          example: BASIC
+        created:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00"
+
+    AccountLoadAmountRequest:
+      type: object
+      required:
+        - amount
+      properties:
+        amount:
+          type: number
+          format: float
+          minimum: 0.01
+          example: 1000.50
+          description: Monto a cargar (debe ser mayor a 0)
+
+    AccountChangeTypeRequest:
+      type: object
+      required:
+        - type
+      properties:
+        type:
+          type: string
+          enum: [BASIC, PREMIUM]
+          example: PREMIUM
+
+    PaymentMade:
+      type: object
+      properties:
+        idAccount:
+          type: integer
+          format: int64
+          example: 1
+        idJourney:
+          type: integer
+          format: int64
+          example: 42
+        idUser:
+          type: integer
+          format: int64
+          example: 5
+        priceJourney:
+          type: number
+          format: float
+          example: 250.75
+        amountAccount:
+          type: number
+          format: float
+          example: 1249.75
+          description: Saldo restante en la cuenta después del pago
+
+    ScootesNearby:
+      type: object
+      properties:
+        scooter_id:
+          type: integer
+          format: int64
+          example: 10
+        gps:
+          type: string
+          example: "-34.6037,-58.3816"
+        parkingDock_id:
+          type: integer
+          format: int64
+          example: 3
+
+    # Authentication
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: password123
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        role:
+          type: string
+          enum: [USER, ADMIN]
+          example: USER
+
+    ChangeStateRequest:
+      type: object
+      required:
+        - state
+      properties:
+        state:
+          type: string
+          enum: [CANCELLED, UNCANCELLED]
+          example: CANCELLED
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Descripción del error"

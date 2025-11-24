@@ -48,7 +48,7 @@ public class AccountService {
     public AccountDto getAccountById(Long id){
         return accountRepository.findById(id)
                 .map(AccountDto::new)
-                .orElse(null);
+                .orElseThrow(() -> new AccountNotFoundException(id));
     }
     @Transactional
     public List<AccountDto> getAllByUserId(Long id){

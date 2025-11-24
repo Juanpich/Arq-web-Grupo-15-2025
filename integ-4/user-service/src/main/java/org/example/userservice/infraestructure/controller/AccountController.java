@@ -38,12 +38,13 @@ public class AccountController {
     //traer una cuenta por su id. USER
     @GetMapping("/{id}")
     public ResponseEntity<?> getAccountById(@PathVariable("id") Long id) {
-        AccountDto accountNew = accountService.getAccountById(id);
-        if (accountNew == null) {
-            return  ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("User with ID " +  id  + " was not found");
+        try {
+            AccountDto accountNew = accountService.getAccountById(id);
+            return ResponseEntity.ok(accountNew);
+        } catch (AccountNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
         }
-        return ResponseEntity.ok(accountNew);
     }
 
     //traer los usuarios que tiene asociados una cuenta. USER

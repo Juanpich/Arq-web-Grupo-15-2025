@@ -43,11 +43,15 @@ public class MovementController {
 //    @Valid
     @PostMapping("")
     public ResponseEntity<?> createMovement(@RequestBody Movement movementBody){
-        final var movementCreated = this.movementService.insert( movementBody );
-        if (movementCreated == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se creo el movimiento");
+        try{
+            final var movementCreated = this.movementService.insert( movementBody );
+            if (movementCreated == null){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No se creo el movimiento");
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body(movementCreated);
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(movementCreated);
     }
 
     @PutMapping("/{movementId}")
