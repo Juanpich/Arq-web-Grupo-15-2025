@@ -84,6 +84,7 @@ public class AIAgentService {
 
             // Usamos la nueva extracción segura (usando el metodo de extracccion de la clase)
             String sql = extractSQLRequest(respuestaIa);
+
             if (sql == null || sql.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ChatResponse<>(false,

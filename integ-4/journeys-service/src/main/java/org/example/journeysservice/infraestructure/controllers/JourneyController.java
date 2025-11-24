@@ -175,13 +175,13 @@ public class JourneyController {
     }
 
     @GetMapping("/execute-sql")
-    public ResponseEntity<?> executeSqlRequest(@RequestParam String sqlQuery) {
+    public ResponseEntity<?> executeSqlRequest(@RequestBody String sqlQuery) {
         try {
             List<Object[]> results = this.journeyService.executeSqlQuery(sqlQuery);
             return ResponseEntity.ok(results);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error ejecutando la query SQL: " + e.getMessage());
+                    .body("Error ejecutando la query SQL " + e.getMessage());
         }
     }
 }
