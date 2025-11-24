@@ -1,7 +1,6 @@
 package org.example.iaagentservice.application.services;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.example.iaagentservice.infrastructure.feign.JourneyFeignClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
@@ -25,14 +24,13 @@ import org.slf4j.LoggerFactory;
  * - Servicio que:
  * - Construye el prompt con el esquema SQL
  * - Llama a Groq para generar SQL
- * - Valida y extrae una ÚNICA sentencia SQL (SELECT/INSERT/UPDATE/DELETE)
+ * - Valida y extrae una unica sentencia SQL (SELECT/INSERT/UPDATE/DELETE)
  * - Ejecuta de forma segura (bloquea DDL peligrosos)
  */
 @Service
 public class AIAgentService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    private JourneyFeignClient joruneyFeignClient;
 
     @Autowired
     private GroqClient groqChatClient;
@@ -51,8 +49,9 @@ public class AIAgentService {
     private static final Pattern SQL_FORBIDDEN =
             Pattern.compile("(?i)\\b(DROP|TRUNCATE|ALTER|CREATE|GRANT|REVOKE)\\b");
 
-    public AIAgentService() {
+    public AIAgentService(JourneyFeignClient jfc) {
         this.SQL_CONTEXT = loadSQLschema("context_squema.sql");
+        this.joruneyFeignClient = jfc;
     }
 
     private String loadSQLschema(String fileName) {
@@ -91,23 +90,17 @@ public class AIAgentService {
                                 "No se encontró una sentencia SQL válida en la respuesta de la IA.", null));
             }
 
-            log.info("<-- SQL EXTRAÍDA -->\n{}", sql);
+            log.info("<-- SQL EXTRAIDA -->\n{}", sql);
 
             // saca el ; final si lo tiene, jpa/jdbc no lo necesitan
             String sqlToExecute = sql.endsWith(";") ? sql.substring(0, sql.length() - 1) : sql;
 
             try {
                 Object data;
-                // Ejecutamos SELECT con getResultList y DML con executeUpdate
-                if (sql.trim().regionMatches(true, 0, "SELECT", 0, 6)) {
-                    @SuppressWarnings("unchecked")
-                    List<Object[]> results = entityManager.createNativeQuery(sqlToExecute).getResultList();
+                // Se llama al microservicio Journey para ejecutar la SQL
+                    List<Object[]> results = joruneyFeignClient.executeSqlRequest(sqlToExecute);
                     data = results;
-                    return ResponseEntity.ok(new ChatResponse<>(true, "Consulta SELECT ejecutada con éxito", data));
-                } else {
-                    data = entityManager.createNativeQuery(sqlToExecute).executeUpdate(); // cantidad de filas afectadas
-                    return ResponseEntity.ok(new ChatResponse<>(true, "Sentencia DML ejecutada con éxito", data));
-                }
+                    return ResponseEntity.ok(new ChatResponse<>(true, "Consulta ejecutada con éxito", data));
             } catch (Exception e) {
                 log.warn("Error al ejecutar SQL: {}", e.getMessage(), e);
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -123,7 +116,7 @@ public class AIAgentService {
         }
     }
 
-    // [MOD - REEMPLAZO] metodo de extraccion de sentencia sql
+    //      metodo de extraccion de sentencia sql
     //   - Acepta SOLO una sentencia que empiece con SELECT/INSERT/UPDATE/DELETE
     //   - Exige punto y coma final
     //   - Recorta t0do lo que venga despues de ";"
