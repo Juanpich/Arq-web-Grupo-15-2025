@@ -43,17 +43,16 @@ public class AIAgentService {
 
     // Reglas de extracción/seguridad para la sentencia SQL
     // se acepta solo una sentencia que empiece por SELECT|INSERT|UPDATE|DELETE
-    // y que termine en ';'.
+    // y que termine en ';'
     private static final Pattern SQL_ALLOWED =
             Pattern.compile("(?is)\\b(SELECT|INSERT|UPDATE|DELETE)\\b[\\s\\S]*?;");
 
-    // Bloqueamos DDL u otras operaciones peligrosas por si el modelo "derrapa".
+    // se bloquean operaciones peligrosas por si el modelo "derrapa"
     private static final Pattern SQL_FORBIDDEN =
             Pattern.compile("(?i)\\b(DROP|TRUNCATE|ALTER|CREATE|GRANT|REVOKE)\\b");
-    // ========================================================================
 
     public AIAgentService() {
-        this.SQL_CONTEXT = loadSQLschema("esquema_completo.sql");
+        this.SQL_CONTEXT = loadSQLschema("context_squema.sql");
     }
 
     private String loadSQLschema(String fileName) {
@@ -64,16 +63,12 @@ public class AIAgentService {
         }
     }
 
-    /**
-     * Genera el prompt, obtiene la SQL de Groq, la valida y ejecuta.
-     */
-    // ========================================================================
-    // [MOD - NUEVO] Agregamos @Transactional para soportar INSERT/UPDATE/DELETE
-    // ========================================================================
+    /** Genera el prompt, obtiene la SQL de Groq, la valida y ejecuta. */
+    // @Transactional para soportar INSERT/UPDATE/DELETE
     @Transactional
-    public ResponseEntity<?> processPrompt(String promptUsuario) {
+    public ResponseEntity<?> processPrompt(String userPrompt) {
         try {
-            String promptFinal = """
+            String finalPrompt = """
                     Este es el esquema de mi base de datos MySQL:
                     %s
 
@@ -81,16 +76,14 @@ public class AIAgentService {
                     MySQL completa y VÁLIDA (sin texto adicional, sin markdown, sin comentarios) que
                     termine con punto y coma. La sentencia puede ser SELECT/INSERT/UPDATE/DELETE.
                     %s
-                    """.formatted(SQL_CONTEXT, promptUsuario);
+                    """.formatted(SQL_CONTEXT, userPrompt);
 
-            log.info("==== PROMPT ENVIADO A LA IA ====\n{}", promptFinal);
+            log.info("<-- PROMPT ENVIADO A LA IA -->\n{}", finalPrompt);
 
-            String respuestaIa = groqChatClient.ask(promptFinal);
-            log.info("==== RESPUESTA IA ====\n{}", respuestaIa);
+            String respuestaIa = groqChatClient.ask(finalPrompt);
+            log.info("<-- RESPUESTA IA -->\n{}", respuestaIa);
 
-            // ========================================================================
-            // [MOD - CAMBIO] Usamos la nueva extracción segura (acepta DML y bloquea DDL)
-            // ========================================================================
+            // Usamos la nueva extracción segura (usando el metodo de extracccion de la clase)
             String sql = extractSQLRequest(respuestaIa);
             if (sql == null || sql.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -98,24 +91,21 @@ public class AIAgentService {
                                 "No se encontró una sentencia SQL válida en la respuesta de la IA.", null));
             }
 
-            log.info("==== SQL EXTRAÍDA ====\n{}", sql);
+            log.info("<-- SQL EXTRAÍDA -->\n{}", sql);
 
-            // Para JDBC/JPA normalmente NO va el ';' final
+            // saca el ; final si lo tiene, jpa/jdbc no lo necesitan
             String sqlToExecute = sql.endsWith(";") ? sql.substring(0, sql.length() - 1) : sql;
 
             try {
                 Object data;
-                // ====================================================================
-                // [MOD - NUEVO] Ejecutamos SELECT con getResultList y DML con executeUpdate
-                // ====================================================================
+                // Ejecutamos SELECT con getResultList y DML con executeUpdate
                 if (sql.trim().regionMatches(true, 0, "SELECT", 0, 6)) {
                     @SuppressWarnings("unchecked")
                     List<Object[]> results = entityManager.createNativeQuery(sqlToExecute).getResultList();
                     data = results;
                     return ResponseEntity.ok(new ChatResponse<>(true, "Consulta SELECT ejecutada con éxito", data));
                 } else {
-                    int rows = entityManager.createNativeQuery(sqlToExecute).executeUpdate();
-                    data = rows; // cantidad de filas afectadas
+                    data = entityManager.createNativeQuery(sqlToExecute).executeUpdate(); // cantidad de filas afectadas
                     return ResponseEntity.ok(new ChatResponse<>(true, "Sentencia DML ejecutada con éxito", data));
                 }
             } catch (Exception e) {
@@ -133,13 +123,11 @@ public class AIAgentService {
         }
     }
 
-    // ========================================================================
-    // [MOD - REEMPLAZO] Método de extracción robusto y documentado
+    // [MOD - REEMPLAZO] metodo de extraccion de sentencia sql
     //   - Acepta SOLO una sentencia que empiece con SELECT/INSERT/UPDATE/DELETE
     //   - Exige punto y coma final
-    //   - Recorta todo lo que venga después del primer ';'
+    //   - Recorta t0do lo que venga despues de ";"
     //   - Bloquea DDL peligrosos (DROP/TRUNCATE/ALTER/CREATE/GRANT/REVOKE)
-    // ========================================================================
     private String extractSQLRequest(String respuesta) {
         if (respuesta == null) return null;
 
@@ -162,20 +150,4 @@ public class AIAgentService {
 
         return sql;
     }
-
-    // =======================
-    // [MOD - HISTÓRICO]
-    // Antes estaba este extraerConsultaSQL que solo acepta consultas SELECT:
-    //
-    // private String extraerConsultaSQL(String respuesta) {
-    //     Pattern pattern = Pattern.compile("(?i)(SELECT\\s+.*?;)", Pattern.DOTALL);
-    //     Matcher matcher = pattern.matcher(respuesta);
-    //     if (matcher.find()) {
-    //         return matcher.group(1).trim();
-    //     }
-    //     return null;
-    // }
-    //
-    // Lo reemplazamos por la versión superior que permite DML y agrega salvaguardas.
-    // =======================
 }

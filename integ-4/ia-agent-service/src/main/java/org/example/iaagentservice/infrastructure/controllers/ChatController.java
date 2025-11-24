@@ -14,21 +14,12 @@ public class ChatController {
      * Definir en intelij una variable de entorno:
      * OLLAMA_API_KEY con la API Key de Ollama.
      * la api que pase en el grupo
-    *
-
-     *
-     *  IaController recibe prompt →
-     *  IaService añade esquema + manda a Ollama →
-     *  OllamaClient se conecta a la API →
-     *  Respuesta: IA devuelve consulta SQL →
-     *  IaService la ejecuta →
-     *  Respuesta JSON con resultados.
      */
 
     @Autowired
     private AIAgentService aiAgentService;
 
-    @PostMapping(value = "/prompt", produces = "application/json") // Define endpoint POST /api/ia/prompt que recibe un prompt como cuerpo JSON.
+    @PostMapping(value = "/prompt", produces = "application/json")
     public ResponseEntity<?> procesarPrompt(@RequestBody String prompt) {
         try {
             return aiAgentService.processPrompt(prompt);
