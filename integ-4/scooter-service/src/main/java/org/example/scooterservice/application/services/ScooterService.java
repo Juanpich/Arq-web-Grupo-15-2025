@@ -3,7 +3,7 @@ package org.example.scooterservice.application.services;
 import org.example.scooterservice.domain.entities.State;
 import org.example.scooterservice.domain.exceptions.ScooterNotFoundException;
 import org.example.scooterservice.domain.exceptions.ScooterWithIDAlreadyExistsException;
-import org.example.scooterservice.infraestructure.feingClient.ScooterFeignClient;
+import org.example.scooterservice.infraestructure.feingClient.JourneyFeignClient;
 import org.example.scooterservice.infraestructure.models.Journey;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,9 +19,9 @@ import java.util.Optional;
 @Service
 public class ScooterService {
     private final ScooterRepository scooterRepository;
-    private final ScooterFeignClient scooterFeignClient;
+    private final JourneyFeignClient scooterFeignClient;
 
-    public ScooterService(ScooterRepository scooterRepository, ScooterFeignClient scooterFeignClient) {
+    public ScooterService(ScooterRepository scooterRepository, JourneyFeignClient scooterFeignClient) {
         this.scooterRepository = scooterRepository;
         this.scooterFeignClient = scooterFeignClient;
     }
@@ -104,7 +104,7 @@ public class ScooterService {
         }
         return scooterResult;
     }
-
+    //quiero buscar un listado de los monopatines cercanos a mi zona, para poder encontrar un monopatín cerca de mi ubicación
     public List<ScooterDto> getAllByGps(String gps) {
         List<ScooterDto> scooterResult = this.scooterRepository.findAllByGps(gps).stream().map(ScooterDto:: new).toList();
         return scooterResult;

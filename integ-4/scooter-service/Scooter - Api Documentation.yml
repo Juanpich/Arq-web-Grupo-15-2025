@@ -1,0 +1,332 @@
+openapi: '3.0.3'
+info:
+  title: Scooter service - Api Documentation
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+#------------------
+#  Scooter service
+#------------------
+  /scooter:
+#---------------Trae todos los scooters---------------#
+    get:
+      summary: Trae todos los scooters.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      responses:
+        '200':
+          description: Los scooters fueron accedidos con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                scooter:
+                  $ref: "#/components/examples/scootersArr"
+#---------------Crea un nuevo scooter---------------#
+    post:
+      summary: Crea un scooter.
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: String
+              $ref: "#/components/schemas/scooterSchemaPOST"
+            examples:
+              scooter:
+                $ref: "#/components/examples/scooterExamplePOST"
+      responses:
+        '201':
+          description:  El scooter fue creado con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                scooter:
+                  $ref: "#/components/examples/scooterExampleRESPONSE"
+        "400":
+          description: Error en los datos proporcionados.
+
+
+
+  /scooter/{id}:
+#---------------Trae un scooter por id---------------#
+    get:
+      summary: Trae el scooter segun id.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de un scooter.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: El scooter fue accedida con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                parkingDocks:
+                  $ref: "#/components/examples/scooterExampleRESPONSE"
+        '404':
+          description: La scooter no fue encontrada.
+
+#---------------Elimina un scooter---------------#
+    delete:
+      summary: Elimina un scooter por id.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de un scooter.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: La scooter fue eliminada con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/scooterExampleRESPONSE"
+        "404":
+          description: No se encontro la parada.
+#---------------Actualizar un scooter---------------#
+    put:
+      summary: Actualiza un scooter por id por todos o algunos campos.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: id
+          description: el id de un scooter.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/scooterSchemaPOST"
+            examples:
+              parkingDock:
+                $ref: "#/components/examples/scooterExamplePOST"
+      responses:
+        "200":
+          description: La parada fue actualizada con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/scooterExampleRESPONSE"
+        "400":
+          description: Error en los datos proporcionados.
+        "404":
+          description: No se encontro el scooter.
+#---------------Cambia el estado de un scooter---------------#
+  /scooter/{id}/changeState:
+    put:
+      summary: Cambia el estado de un scooter.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Id del scooter
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                state:
+                  type: string
+                  description: Nuevo estado del scooter
+                  example: AVAILABLE
+      responses:
+        "200":
+          description: Estado actualizado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                parkingDock:
+                  $ref: "#/components/examples/scooterExampleRESPONSE"
+
+        "400":
+          description: Error en los datos proporcionados.
+        "404":
+          description: El Scooter con ese id no fue encontrado.
+#---------------los monopatines con más de X viajes en un cierto año---------------#          
+  /scooter/year/{anio}/countJourneys/{count}:
+    get:
+      summary: Los monopatines con más de X viajes en un cierto año.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: anio
+          description: Año de los viajes realizados por el scooter.
+          required: true
+          schema:
+            type: integer
+          example: 2025
+        - in: path
+          name: count
+          description: Cantidad de viajes realizados ese año.
+          required: true
+          schema:
+            type: integer
+          example: 12
+      responses:
+        '200':
+          description: Los monopatines con más de X viajes en un cierto año fue accedidos con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                parkingDocks:
+                  $ref: "#/components/examples/scootersArr"
+      
+#---------------Los scooters cercanos a mi zona---------------#
+  /scooter/gps/{gps}:
+    get:
+      summary: Obtiene los scooters cercanos a mi zona.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: gps
+          description: Zona solicitada.
+          required: true
+          schema:
+            type: string
+          example: "-34.6037, -58.3816"
+      responses:
+        '200':
+          description: Los scooters cercanos a mi zona fueron acceduidos con exito.
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/scooterSchema"
+              examples:
+                parkingDocks:
+                  $ref: "#/components/examples/scootersArr"
+
+components:
+  schemas:
+#el esquema de una scooter.
+    scooterSchema:
+      type: object
+      properties:
+        scooter_id:
+          type: integer
+          format: int64
+          example: 1
+        state:
+          type: string
+          example: "AVAILABLE"
+        gps:
+          type: string
+          example: "-34.6037, -58.3816"
+        parkingDockId:
+          type: integer
+          format: int64
+          example: 2
+
+#el esquema de una scooter en POST.
+    scooterSchemaPOST:
+      type: object
+      properties:
+        state:
+          type: string
+          example: "AVAILABLE"
+        gps:
+          type: string
+          example: "-34.6037, -58.3816"
+        parkingDockId:
+          type: integer
+          format: int64
+          example: 2
+
+  examples:
+#el ejemplo de un scooter
+    scooterExampleRESPONSE:
+      summary: Ejemplo de un monopatin
+      type: object
+      value:
+        scooter_id: 1
+        state: "AVAILABLE"
+        gps: "-34.6037, -58.3816"
+        parkingDockId: 2
+
+    #el ejemplo de un scooter POST.
+    scooterExamplePOST:
+      summary: Ejemplo de un monopatin
+      value:
+        state: "AVAILABLE"
+        gps: "-34.6037, -58.3816"
+        parkingDockId: 2
+
+#el ejemplo de un arreglo de scooters
+    scootersArr:
+      summary: un arreglo de scooters
+      security:
+        - BearerAuth: [ ]
+          description: Requiere rol **ADMIN**.
+      value:
+        - scooter_id: 1
+        - state: "AVAILABLE"
+        - gps: "-34.6037, -58.3816"
+        - parkingDockId: 2
+
+        - scooter_id: 2
+        - state: "IN-USE"
+        - gps: "-34.6037, -58.3816"
+        - parkingDockId: 3
+
+  #componente de seguridad
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
