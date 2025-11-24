@@ -285,5 +285,9 @@ public class JourneyService {
         Journey journeysave = this.journeyRepo.save(journey);
         return new JourneyDTO(journeysave);
     }
+
+    public List<Object[]> executeSqlQuery(String sqlQuery) {
+        return this.journeyRepo.executeSqlQuery(sqlQuery);
+    }
 }
 
