@@ -1,0 +1,308 @@
+openapi: '3.0.3'
+info:
+  title: Movement service - Api Documentation
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+  #----------------------
+  #  Movement service
+  #----------------------
+  /movement:
+    #---------------Trae todos los movimientos---------------#
+    get:
+      summary: Trae todos los movimientos.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      responses:
+        '200':
+          description: Los movimientos fueron accedidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/movementSchemaResponse"
+              examples:
+                movements:
+                  $ref: "#/components/examples/movementsArr"
+    #---------------Crea un nuevo movimiento---------------#
+    post:
+      summary: Crea un nuevo movimiento.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **USER**.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/movementSchemaRequest"
+            examples:
+              movement:
+                $ref: "#/components/examples/movementExampleRequest"
+      responses:
+        '201':
+          description: El movimiento fue creado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/movementSchemaResponse"
+              examples:
+                movement:
+                  $ref: "#/components/examples/movementExampleResponse"
+        '400':
+          description: Error en los datos proporcionados.
+
+  /movement/{movementId}:
+    #---------------Trae un movimiento por ID---------------#
+    get:
+      summary: Trae un movimiento por su ID.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN** o **USER**.
+      parameters:
+        - in: path
+          name: movementId
+          description: El ID de un movimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: El movimiento fue accedido con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/movementSchemaResponse"
+              examples:
+                movement:
+                  $ref: "#/components/examples/movementExampleResponse"
+        '404':
+          description: Movimiento no encontrado.
+    #---------------Actualiza un movimiento---------------#
+    put:
+      summary: Actualiza un movimiento por su ID.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: movementId
+          description: El ID del movimiento a actualizar.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/movementSchemaRequest"
+            examples:
+              movement:
+                $ref: "#/components/examples/movementExampleRequest"
+      responses:
+        '200':
+          description: El movimiento fue actualizado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/movementSchemaResponse"
+              examples:
+                movement:
+                  $ref: "#/components/examples/movementExampleResponse"
+        '404':
+          description: Movimiento no encontrado.
+
+  /movement/{id}:
+    #---------------Elimina un movimiento---------------#
+    delete:
+      summary: Elimina un movimiento por su ID.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**.
+      parameters:
+        - in: path
+          name: id
+          description: El ID de un movimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: El movimiento fue eliminado con éxito.
+        '404':
+          description: Movimiento no encontrado.
+
+  /movement/userId/{userId}:
+    #---------------Trae movimientos por ID de usuario---------------#
+    get:
+      summary: Trae todos los movimientos de un usuario específico.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN** o **USER**.
+      parameters:
+        - in: path
+          name: userId
+          description: El ID del usuario.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 3
+      responses:
+        '200':
+          description: Los movimientos fueron accedidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/movementSchemaResponse"
+              examples:
+                movements:
+                  $ref: "#/components/examples/movementsArr"
+
+  /movement/accountId/{accountId}:
+    #---------------Trae movimientos por ID de cuenta---------------#
+    get:
+      summary: Trae todos los movimientos de una cuenta específica.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN** o **USER**.
+      parameters:
+        - in: path
+          name: accountId
+          description: El ID de la cuenta.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 10
+      responses:
+        '200':
+          description: Los movimientos fueron accedidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/movementSchemaResponse"
+              examples:
+                movements:
+                  $ref: "#/components/examples/movementsArr"
+
+components:
+  schemas:
+    # Esquema de respuesta de un movimiento
+    movementSchemaResponse:
+      type: object
+      properties:
+        movementId:
+          type: integer
+          format: int64
+          example: 1
+        accountId:
+          type: integer
+          format: int64
+          example: 10
+        userId:
+          type: integer
+          format: int64
+          example: 3
+        amount:
+          type: integer
+          format: int64
+          example: 500
+        date:
+          type: string
+          format: date
+          example: "2024-11-24"
+        paymentId:
+          type: string
+          example: "MP-123456"
+        paymentStatus:
+          type: string
+          example: "approved"
+        paymentStatusDetail:
+          type: string
+          example: "accredited"
+        authorizationCode:
+          type: string
+          example: "AUTH-001"
+
+    # Esquema de solicitud para crear un movimiento
+    movementSchemaRequest:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int64
+          example: 10
+        userId:
+          type: integer
+          format: int64
+          example: 3
+        amount:
+          type: integer
+          format: int64
+          example: 500
+
+  examples:
+    # Ejemplo de respuesta de un movimiento
+    movementExampleResponse:
+      summary: Ejemplo de un movimiento
+      value:
+        movementId: 1
+        accountId: 10
+        userId: 3
+        amount: 500
+        date: "2024-11-24"
+        paymentId: "MP-123456"
+        paymentStatus: "approved"
+        paymentStatusDetail: "accredited"
+        authorizationCode: "AUTH-001"
+
+    # Ejemplo de solicitud para crear un movimiento
+    movementExampleRequest:
+      summary: Ejemplo para crear un movimiento
+      value:
+        accountId: 10
+        userId: 3
+        amount: 500
+
+    # Ejemplo de un arreglo de movimientos
+    movementsArr:
+      summary: Un arreglo de movimientos
+      value:
+        - movementId: 1
+          accountId: 10
+          userId: 3
+          amount: 500
+          date: "2024-11-24"
+          paymentId: "MP-123456"
+          paymentStatus: "approved"
+          paymentStatusDetail: "accredited"
+          authorizationCode: "AUTH-001"
+        - movementId: 2
+          accountId: 10
+          userId: 3
+          amount: -250
+          date: "2024-11-25"
+          paymentId: null
+          paymentStatus: null
+          paymentStatusDetail: null
+          authorizationCode: null
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Requiere rol **ADMIN**

@@ -1,0 +1,275 @@
+openapi: '3.0.3'
+info:
+  title: Maintenance service - Api Documentation
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+paths:
+#----------------------
+#  Maintenance service
+#----------------------
+  /maintenance:
+#---------------Trae todos los mantenimientos---------------#
+    get:
+      summary: Trae todos los registros de mantenimientos.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      responses:
+        '200':
+          description: Los mantenimientos fueron accedidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/maintenanceSchemaResponse"
+              examples:
+                maintenances:
+                  $ref: "#/components/examples/maintenancesArr"
+
+#---------------Inicia un mantenimiento para un scooter---------------#
+  /maintenance/start:
+    post:
+      summary: Pone un scooter en mantenimiento.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      parameters:
+        - in: query
+          name: scooterId
+          description: El id del scooter a poner en mantenimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 15
+        - in: query
+          name: userId
+          description: El id del usuario que inicia el mantenimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 3
+      responses:
+        '200':
+          description: El mantenimiento fue iniciado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/maintenanceSchemaResponse"
+              examples:
+                maintenance:
+                  $ref: "#/components/examples/maintenanceExampleResponse"
+        '400':
+          description: Error en los datos proporcionados.
+
+#---------------Trae los mantenimientos activos---------------#
+  /maintenance/active:
+    get:
+      summary: Trae todos los mantenimientos activos (no finalizados).
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      responses:
+        '200':
+          description: Los mantenimientos activos fueron accedidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/maintenanceSchemaResponse"
+              examples:
+                maintenances:
+                  $ref: "#/components/examples/maintenancesArrActive"
+
+#---------------Trae un mantenimiento por id---------------#
+  /maintenance/{id}:
+    get:
+      summary: Trae un mantenimiento según su id.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      parameters:
+        - in: path
+          name: id
+          description: El id de un mantenimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        '200':
+          description: El mantenimiento fue accedido con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/maintenanceSchemaResponse"
+              examples:
+                maintenance:
+                  $ref: "#/components/examples/maintenanceExampleResponse"
+        '404':
+          description: El mantenimiento no fue encontrado.
+#---------------Elimina un mantenimiento---------------#
+    delete:
+      summary: Elimina un mantenimiento por id.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      parameters:
+        - in: path
+          name: id
+          description: El id de un mantenimiento.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: El mantenimiento fue eliminado con éxito.
+        '404':
+          description: No se encontró el mantenimiento.
+
+#---------------Finaliza un mantenimiento---------------#
+  /maintenance/{id}/finish:
+    put:
+      summary: Finaliza un mantenimiento activo.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      parameters:
+        - in: path
+          name: id
+          description: El id del mantenimiento a finalizar.
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: El mantenimiento fue finalizado con éxito.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/maintenanceSchemaResponse"
+              examples:
+                maintenance:
+                  $ref: "#/components/examples/maintenanceExampleFinished"
+        '400':
+          description: El mantenimiento ya se encuentra finalizado.
+        '404':
+          description: No se encontró el mantenimiento.
+
+#---------------Trae los mantenimientos de un scooter---------------#
+  /maintenance/scooter/{scooterId}:
+    get:
+      summary: Trae los mantenimientos de un scooter específico.
+      security:
+        - BearerAuth: []
+          description: Requiere rol **ADMIN**
+      parameters:
+        - in: path
+          name: scooterId
+          description: El id del scooter.
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 15
+      responses:
+        '200':
+          description: Los mantenimientos fueron accedidos con éxito.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/maintenanceSchemaResponse"
+              examples:
+                maintenances:
+                  $ref: "#/components/examples/maintenancesArr"
+
+components:
+  schemas:
+#el esquema de un mantenimiento (respuesta).
+    maintenanceSchemaResponse:
+      type: object
+      properties:
+        maintenance_id:
+          type: integer
+          format: int64
+          description: Identificador único del registro de mantenimiento.
+        scooter_id:
+          type: integer
+          format: int64
+          description: Identificador del scooter en mantenimiento.
+        user_id:
+          type: integer
+          format: int64
+          description: Identificador del usuario que gestiona el mantenimiento.
+        init_date:
+          type: string
+          format: date-time
+          description: Fecha y hora de inicio del mantenimiento.
+        finish_date:
+          type: string
+          format: date-time
+          nullable: true
+          description: Fecha y hora de finalización del mantenimiento (nulo si está activo).
+
+  examples:
+#el ejemplo de un mantenimiento activo.
+    maintenanceExampleResponse:
+      summary: Ejemplo de un mantenimiento activo
+      value:
+        maintenance_id: 2
+        scooter_id: 22
+        user_id: 3
+        init_date: "2024-07-30T14:00:00"
+        finish_date: null
+
+#el ejemplo de un mantenimiento finalizado.
+    maintenanceExampleFinished:
+      summary: Ejemplo de un mantenimiento finalizado
+      value:
+        maintenance_id: 1
+        scooter_id: 15
+        user_id: 3
+        init_date: "2024-07-29T10:00:00"
+        finish_date: "2024-07-29T12:30:00"
+
+#el ejemplo de un arreglo de mantenimientos.
+    maintenancesArr:
+      summary: Un arreglo de mantenimientos
+      value:
+        - maintenance_id: 1
+          scooter_id: 15
+          user_id: 3
+          init_date: "2024-07-29T10:00:00"
+          finish_date: "2024-07-29T12:30:00"
+        - maintenance_id: 2
+          scooter_id: 22
+          user_id: 3
+          init_date: "2024-07-30T14:00:00"
+          finish_date: null
+
+#el ejemplo de un arreglo de mantenimientos activos.
+    maintenancesArrActive:
+      summary: Un arreglo de mantenimientos activos
+      value:
+        - maintenance_id: 2
+          scooter_id: 22
+          user_id: 3
+          init_date: "2024-07-30T14:00:00"
+          finish_date: null
+
+  #componente de seguridad
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Requiere rol **ADMIN**
