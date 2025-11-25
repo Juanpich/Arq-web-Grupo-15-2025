@@ -7,13 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/ia")
+@RequestMapping("/ia-chat")
 public class ChatController {
 
     /**
-     * Definir en intelij una variable de entorno:
-     * OLLAMA_API_KEY con la API Key de Ollama.
-     * la api que pase en el grupo
+     * variable de entorno:
+     * GORQ_API_KEY = api key que pase al grupo
      */
 
     @Autowired
