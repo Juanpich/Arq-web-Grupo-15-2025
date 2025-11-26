@@ -18,7 +18,7 @@ spring:
         format_sql: true
 
 groq:
-  api-key: ${GROQ_API_KEY}
+  api-key: {api-key}
   base-url: https://api.groq.com/openai
   model: llama-3.1-8b-instant   # o llama3-70b-8192 si se quiere mas calidad
   temperature: 0.3

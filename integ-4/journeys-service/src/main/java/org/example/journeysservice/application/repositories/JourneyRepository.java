@@ -82,7 +82,7 @@ public interface JourneyRepository extends JpaRepository<Journey, Long> {
             "AND j.finishDate <= :finishDate " +
             "GROUP BY j.userId")
     DateRangeUserIdDTO findJourneysByDateRange(Long userId, LocalDate initDate, LocalDate finishDate);
-
-    @Query(value = ":sqlQuery", nativeQuery = true)
-    List<Object[]> executeSqlQuery(String sqlQuery);
+        /*No se puede con JPA */
+    /*@Query(value = ":sqlQuery", nativeQuery = true)
+    List<Object[]> executeSqlQuery(String sqlQuery);*/
 }

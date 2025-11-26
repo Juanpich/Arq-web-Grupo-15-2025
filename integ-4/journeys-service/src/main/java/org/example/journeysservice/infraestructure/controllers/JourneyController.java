@@ -174,9 +174,12 @@ public class JourneyController {
         }
     }
 
-    @GetMapping("/execute-sql/{sqlQuery}")
-    public ResponseEntity<?> executeSqlRequest(@PathVariable String sqlQuery) {
+    @PostMapping("/execute-sql")
+    public ResponseEntity<?> executeSqlRequest(@RequestBody String sqlQuery) {
         try {
+            System.out.println("=== SQL RECIBIDA ===");
+            System.out.println(sqlQuery);
+            System.out.println("===================");
             List<Object[]> results = this.journeyService.executeSqlQuery(sqlQuery);
             return ResponseEntity.ok(results);
         } catch (Exception e) {

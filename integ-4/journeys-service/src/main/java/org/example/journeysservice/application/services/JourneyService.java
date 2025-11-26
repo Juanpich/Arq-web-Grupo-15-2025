@@ -1,5 +1,7 @@
 package org.example.journeysservice.application.services;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.example.journeysservice.application.repositories.JourneyRepository;
 import org.example.journeysservice.application.repositories.RateRepository;
 import org.example.journeysservice.domain.dto.*;
@@ -285,9 +287,25 @@ public class JourneyService {
         Journey journeysave = this.journeyRepo.save(journey);
         return new JourneyDTO(journeysave);
     }
-
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Transactional(readOnly = true)
     public List<Object[]> executeSqlQuery(String sqlQuery) {
-        return this.journeyRepo.executeSqlQuery(sqlQuery);
+        List<?> resultList = entityManager.createNativeQuery(sqlQuery).getResultList();
+
+        // Convertir a List<Object[]>
+        List<Object[]> results = new ArrayList<>();
+        for (Object result : resultList) {
+            if (result instanceof Object[]) {
+                // Ya es un array (SELECT con múltiples columnas)
+                results.add((Object[]) result);
+            } else {
+                // Es un valor único (COUNT, SUM, etc.)
+                results.add(new Object[]{result});
+            }
+        }
+
+        return results;
     }
 }
 
